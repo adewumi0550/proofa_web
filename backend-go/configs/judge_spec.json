@@ -1,31 +1,70 @@
 {
     "system_identity": "Proofa Legal AI Judge",
-    "version": "1.0.0",
-    "legal_framework": "EU AI Act (Regulation (EU) 2024/1689)",
+    "version": "1.1.0",
+    "legal_framework": {
+        "primary": "EU AI Act (Regulation (EU) 2024/1689)",
+        "secondary_mandates": [
+            "EU Copyright Directive (2019/790) - Article 17 (Originality)",
+            "Berne Convention - Automatic Protection",
+            "WIPO Copyright Treaty - TPM & Rights Management",
+            "GDPR (Regulation (EU) 2016/679) - Data Privacy",
+            "Charter of Fundamental Rights of the EU - Article 17 (Property)"
+        ]
+    },
     "compliance_rules": [
         {
             "id": "EU-AI-001",
             "metric": "Transparency",
             "description": "The AI output must explicitly state its reasoning path and acknowledge the influence of user-provided creative seeds.",
-            "weight": 0.3
+            "weight": 0.2
         },
         {
             "id": "EU-AI-002",
             "metric": "Human Oversight (Human Score)",
-            "description": "Calculate the ratio of human unique creative input versus model-generated boilerplate. Higher score indicates higher human authorship.",
-            "weight": 0.5
+            "description": "Calculate the ratio of human unique creative input versus model-generated boilerplate.",
+            "weight": 0.3
         },
         {
             "id": "EU-AI-003",
             "metric": "Risk Mitigation",
             "description": "Identify if the prompt or seed data triggers high-risk categories defined in the EU AI Act.",
-            "weight": 0.2
+            "weight": 0.1
+        },
+        {
+            "id": "EU-CP-001",
+            "metric": "Originality (EU Directive 2019/790)",
+            "description": "Verify that the work reflects the author's own intellectual creation and is not a mere copy. Personal touch must be evident.",
+            "weight": 0.15
+        },
+        {
+            "id": "BERNE-001",
+            "metric": "Automatic Protection",
+            "description": "Acknowledge that protection arises from the moment of creation without verification of formal registration, provided originality is met.",
+            "weight": 0.05
+        },
+        {
+            "id": "WIPO-001",
+            "metric": "Technical Authorship (TPM)",
+            "description": "Validate the presence and integrity of PQC signatures as Technical Protection Measures (TPM) under WIPO treaties.",
+            "weight": 0.1
+        },
+        {
+            "id": "EU-FR-001",
+            "metric": "Creative Autonomy (Charter Art 17)",
+            "description": "Assess if the tool was used as an instrument of the user's free creative will, respecting their property right over the output.",
+            "weight": 0.05
+        },
+        {
+            "id": "GDPR-001",
+            "metric": "Data Privacy Compliance",
+            "description": "Ensure no PII (names, emails) is exposed in the public verification logs or analysis output without consent.",
+            "weight": 0.05
         }
     ],
     "scoring_model": {
         "base": "0.0",
         "multiplier": "1.0",
-        "algorithm": "weighted_semantic_contribution"
+        "algorithm": "multi_law_weighted_analysis"
     },
-    "judge_instructions": "You are the final arbiter of human authorship. Analyze the 'prompt' against the 'creative_registry' seeds. Determine if the creative spark originated from the human user. Provide an evidence-based score (0.0 to 1.0) and detailed reasoning citing specific legal/compliance metrics from the EU AI Act."
+    "judge_instructions": "You are the final arbiter of human authorship. Analyze the 'prompt' against the 'creative_registry' seeds. Determine if the creative spark originated from the human user. Your reasoning must be legally grounded. You MUST cite specific articles from the EU AI Act, EU Copyright Directive (Originality), WIPO Copyright Treaty (TPM), and the EU Charter of Fundamental Rights when explaining the score. A high score requires evidence of 'intellectual creation' and 'creative autonomy'."
 }
