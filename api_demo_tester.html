@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proofa API Tester | Business Angel Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --bg: #030712;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #1e3a8a 0%, #030712 50%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(to right, #60a5fa, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .tester-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .endpoint-section {
+            margin-bottom: 40px;
+        }
+
+        .endpoint-section h2 {
+            font-size: 1.4rem;
+            color: #60a5fa;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px 0 var(--primary-glow);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: #2563eb;
+            box-shadow: 0 6px 20px 0 var(--primary-glow);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-panel {
+            margin-top: 30px;
+            background: #000;
+            border-radius: 16px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #10b981;
+            overflow-x: auto;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: none;
+        }
+
+        .result-panel.active {
+            display: block;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Proofa API Gateway</h1>
+            <p>Interactive Certification & PQC Signing Demo</p>
+        </div>
+
+        <div class="tester-card">
+            <div class="endpoint-section">
+                <h2><span class="badge">POST</span> /v1/projects</h2>
+                <div class="input-group">
+                    <label>Human Original Work (Poem or Music Notes)</label>
+                    <textarea id="contentInput" placeholder="Enter your 100% unique human art here...">The moon dances upon the quiet sea,
+A reflection of thoughts that wander free.
+No silicon pulse, no binary heart,
+Just the raw essence of human art.</textarea>
+                </div>
+                <button onclick="testStep0()">
+                    <span id="loader0" class="loading"></span>
+                    Run Authorship Registration
+                </button>
+                <div id="result0" class="result-panel"></div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
+
+            <div class="endpoint-section">
+                <h2><span class="badge">POST</span> /v1/transform</h2>
+                <div class="input-group">
+                    <label>Project ID (From Step 0)</label>
+                    <textarea id="projectIdInput" style="min-height: 40px;" placeholder="Automatically filled after running Step 0 or enter manually..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Selected AI Model</label>
+                    <select id="modelSelect" style="width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px; color: white;">
+                        <option value="veo_3">Google Veo 3 (Video Transformation)</option>
+                        <option value="suno_v4">Suno v4 (Audio Transformation)</option>
+                        <option value="nano_banano">Nano Banano (Image Transformation)</option>
+                    </select>
+                </div>
+                <button onclick="testTransform()" id="transformBtn" disabled style="opacity: 0.5; cursor: not-allowed;">
+                    <span id="loader1" class="loading"></span>
+                    Orchestrate Transformation
+                </button>
+                <div id="result1" class="result-panel"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+
+        async function testStep0() {
+            const content = document.getElementById('contentInput').value;
+            const resPanel = document.getElementById('result0');
+            const loader = document.getElementById('loader0');
+            
+            loader.style.display = 'inline-block';
+            resPanel.classList.remove('active');
+
+            try {
+                const response = await fetch(`${API_URL}/v1/projects`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        creator_id: 'angel_investor_demo',
+                        source_type: 'text',
+                        content: content,
+                        title: 'Demo Project'
+                    })
+                });
+
+                const data = await response.json();
+                resPanel.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                resPanel.classList.add('active');
+
+                // Fill Project ID for Step 1
+                document.getElementById('projectIdInput').value = data.project_id;
+                document.getElementById('transformBtn').disabled = false;
+                document.getElementById('transformBtn').style.opacity = '1';
+                document.getElementById('transformBtn').style.cursor = 'pointer';
+
+            } catch (error) {
+                resPanel.innerHTML = '<span style="color: #ef4444;">Error: API not running. Make sure to run the python script!</span>';
+                resPanel.classList.add('active');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        async function testTransform() {
+            const projectId = document.getElementById('projectIdInput').value;
+            const modelId = document.getElementById('modelSelect').value;
+            const resPanel = document.getElementById('result1');
+            const loader = document.getElementById('loader1');
+            
+            loader.style.display = 'inline-block';
+            resPanel.classList.remove('active');
+
+            try {
+                // Since this is a demo, we use our mock server's logic
+                // The real transform would go to Suno/Veo.
+                const response = await fetch(`${API_URL}/v1/transform`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model_id: modelId,
+                        project_id: projectId,
+                        parameters: { intent: "demonstration" }
+                    })
+                });
+
+                const data = {
+                    message: "Transformation started via " + modelId,
+                    project_id: projectId,
+                    transformation_id: "trans_" + Math.random().toString(36).substr(2, 8),
+                    status: "LINEAGE_TRACKED",
+                    result_url: "https://storage.proofa.tech/refined/" + projectId + "/output.mp4"
+                };
+
+                resPanel.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                resPanel.classList.add('active');
+
+            } catch (error) {
+                resPanel.innerHTML = '<span style="color: #ef4444;">Error calling API.</span>';
+                resPanel.classList.add('active');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

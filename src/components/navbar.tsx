@@ -6,9 +6,11 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useAuth } from "@/components/auth-context";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { user, logout } = useAuth();
 
     const navLinks = [
         { name: "Model Garden", href: "/model-garden" },
@@ -51,16 +53,31 @@ export function Navbar() {
                     </div>
                     <div className="hidden md:flex items-center gap-4">
                         <ThemeToggle />
-                        <Link href="/login">
-                            <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                                Sign In
-                            </Button>
-                        </Link>
-                        <Link href="/signup">
-                            <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0">
-                                Get Started
-                            </Button>
-                        </Link>
+                        {user ? (
+                            <>
+                                <Link href="/dashboard">
+                                    <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <Button onClick={logout} className="bg-red-600 hover:bg-red-700 text-white border-0">
+                                    Sign Out
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login">
+                                    <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+                                        Sign In
+                                    </Button>
+                                </Link>
+                                <Link href="/signup">
+                                    <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0">
+                                        Get Started
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
                     </div>
                     <div className="-mr-2 flex md:hidden">
                         <button

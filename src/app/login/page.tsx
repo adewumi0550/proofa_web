@@ -8,16 +8,30 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { FadeIn } from "@/components/fade-in";
 
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth-context";
+
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const { login } = useAuth();
 
     async function onSubmit(event: React.FormEvent) {
         event.preventDefault();
         setIsLoading(true);
 
-        setTimeout(() => {
+        const formData = new FormData(event.target as HTMLFormElement);
+        const email = formData.get("email") as string;
+
+        try {
+            await login(email);
+            router.push("/dashboard");
+        } catch (error) {
+            console.error(error);
+            alert("Login failed. Is backend running?");
+        } finally {
             setIsLoading(false);
-        }, 3000);
+        }
     }
 
     return (
@@ -50,6 +64,7 @@ export default function LoginPage() {
                                     </label>
                                     <Input
                                         id="email"
+                                        name="email"
                                         placeholder="name@example.com"
                                         type="email"
                                         autoCapitalize="none"
