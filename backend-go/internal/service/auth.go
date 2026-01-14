@@ -47,9 +47,6 @@ func (s *AuthService) RegisterUser(ctx context.Context, email, password, firstNa
 	// 2. Persist User and PQC Public Key (Private Key encrypted in real scenario)
 	user, err := s.repo.CreateUser(ctx, repository.CreateUserParams{
 		Email:                  email,
-		Password:               password,
-		FirstName:              firstName,
-		LastName:               lastName,
 		FirebaseUid:            firebaseUID,
 		PqcPublicKey:           string(keys.PublicKey),
 		PqcPrivateKeyEncrypted: string(keys.PrivateKey), // Mocking encryption
@@ -63,9 +60,6 @@ func (s *AuthService) RegisterUser(ctx context.Context, email, password, firstNa
 		uid := uuid.New()
 		user.ID = pgtype.UUID{Bytes: uid, Valid: true}
 		user.Email = email
-		user.Password = password
-		user.FirstName = firstName
-		user.LastName = lastName
 		user.FirebaseUid = firebaseUID
 		user.PqcPublicKey = string(keys.PublicKey)
 		user.PqcPrivateKeyEncrypted = string(keys.PrivateKey)

@@ -85,6 +85,46 @@ func (q *Queries) CreateEvidenceLog(ctx context.Context, arg CreateEvidenceLogPa
 	return i, err
 }
 
+const createProject = `-- name: CreateProject :one
+
+INSERT INTO projects (user_id, seed_text, embedding, plagiarism_score, ai_probability, status)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING id, user_id, seed_text, embedding, plagiarism_score, ai_probability, status, created_at
+`
+
+type CreateProjectParams struct {
+	UserID          pgtype.UUID
+	SeedText        string
+	Embedding       pgvector.Vector
+	PlagiarismScore pgtype.Float8
+	AiProbability   pgtype.Float8
+	Status          string
+}
+
+// Project-related queries
+func (q *Queries) CreateProject(ctx context.Context, arg CreateProjectParams) (Project, error) {
+	row := q.db.QueryRow(ctx, createProject,
+		arg.UserID,
+		arg.SeedText,
+		arg.Embedding,
+		arg.PlagiarismScore,
+		arg.AiProbability,
+		arg.Status,
+	)
+	var i Project
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.SeedText,
+		&i.Embedding,
+		&i.PlagiarismScore,
+		&i.AiProbability,
+		&i.Status,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (email, firebase_uid, pqc_public_key, pqc_private_key_encrypted)
 VALUES ($1, $2, $3, $4)
@@ -93,9 +133,6 @@ RETURNING id, email, firebase_uid, pqc_public_key, pqc_private_key_encrypted, cr
 
 type CreateUserParams struct {
 	Email                  string
-	Password               string
-	FirstName              string
-	LastName               string
 	FirebaseUid            string
 	PqcPublicKey           string
 	PqcPrivateKeyEncrypted string
@@ -104,9 +141,6 @@ type CreateUserParams struct {
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(ctx, createUser,
 		arg.Email,
-		arg.Password,
-		arg.FirstName,
-		arg.LastName,
 		arg.FirebaseUid,
 		arg.PqcPublicKey,
 		arg.PqcPrivateKeyEncrypted,
@@ -115,9 +149,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
-		&i.Password,
-		&i.FirstName,
-		&i.LastName,
 		&i.FirebaseUid,
 		&i.PqcPublicKey,
 		&i.PqcPrivateKeyEncrypted,
@@ -147,6 +178,32 @@ func (q *Queries) GetEvidenceLog(ctx context.Context, id pgtype.UUID) (EvidenceL
 	return i, err
 }
 
+const getEvidenceLogsBySeed = `-- name: GetEvidenceLogsBySeed :many
+SELECT prompt FROM evidence_logs
+WHERE seed_id = $1
+ORDER BY created_at ASC
+`
+
+func (q *Queries) GetEvidenceLogsBySeed(ctx context.Context, seedID pgtype.UUID) ([]string, error) {
+	rows, err := q.db.Query(ctx, getEvidenceLogsBySeed, seedID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var prompt string
+		if err := rows.Scan(&prompt); err != nil {
+			return nil, err
+		}
+		items = append(items, prompt)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUserByFirebaseUID = `-- name: GetUserByFirebaseUID :one
 SELECT id, email, firebase_uid, pqc_public_key, pqc_private_key_encrypted, created_at FROM users WHERE firebase_uid = $1
 `
@@ -166,7 +223,7 @@ func (q *Queries) GetUserByFirebaseUID(ctx context.Context, firebaseUid string) 
 }
 
 const searchCreativeSeeds = `-- name: SearchCreativeSeeds :many
-SELECT id, user_id, content, embedding, metadata, created_at, 1 - (embedding <=> $2) AS similarity
+SELECT id, user_id, content, embedding, metadata, created_at, (1 - (embedding <=> $2))::float8 AS similarity
 FROM creative_seeds
 WHERE user_id = $1
 ORDER BY similarity DESC
@@ -186,7 +243,7 @@ type SearchCreativeSeedsRow struct {
 	Embedding  pgvector.Vector
 	Metadata   []byte
 	CreatedAt  pgtype.Timestamptz
-	Similarity int32
+	Similarity float64
 }
 
 func (q *Queries) SearchCreativeSeeds(ctx context.Context, arg SearchCreativeSeedsParams) ([]SearchCreativeSeedsRow, error) {
@@ -215,4 +272,95 @@ func (q *Queries) SearchCreativeSeeds(ctx context.Context, arg SearchCreativeSee
 		return nil, err
 	}
 	return items, nil
+}
+
+const searchProjects = `-- name: SearchProjects :many
+SELECT id, user_id, seed_text, embedding, plagiarism_score, ai_probability, status, created_at, (1 - (embedding <=> $2))::float8 AS similarity
+FROM projects
+WHERE user_id = $1
+ORDER BY similarity DESC
+LIMIT $3
+`
+
+type SearchProjectsParams struct {
+	UserID    pgtype.UUID
+	Embedding pgvector.Vector
+	Limit     int32
+}
+
+type SearchProjectsRow struct {
+	ID              pgtype.UUID
+	UserID          pgtype.UUID
+	SeedText        string
+	Embedding       pgvector.Vector
+	PlagiarismScore pgtype.Float8
+	AiProbability   pgtype.Float8
+	Status          string
+	CreatedAt       pgtype.Timestamptz
+	Similarity      float64
+}
+
+func (q *Queries) SearchProjects(ctx context.Context, arg SearchProjectsParams) ([]SearchProjectsRow, error) {
+	rows, err := q.db.Query(ctx, searchProjects, arg.UserID, arg.Embedding, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchProjectsRow
+	for rows.Next() {
+		var i SearchProjectsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.SeedText,
+			&i.Embedding,
+			&i.PlagiarismScore,
+			&i.AiProbability,
+			&i.Status,
+			&i.CreatedAt,
+			&i.Similarity,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateProjectStatus = `-- name: UpdateProjectStatus :one
+UPDATE projects
+SET status = $2, plagiarism_score = $3, ai_probability = $4
+WHERE id = $1
+RETURNING id, user_id, seed_text, embedding, plagiarism_score, ai_probability, status, created_at
+`
+
+type UpdateProjectStatusParams struct {
+	ID              pgtype.UUID
+	Status          string
+	PlagiarismScore pgtype.Float8
+	AiProbability   pgtype.Float8
+}
+
+func (q *Queries) UpdateProjectStatus(ctx context.Context, arg UpdateProjectStatusParams) (Project, error) {
+	row := q.db.QueryRow(ctx, updateProjectStatus,
+		arg.ID,
+		arg.Status,
+		arg.PlagiarismScore,
+		arg.AiProbability,
+	)
+	var i Project
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.SeedText,
+		&i.Embedding,
+		&i.PlagiarismScore,
+		&i.AiProbability,
+		&i.Status,
+		&i.CreatedAt,
+	)
+	return i, err
 }

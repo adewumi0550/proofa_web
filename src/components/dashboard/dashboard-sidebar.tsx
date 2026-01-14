@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
-import { Plus, ChevronRight, Folder, Shield, Database, Settings, LogOut } from "lucide-react";
+import React, { useState } from "react";
+import { Plus, ChevronRight, Folder, Shield, Settings, LogOut, Menu, X, LayoutDashboard, Briefcase, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Project {
     id: string;
@@ -12,7 +13,13 @@ interface Project {
     updatedAt: string;
 }
 
-export function DashboardSidebar() {
+interface DashboardSidebarProps {
+    showAddProject?: boolean;
+}
+
+export function DashboardSidebar({ showAddProject = false }: DashboardSidebarProps) {
+    const [isCollapsed, setIsCollapsed] = useState(true);
+
     const projects: Project[] = [
         { id: "1", name: "Cyberpunk Melody", stage: "Collaboration", updatedAt: "2h ago" },
         { id: "2", name: "Ethereal Landscape", stage: "Certified", updatedAt: "1d ago" },
@@ -20,61 +27,93 @@ export function DashboardSidebar() {
     ];
 
     return (
-        <aside className="w-64 flex flex-col h-full border-r border-gray-200 dark:border-white/10 pr-6 shrink-0 group transition-all duration-300">
-            <div className="mb-8">
-                <h3 className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
-                    <Folder className="w-3 h-3" />
-                    My Creations
-                </h3>
-                <Button className="w-full justify-start gap-3 h-11 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-xl shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
-                    <Plus className="w-5 h-5" />
-                    <span className="font-bold text-sm">New Project</span>
-                </Button>
+        <motion.aside
+            animate={{ width: isCollapsed ? 80 : 280 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className={`flex flex-col h-full transition-all relative group crystal-view z-40 overflow-hidden`}
+        >
+            {/* Header Section */}
+            <div className={`flex flex-col p-6 pb-2 ${isCollapsed ? 'items-center' : ''}`}>
+                <div className="flex items-center justify-between mb-10">
+                    <button
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    >
+                        <Menu className="w-5 h-5 text-gray-500" />
+                    </button>
+                </div>
+
+                {showAddProject && (
+                    <Button
+                        className={`justify-start gap-3 h-12 glass-button border-0 rounded-2xl shadow-xl active:scale-95 transition-all w-full ${isCollapsed ? 'px-0 justify-center w-12 h-12' : ''}`}
+                    >
+                        <Plus className="w-5 h-5 shrink-0" />
+                        {!isCollapsed && (
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="font-bold text-sm whitespace-nowrap"
+                            >
+                                New Project
+                            </motion.span>
+                        )}
+                    </Button>
+                )}
             </div>
 
-            <nav className="flex-1 space-y-1.5 overflow-y-auto custom-scrollbar pr-1">
-                {projects.map((p) => (
-                    <div
-                        key={p.id}
-                        className="group/item flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-gray-200 dark:hover:border-white/10"
-                    >
-                        <div className="min-w-0 flex-1">
-                            <p className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate">{p.name}</p>
-                            <div className="flex items-center gap-2 mt-0.5">
-                                <span className={`text-[9px] font-black uppercase tracking-widest ${p.stage === 'Certified' ? 'text-green-500' :
-                                    p.stage === 'Collaboration' ? 'text-blue-500' : 'text-orange-500'
-                                    }`}>
-                                    {p.stage}
-                                </span>
-                                <span className="text-[9px] text-gray-400 font-medium whitespace-nowrap">• {p.updatedAt}</span>
-                            </div>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover/item:text-blue-500 transition-colors shrink-0" />
-                    </div>
-                ))}
+            {/* Navigation Section */}
+            <nav className="flex-1 space-y-4 overflow-y-auto custom-scrollbar p-4 pt-6">
+                <SidebarItem icon={<LayoutDashboard className="w-5 h-5" />} label="Dashboard" href="/dashboard" isCollapsed={isCollapsed} active />
+                <SidebarItem icon={<Briefcase className="w-5 h-5" />} label="Projects" href="/projects" isCollapsed={isCollapsed} />
+                <SidebarItem icon={<Activity className="w-5 h-5" />} label="Analytics" href="/analytics" isCollapsed={isCollapsed} />
+                <SidebarItem icon={<Settings className="w-5 h-5" />} label="Settings" href="/settings" isCollapsed={isCollapsed} />
             </nav>
 
-            <div className="mt-auto pt-6 border-t border-gray-100 dark:border-white/5 space-y-1">
-                <SidebarItem icon={<Shield className="w-4 h-4" />} label="Licensing" href="/licensing" />
-                <SidebarItem icon={<Settings className="w-4 h-4" />} label="Settings" href="/settings" />
-                <button className="w-full flex items-center gap-3 p-3 text-sm font-bold text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors mt-4">
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
+            {/* User Profile / Logout */}
+            <div className="mt-auto p-4 border-t border-black/5 dark:border-white/5 items-center flex flex-col gap-4 pb-8">
+                <button
+                    className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-black/40 dark:text-white/40 hover:text-red-500 transition-colors ${isCollapsed ? 'justify-center w-12 h-12 p-0' : ''}`}
+                >
+                    <LogOut className="w-5 h-5 shrink-0" />
+                    {!isCollapsed && (
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-[13px] font-bold"
+                        >
+                            Sign Out
+                        </motion.span>
+                    )}
                 </button>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 border-2 border-white/20 shadow-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition-transform">
+                    {/* User Avatar Placeholder */}
+                </div>
             </div>
-        </aside>
+        </motion.aside>
     );
 }
 
-function SidebarItem({ icon, label, href }: { icon: React.ReactNode, label: string, href: string }) {
+function SidebarItem({ icon, label, href, isCollapsed, active = false }: { icon: React.ReactNode, label: string, href: string, isCollapsed: boolean, active?: boolean }) {
     return (
         <Link
             href={href}
-            className="w-full flex items-center gap-3 p-3 text-sm font-bold text-gray-500 hover:text-blue-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-xl transition-all border border-transparent hover:border-gray-100 dark:hover:border-white/5"
+            title={isCollapsed ? label : ""}
+            className={`
+                w-full flex items-center gap-4 p-3.5 rounded-2xl transition-all group
+                ${active ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' : 'text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5'}
+                ${isCollapsed ? 'justify-center w-12 h-12 p-0 mx-auto' : ''}
+            `}
         >
             <span className="shrink-0">{icon}</span>
-            <span className="flex-1 text-left">{label}</span>
-            <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" />
+            {!isCollapsed && (
+                <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex-1 font-bold text-[13px] whitespace-nowrap"
+                >
+                    {label}
+                </motion.span>
+            )}
         </Link>
     );
 }

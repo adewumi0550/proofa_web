@@ -44,10 +44,12 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
         "Analysis Hub"
     ]);
 
-    const chatEndRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+        }
     }, [messages]);
 
     const handleSend = () => {
@@ -62,14 +64,14 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
     };
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-3xl overflow-hidden">
+        <div className="flex flex-col h-full crystal-view rounded-2xl overflow-hidden">
 
             {/* Model Selection & Mode Bar */}
             <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 bg-gray-50/50 dark:bg-white/2">
                 <div className="relative">
                     <button
                         onClick={() => setIsModelsOpen(!isModelsOpen)}
-                        className="flex items-center gap-3 px-4 py-2 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg text-xs font-bold text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-all shadow-sm"
+                        className="flex items-center gap-3 px-4 py-2 glass-button rounded-xl text-xs font-bold transition-all"
                     >
                         <Cpu className="w-4 h-4 text-blue-500" />
                         {selectedModel}
@@ -112,7 +114,10 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
             </div>
 
             {/* Message History */}
-            <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar">
+            <div
+                ref={scrollContainerRef}
+                className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar"
+            >
                 {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center opacity-30 select-none">
                         <div className="w-16 h-16 border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl flex items-center justify-center mb-4">
@@ -127,20 +132,19 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
                 max-w-[80%] px-6 py-4 rounded-2xl text-sm font-bold leading-relaxed
                 ${m.role === 'user'
                                     ? 'bg-blue-600 text-white shadow-xl shadow-blue-500/10'
-                                    : 'bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-white/10'}
+                                    : 'crystal-view text-gray-900 dark:text-gray-100 border-0'}
               `}>
                                 {m.content}
                             </div>
                         </div>
                     ))
                 )}
-                <div ref={chatEndRef} />
             </div>
 
             {/* Input Section */}
             {/* Input Section */}
             <div className="p-6 pt-0">
-                <div className="flex items-end gap-4 bg-gray-50 dark:bg-white/5 border border-transparent focus-within:ring-0 rounded-2xl p-2 pl-4 transition-all hover:bg-gray-100 dark:hover:bg-white/10">
+                <div className="flex items-end gap-4 glass-button border-0 rounded-2xl p-2 pl-4 shadow-none hover:shadow-lg">
                     <input
                         type="file"
                         ref={fileInputRef}

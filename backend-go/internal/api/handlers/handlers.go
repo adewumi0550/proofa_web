@@ -12,13 +12,17 @@ type APIHandler struct {
 	auth     *service.AuthService
 	registry *service.RegistryService
 	proofa   *service.ProofaEngine
+	seed     *service.SeedEngine
+	judge    *service.JudgeEngine
 }
 
-func NewAPIHandler(auth *service.AuthService, registry *service.RegistryService, proofa *service.ProofaEngine) *APIHandler {
+func NewAPIHandler(auth *service.AuthService, registry *service.RegistryService, proofa *service.ProofaEngine, seed *service.SeedEngine, judge *service.JudgeEngine) *APIHandler {
 	return &APIHandler{
 		auth:     auth,
 		registry: registry,
 		proofa:   proofa,
+		seed:     seed,
+		judge:    judge,
 	}
 }
 
@@ -133,6 +137,72 @@ func (h *APIHandler) GetCertificate(c *fiber.Ctx) error {
 		"message": "PQC-protected authorship certificate retrieved.",
 	})
 }
+func (h *APIHandler) SeedCheck(c *fiber.Ctx) error {
+	type Request struct {
+		UserID   string `json:"user_id"`
+		SeedText string `json:"seed_text"`
+	}
+	var req Request
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	uid, err := uuid.Parse(req.UserID)
+	if err != nil {
+		// Fallback for demo if id is empty
+		uid = uuid.New()
+	}
+
+	res, err := h.seed.VerifySeed(c.Context(), uid, req.SeedText)
+	if err != nil {
+		log.Printf("Seed check failed: %v. Returning fallback.", err)
+		return c.JSON(fiber.Map{
+			"status":           "YELLOW",
+			"plagiarism_score": 0.0,
+			"ai_probability":   100.0,
+			"message":          "Simple command or short text detected.",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"project_id":       res.ProjectID,
+		"status":           res.Status,
+		"plagiarism_score": res.PlagiarismScore,
+		"ai_probability":   res.AIProbability,
+		"internal_match":   res.InternalMatch,
+		"birth_hash":       res.BirthHash,
+		"reasoning":        res.Reasoning,
+	})
+}
+
+func (h *APIHandler) UpdateScore(c *fiber.Ctx) error {
+	type Request struct {
+		UserID        string `json:"user_id"`
+		ProjectID     string `json:"project_id"`
+		CurrentPrompt string `json:"current_prompt"`
+	}
+	var req Request
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	uid, _ := uuid.Parse(req.UserID)
+	projectID, _ := uuid.Parse(req.ProjectID)
+
+	res, err := h.judge.UpdateScore(c.Context(), uid, projectID, req.CurrentPrompt)
+	if err != nil {
+		log.Printf("UpdateScore failed: %v", err)
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to update score"})
+	}
+
+	return c.JSON(fiber.Map{
+		"human_score":    res.HumanScore,
+		"reasoning":      res.Reasoning,
+		"is_ai_proxy":    res.IsAIProxy,
+		"creative_delta": res.CreativeDelta,
+	})
+}
+
 func (h *APIHandler) DebugState(c *fiber.Ctx) error {
 	// EXPOSE INTERNAL STATE FOR DEMO visualization
 	// In production this would be admin-only or removed
@@ -140,5 +210,6 @@ func (h *APIHandler) DebugState(c *fiber.Ctx) error {
 		"users":    h.auth.DebugGetUsers(),
 		"seeds":    h.registry.DebugGetSeeds(),
 		"evidence": h.proofa.DebugGetEvidence(),
+		"projects": []string{"Seed engine projects are in DB"},
 	})
 }

@@ -15,6 +15,23 @@ func (m *mockJudge) VerifyAuthorship(ctx context.Context, prompt string, seedsCo
 	}, nil
 }
 
+func (m *mockJudge) AnalyzeProcess(ctx context.Context, currentPrompt string, history []string) (*ProofaResult, error) {
+	return &ProofaResult{
+		Score:         0.9,
+		Reasoning:     "Mock process analysis",
+		IsAIProxy:     false,
+		CreativeDelta: 0.7,
+	}, nil
+}
+
+func (m *mockJudge) DetectAI(ctx context.Context, text string) (float64, error) {
+	return 5.0, nil
+}
+
+func (m *mockJudge) EmbedText(ctx context.Context, text string) ([]float32, error) {
+	return make([]float32, 1024), nil
+}
+
 func (m *mockJudge) Name() string {
 	return "MockJudge"
 }

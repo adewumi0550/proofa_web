@@ -16,7 +16,7 @@ export function AuthorshipHUD({ score, stage }: AuthorshipHUDProps) {
         <div className="w-full pt-2 pb-6 flex flex-col gap-3">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 dark:text-gray-500">
+                    <span className="text-[11px] font-bold tracking-tight text-gray-500">
                         Authorship Strength
                     </span>
                     <div className="group relative z-50">
@@ -38,7 +38,7 @@ export function AuthorshipHUD({ score, stage }: AuthorshipHUDProps) {
                                 className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full"
                             >
                                 <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
-                                <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">License Eligible</span>
+                                <span className="text-[10px] font-bold text-blue-500 tracking-tight">License Eligible</span>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -61,7 +61,7 @@ export function AuthorshipHUD({ score, stage }: AuthorshipHUDProps) {
                 />
             </div>
 
-            <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-[0.2em]">
+            <div className="flex justify-between items-center text-[10px] font-bold tracking-tight text-gray-400">
                 <span className={stage === 'Inception' ? 'text-blue-500' : 'text-gray-400'}>Step 1: Inception</span>
                 <span className={stage === 'Collaboration' ? 'text-blue-500' : 'text-gray-400'}>Step 2: Collaboration</span>
                 <span className={stage === 'Certified' ? 'text-blue-500' : 'text-gray-400'}>Step 3: Certification</span>

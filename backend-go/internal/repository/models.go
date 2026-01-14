@@ -30,12 +30,20 @@ type EvidenceLog struct {
 	CreatedAt    pgtype.Timestamptz
 }
 
+type Project struct {
+	ID              pgtype.UUID
+	UserID          pgtype.UUID
+	SeedText        string
+	Embedding       pgvector.Vector
+	PlagiarismScore pgtype.Float8
+	AiProbability   pgtype.Float8
+	Status          string
+	CreatedAt       pgtype.Timestamptz
+}
+
 type User struct {
 	ID                     pgtype.UUID
 	Email                  string
-	Password               string
-	FirstName              string
-	LastName               string
 	FirebaseUid            string
 	PqcPublicKey           string
 	PqcPrivateKeyEncrypted string

@@ -66,9 +66,11 @@ func main() {
 	authService := service.NewAuthService(repo)
 	registryService := service.NewRegistryService(repo)
 	proofaEngine := service.NewProofaEngine(repo, orchestrator)
+	seedEngine := service.NewSeedEngine(repo, activeJudge)
+	judgeEngine := service.NewJudgeEngine(repo, activeJudge)
 
 	// 5. Setup Handlers
-	handler := handlers.NewAPIHandler(authService, registryService, proofaEngine)
+	handler := handlers.NewAPIHandler(authService, registryService, proofaEngine, seedEngine, judgeEngine)
 
 	// 6. Initialize Fiber App
 	app := fiber.New(fiber.Config{
@@ -95,7 +97,9 @@ func main() {
 	v1.Post("/auth/register", handler.Register)
 	v1.Post("/registry/upload", handler.Upload)
 	v1.Post("/proofa/calculate", handler.Calculate)
-	v1.Post("/proofa/calculate", handler.Calculate)
+	v1.Post("/proofa/seed-check", handler.SeedCheck)
+	v1.Post("/proofa/init-seed", handler.SeedCheck) // Map to existing seed-check with new logic
+	v1.Post("/proofa/update-score", handler.UpdateScore)
 	v1.Get("/proofa/certificate/:id", handler.GetCertificate)
 	v1.Get("/debug/state", handler.DebugState)
 
