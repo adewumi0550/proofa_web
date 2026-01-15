@@ -6,7 +6,7 @@ import { AuthorshipHUD } from "@/components/dashboard/authorship-hud";
 import { PromptOrchestrator } from "@/components/dashboard/prompt-orchestrator";
 import { LicensingEngine } from "@/components/dashboard/licensing-engine";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, Hash, Sparkles, AlertCircle, FileText, X } from "lucide-react";
+import { ShieldCheck, Hash, Sparkles, AlertCircle, FileText, X, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { proofaApi } from "@/lib/api";
 import { useAuth } from "@/components/auth-context";

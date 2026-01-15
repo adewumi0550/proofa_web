@@ -33,6 +33,7 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
     const [selectedModel, setSelectedModel] = useState("Pro v1.5 Engine");
     const [activeMode, setActiveMode] = useState<"art" | "video" | "music" | "voice">("art");
     const [isModelsOpen, setIsModelsOpen] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [availableModels] = useState([
@@ -119,11 +120,32 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
                 className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar"
             >
                 {messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center opacity-30 select-none">
-                        <div className="w-16 h-16 border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl flex items-center justify-center mb-4">
-                            <Plus className="w-6 h-6" />
-                        </div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em]">Workspace Active</p>
+                    <div
+                        className={`
+                            h-full flex flex-col items-center justify-center transition-all duration-300 rounded-[32px]
+                            ${isDragging ? 'bg-blue-500/5 scale-105 border-2 border-dashed border-blue-500/50' : 'opacity-40'}
+                        `}
+                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                        onDragLeave={() => setIsDragging(false)}
+                        onDrop={(e) => {
+                            e.preventDefault();
+                            setIsDragging(false);
+                            const file = e.dataTransfer.files[0];
+                            if (file) onFileUpload(file);
+                        }}
+                    >
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className={`
+                                w-20 h-20 border-2 border-dashed rounded-3xl flex items-center justify-center mb-6 transition-all duration-500
+                                ${isDragging ? 'bg-blue-500 border-blue-400 scale-110 rotate-90' : 'border-gray-300 dark:border-white/20 hover:border-blue-500 hover:bg-blue-500/5'}
+                            `}
+                        >
+                            <Plus className={`w-8 h-8 transition-colors ${isDragging ? 'text-white' : 'text-gray-400'}`} />
+                        </button>
+                        <p className={`text-[11px] font-black uppercase tracking-[0.4em] transition-colors ${isDragging ? 'text-blue-500' : 'text-gray-500'}`}>
+                            {isDragging ? 'Drop Image Here' : 'Workspace Active'}
+                        </p>
                     </div>
                 ) : (
                     messages.map((m) => (
