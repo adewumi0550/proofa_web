@@ -144,6 +144,12 @@ func generateBirthHash(userID uuid.UUID, text string) string {
 
 func isSimpleCommand(text string) bool {
 	lower := strings.ToLower(strings.TrimSpace(text))
+
+	// Catch "Screenshot" or "Uploaded File" patterns which indicate low creative intent in text
+	if strings.Contains(lower, "screenshot") || strings.Contains(lower, "uploaded file") {
+		return true
+	}
+
 	commands := []string{
 		"explain", "write a", "create a", "how to", "tell me", "summarize",
 		"what is", "help me", "analyze this", "give me",

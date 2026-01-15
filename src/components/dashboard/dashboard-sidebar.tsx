@@ -9,27 +9,27 @@ import { motion, AnimatePresence } from "framer-motion";
 interface Project {
     id: string;
     name: string;
-    stage: "Inception" | "Collaboration" | "Certified";
-    updatedAt: string;
 }
 
 interface DashboardSidebarProps {
     showAddProject?: boolean;
+    projects: Project[];
+    activeProjectId?: string | null;
+    onProjectSelect: (id: string) => void;
 }
 
-export function DashboardSidebar({ showAddProject = false }: DashboardSidebarProps) {
+export function DashboardSidebar({
+    showAddProject = false,
+    projects = [],
+    activeProjectId,
+    onProjectSelect
+}: DashboardSidebarProps) {
     const [isCollapsed, setIsCollapsed] = useState(true);
-
-    const projects: Project[] = [
-        { id: "1", name: "Cyberpunk Melody", stage: "Collaboration", updatedAt: "2h ago" },
-        { id: "2", name: "Ethereal Landscape", stage: "Certified", updatedAt: "1d ago" },
-        { id: "3", name: "Abstract Poem #4", stage: "Inception", updatedAt: "3d ago" },
-    ];
 
     return (
         <motion.aside
             animate={{ width: isCollapsed ? 80 : 280 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
             className={`flex flex-col h-full transition-all relative group crystal-view z-40 overflow-hidden`}
         >
             {/* Header Section */}
@@ -41,18 +41,22 @@ export function DashboardSidebar({ showAddProject = false }: DashboardSidebarPro
                     >
                         <Menu className="w-5 h-5 text-gray-500" />
                     </button>
+                    {!isCollapsed && (
+                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Collections</span>
+                    )}
                 </div>
 
                 {showAddProject && (
                     <Button
-                        className={`justify-start gap-3 h-12 glass-button border-0 rounded-2xl shadow-xl active:scale-95 transition-all w-full ${isCollapsed ? 'px-0 justify-center w-12 h-12' : ''}`}
+                        onClick={() => window.location.href = '/dashboard'} // Simple reset for demo
+                        className={`justify-start gap-4 h-12 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-2xl shadow-xl active:scale-95 transition-all w-full ${isCollapsed ? 'px-0 justify-center w-12 h-12' : ''}`}
                     >
                         <Plus className="w-5 h-5 shrink-0" />
                         {!isCollapsed && (
                             <motion.span
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="font-bold text-sm whitespace-nowrap"
+                                className="font-black text-[10px] uppercase tracking-widest whitespace-nowrap"
                             >
                                 New Project
                             </motion.span>
@@ -61,59 +65,47 @@ export function DashboardSidebar({ showAddProject = false }: DashboardSidebarPro
                 )}
             </div>
 
-            {/* Navigation Section */}
-            <nav className="flex-1 space-y-4 overflow-y-auto custom-scrollbar p-4 pt-6">
-                <SidebarItem icon={<LayoutDashboard className="w-5 h-5" />} label="Dashboard" href="/dashboard" isCollapsed={isCollapsed} active />
-                <SidebarItem icon={<Briefcase className="w-5 h-5" />} label="Projects" href="/projects" isCollapsed={isCollapsed} />
-                <SidebarItem icon={<Activity className="w-5 h-5" />} label="Analytics" href="/analytics" isCollapsed={isCollapsed} />
-                <SidebarItem icon={<Settings className="w-5 h-5" />} label="Settings" href="/settings" isCollapsed={isCollapsed} />
+            {/* Project List Section */}
+            <nav className="flex-1 space-y-3 overflow-y-auto custom-scrollbar p-4 pt-8">
+                {projects.map((project) => (
+                    <button
+                        key={project.id}
+                        onClick={() => onProjectSelect(project.id)}
+                        title={isCollapsed ? project.name : ""}
+                        className={`
+                            w-full flex items-center gap-4 p-4 rounded-2xl transition-all group border border-transparent
+                            ${activeProjectId === project.id
+                                ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
+                                : 'text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5'}
+                            ${isCollapsed ? 'justify-center w-12 h-12 p-0 mx-auto' : ''}
+                        `}
+                    >
+                        <LayoutDashboard className="w-5 h-5 shrink-0" />
+                        {!isCollapsed && (
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="flex-1 font-bold text-[12px] whitespace-nowrap overflow-hidden text-ellipsis text-left"
+                            >
+                                {project.name}
+                            </motion.span>
+                        )}
+                    </button>
+                ))}
             </nav>
 
-            {/* User Profile / Logout */}
+            {/* Footer Section */}
             <div className="mt-auto p-4 border-t border-black/5 dark:border-white/5 items-center flex flex-col gap-4 pb-8">
-                <button
-                    className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-black/40 dark:text-white/40 hover:text-red-500 transition-colors ${isCollapsed ? 'justify-center w-12 h-12 p-0' : ''}`}
-                >
-                    <LogOut className="w-5 h-5 shrink-0" />
-                    {!isCollapsed && (
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-[13px] font-bold"
-                        >
-                            Sign Out
-                        </motion.span>
-                    )}
-                </button>
+                {!isCollapsed && (
+                    <div className="w-full flex items-center justify-between px-2 mb-2">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">v1.1.2 Metal</span>
+                        <Settings className="w-4 h-4 text-gray-400 cursor-pointer hover:text-blue-500 transition-colors" />
+                    </div>
+                )}
                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 border-2 border-white/20 shadow-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition-transform">
                     {/* User Avatar Placeholder */}
                 </div>
             </div>
         </motion.aside>
-    );
-}
-
-function SidebarItem({ icon, label, href, isCollapsed, active = false }: { icon: React.ReactNode, label: string, href: string, isCollapsed: boolean, active?: boolean }) {
-    return (
-        <Link
-            href={href}
-            title={isCollapsed ? label : ""}
-            className={`
-                w-full flex items-center gap-4 p-3.5 rounded-2xl transition-all group
-                ${active ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' : 'text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5'}
-                ${isCollapsed ? 'justify-center w-12 h-12 p-0 mx-auto' : ''}
-            `}
-        >
-            <span className="shrink-0">{icon}</span>
-            {!isCollapsed && (
-                <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex-1 font-bold text-[13px] whitespace-nowrap"
-                >
-                    {label}
-                </motion.span>
-            )}
-        </Link>
     );
 }

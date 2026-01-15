@@ -12,6 +12,88 @@ import (
 	"github.com/pgvector/pgvector-go"
 )
 
+const addItemToCollection = `-- name: AddItemToCollection :exec
+INSERT INTO collection_items (collection_id, project_id)
+VALUES ($1, $2)
+`
+
+type AddItemToCollectionParams struct {
+	CollectionID pgtype.UUID
+	ProjectID    pgtype.UUID
+}
+
+func (q *Queries) AddItemToCollection(ctx context.Context, arg AddItemToCollectionParams) error {
+	_, err := q.db.Exec(ctx, addItemToCollection, arg.CollectionID, arg.ProjectID)
+	return err
+}
+
+const createAuthorshipCertification = `-- name: CreateAuthorshipCertification :one
+
+INSERT INTO authorship_certifications (project_id, collection_id, user_id, certification_hash, pqc_signature, audit_data)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING id, project_id, collection_id, user_id, certification_hash, pqc_signature, audit_data, created_at
+`
+
+type CreateAuthorshipCertificationParams struct {
+	ProjectID         pgtype.UUID
+	CollectionID      pgtype.UUID
+	UserID            pgtype.UUID
+	CertificationHash string
+	PqcSignature      string
+	AuditData         []byte
+}
+
+// Certification-related queries
+func (q *Queries) CreateAuthorshipCertification(ctx context.Context, arg CreateAuthorshipCertificationParams) (AuthorshipCertification, error) {
+	row := q.db.QueryRow(ctx, createAuthorshipCertification,
+		arg.ProjectID,
+		arg.CollectionID,
+		arg.UserID,
+		arg.CertificationHash,
+		arg.PqcSignature,
+		arg.AuditData,
+	)
+	var i AuthorshipCertification
+	err := row.Scan(
+		&i.ID,
+		&i.ProjectID,
+		&i.CollectionID,
+		&i.UserID,
+		&i.CertificationHash,
+		&i.PqcSignature,
+		&i.AuditData,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const createCollection = `-- name: CreateCollection :one
+
+INSERT INTO collections (user_id, name, description)
+VALUES ($1, $2, $3)
+RETURNING id, user_id, name, description, created_at
+`
+
+type CreateCollectionParams struct {
+	UserID      pgtype.UUID
+	Name        string
+	Description pgtype.Text
+}
+
+// Collection-related queries
+func (q *Queries) CreateCollection(ctx context.Context, arg CreateCollectionParams) (Collection, error) {
+	row := q.db.QueryRow(ctx, createCollection, arg.UserID, arg.Name, arg.Description)
+	var i Collection
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Name,
+		&i.Description,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const createCreativeSeed = `-- name: CreateCreativeSeed :one
 INSERT INTO creative_seeds (user_id, content, embedding, metadata)
 VALUES ($1, $2, $3, $4)
@@ -157,6 +239,61 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getCertificationByProject = `-- name: GetCertificationByProject :one
+SELECT id, project_id, collection_id, user_id, certification_hash, pqc_signature, audit_data, created_at FROM authorship_certifications WHERE project_id = $1
+`
+
+func (q *Queries) GetCertificationByProject(ctx context.Context, projectID pgtype.UUID) (AuthorshipCertification, error) {
+	row := q.db.QueryRow(ctx, getCertificationByProject, projectID)
+	var i AuthorshipCertification
+	err := row.Scan(
+		&i.ID,
+		&i.ProjectID,
+		&i.CollectionID,
+		&i.UserID,
+		&i.CertificationHash,
+		&i.PqcSignature,
+		&i.AuditData,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getCollectionItems = `-- name: GetCollectionItems :many
+SELECT p.id, p.user_id, p.seed_text, p.embedding, p.plagiarism_score, p.ai_probability, p.status, p.created_at FROM projects p
+JOIN collection_items ci ON p.id = ci.project_id
+WHERE ci.collection_id = $1
+`
+
+func (q *Queries) GetCollectionItems(ctx context.Context, collectionID pgtype.UUID) ([]Project, error) {
+	rows, err := q.db.Query(ctx, getCollectionItems, collectionID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Project
+	for rows.Next() {
+		var i Project
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.SeedText,
+			&i.Embedding,
+			&i.PlagiarismScore,
+			&i.AiProbability,
+			&i.Status,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getEvidenceLog = `-- name: GetEvidenceLog :one
 SELECT id, user_id, prompt, seed_id, human_score, reasoning, evidence_hash, pqc_signature, created_at FROM evidence_logs WHERE id = $1
 `
@@ -220,6 +357,36 @@ func (q *Queries) GetUserByFirebaseUID(ctx context.Context, firebaseUid string) 
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const getUserCollections = `-- name: GetUserCollections :many
+SELECT id, user_id, name, description, created_at FROM collections WHERE user_id = $1
+`
+
+func (q *Queries) GetUserCollections(ctx context.Context, userID pgtype.UUID) ([]Collection, error) {
+	rows, err := q.db.Query(ctx, getUserCollections, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Collection
+	for rows.Next() {
+		var i Collection
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Name,
+			&i.Description,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const searchCreativeSeeds = `-- name: SearchCreativeSeeds :many

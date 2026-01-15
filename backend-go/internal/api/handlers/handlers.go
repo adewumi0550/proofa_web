@@ -9,20 +9,29 @@ import (
 )
 
 type APIHandler struct {
-	auth     *service.AuthService
-	registry *service.RegistryService
-	proofa   *service.ProofaEngine
-	seed     *service.SeedEngine
-	judge    *service.JudgeEngine
+	auth      *service.AuthService
+	registry  *service.RegistryService
+	proofa    *service.ProofaEngine
+	seed      *service.SeedEngine
+	judge     *service.JudgeEngine
+	licensing *service.LicensingService
 }
 
-func NewAPIHandler(auth *service.AuthService, registry *service.RegistryService, proofa *service.ProofaEngine, seed *service.SeedEngine, judge *service.JudgeEngine) *APIHandler {
+func NewAPIHandler(
+	auth *service.AuthService,
+	registry *service.RegistryService,
+	proofa *service.ProofaEngine,
+	seed *service.SeedEngine,
+	judge *service.JudgeEngine,
+	licensing *service.LicensingService,
+) *APIHandler {
 	return &APIHandler{
-		auth:     auth,
-		registry: registry,
-		proofa:   proofa,
-		seed:     seed,
-		judge:    judge,
+		auth:      auth,
+		registry:  registry,
+		proofa:    proofa,
+		seed:      seed,
+		judge:     judge,
+		licensing: licensing,
 	}
 }
 
@@ -113,11 +122,11 @@ func (h *APIHandler) Calculate(c *fiber.Ctx) error {
 		SeedID: seedID,
 	})
 	if err != nil {
-		log.Printf("Calculation failed: %v. Returning DEMO response.", err)
-		return c.JSON(fiber.Map{
-			"human_score":   0.92,
-			"reasoning":     "DEMO MODE: High semantic correlation with registry seeds. Analysis aligns with EU AI Act Art. 52 Transparency obligations.",
-			"evidence_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		log.Printf("Calculation failed: %v", err)
+		return c.Status(500).JSON(fiber.Map{
+			"human_score": 0.0,
+			"reasoning":   "Authorship analysis failed. Verification required.",
+			"error":       err.Error(),
 		})
 	}
 
@@ -155,12 +164,10 @@ func (h *APIHandler) SeedCheck(c *fiber.Ctx) error {
 
 	res, err := h.seed.VerifySeed(c.Context(), uid, req.SeedText)
 	if err != nil {
-		log.Printf("Seed check failed: %v. Returning fallback.", err)
-		return c.JSON(fiber.Map{
-			"status":           "YELLOW",
-			"plagiarism_score": 0.0,
-			"ai_probability":   100.0,
-			"message":          "Simple command or short text detected.",
+		log.Printf("Seed check failed: %v", err)
+		return c.Status(500).JSON(fiber.Map{
+			"status":    "REJECTED",
+			"reasoning": "Internal verification error.",
 		})
 	}
 
@@ -200,6 +207,62 @@ func (h *APIHandler) UpdateScore(c *fiber.Ctx) error {
 		"reasoning":      res.Reasoning,
 		"is_ai_proxy":    res.IsAIProxy,
 		"creative_delta": res.CreativeDelta,
+	})
+}
+
+func (h *APIHandler) CreateCollection(c *fiber.Ctx) error {
+	type Request struct {
+		UserID      string   `json:"user_id"`
+		Name        string   `json:"name"`
+		Description string   `json:"description"`
+		ProjectIDs  []string `json:"project_ids"`
+	}
+	var req Request
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	uid, _ := uuid.Parse(req.UserID)
+	pids := make([]uuid.UUID, 0, len(req.ProjectIDs))
+	for _, pidStr := range req.ProjectIDs {
+		pid, _ := uuid.Parse(pidStr)
+		pids = append(pids, pid)
+	}
+
+	collection, err := h.licensing.CreateCollection(c.Context(), uid, req.Name, req.Description, pids)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(201).JSON(collection)
+}
+
+func (h *APIHandler) CertifyAuthorship(c *fiber.Ctx) error {
+	type Request struct {
+		UserID    string `json:"user_id"`
+		ProjectID string `json:"project_id"`
+	}
+	var req Request
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	uid, _ := uuid.Parse(req.UserID)
+	pid, _ := uuid.Parse(req.ProjectID)
+
+	cert, err := h.licensing.CertifyAuthorship(c.Context(), uid, pid)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(201).JSON(cert)
+}
+
+func (h *APIHandler) AdminUsers(c *fiber.Ctx) error {
+	users := h.auth.DebugGetUsers()
+	return c.JSON(fiber.Map{
+		"users": users,
+		"count": len(users),
 	})
 }
 

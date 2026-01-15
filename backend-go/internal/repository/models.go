@@ -9,6 +9,30 @@ import (
 	"github.com/pgvector/pgvector-go"
 )
 
+type AuthorshipCertification struct {
+	ID                pgtype.UUID
+	ProjectID         pgtype.UUID
+	CollectionID      pgtype.UUID
+	UserID            pgtype.UUID
+	CertificationHash string
+	PqcSignature      string
+	AuditData         []byte
+	CreatedAt         pgtype.Timestamptz
+}
+
+type Collection struct {
+	ID          pgtype.UUID
+	UserID      pgtype.UUID
+	Name        string
+	Description pgtype.Text
+	CreatedAt   pgtype.Timestamptz
+}
+
+type CollectionItem struct {
+	CollectionID pgtype.UUID
+	ProjectID    pgtype.UUID
+}
+
 type CreativeSeed struct {
 	ID        pgtype.UUID
 	UserID    pgtype.UUID

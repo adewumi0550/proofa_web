@@ -8,8 +8,11 @@ import (
 
 // JudgeConfig represents the EU AI Law compliance configuration
 type JudgeConfig struct {
-	SystemIdentity    string `json:"system_identity"`
-	LegalFramework    string `json:"legal_framework"`
+	SystemIdentity string `json:"system_identity"`
+	LegalFramework struct {
+		Primary           string   `json:"primary"`
+		SecondaryMandates []string `json:"secondary_mandates"`
+	} `json:"legal_framework"`
 	JudgeInstructions string `json:"judge_instructions"`
 	ComplianceRules   []struct {
 		ID          string  `json:"id"`

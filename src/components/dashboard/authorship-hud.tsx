@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface AuthorshipHUDProps {
     score: number;
-    stage: "Inception" | "Collaboration" | "Certified";
+    stage: "Inception" | "Collaboration" | "Certified" | "Licensing";
 }
 
 export function AuthorshipHUD({ score, stage }: AuthorshipHUDProps) {
@@ -64,7 +64,7 @@ export function AuthorshipHUD({ score, stage }: AuthorshipHUDProps) {
             <div className="flex justify-between items-center text-[10px] font-bold tracking-tight text-gray-400">
                 <span className={stage === 'Inception' ? 'text-blue-500' : 'text-gray-400'}>Step 1: Inception</span>
                 <span className={stage === 'Collaboration' ? 'text-blue-500' : 'text-gray-400'}>Step 2: Collaboration</span>
-                <span className={stage === 'Certified' ? 'text-blue-500' : 'text-gray-400'}>Step 3: Certification</span>
+                <span className={stage === 'Certified' || stage === 'Licensing' ? 'text-blue-500' : 'text-gray-400'}>Step 3: Certification</span>
             </div>
         </div>
     );

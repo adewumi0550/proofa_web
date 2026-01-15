@@ -23,7 +23,7 @@ interface Message {
 }
 
 interface PromptOrchestratorProps {
-    onPromptSent: (content: string) => void;
+    onPromptSent: (content: string) => boolean | Promise<boolean> | void;
     onFileUpload: (file: File) => void;
     messages: Message[];
 }
@@ -52,10 +52,10 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
         }
     }, [messages]);
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!input.trim()) return;
-        onPromptSent(input);
-        setInput("");
+        const result = await onPromptSent(input);
+        if (result !== false) setInput("");
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

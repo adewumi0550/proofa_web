@@ -24,7 +24,7 @@ func NewGeminiProvider(ctx context.Context, apiKey string, config *JudgeConfig) 
 		return nil, fmt.Errorf("failed to create gemini client: %w", err)
 	}
 
-	model := client.GenerativeModel("gemini-1.5-pro")
+	model := client.GenerativeModel("gemini-1.5-flash-latest")
 
 	// Inject Judge instructions for EU AI Law compliance
 	model.SystemInstruction = &genai.Content{
@@ -55,7 +55,7 @@ Return your analysis in the following JSON format:
   "score": float, (0.0 to 1.0)
   "reasoning": "detailed reasoning string citing compliance metrics"
 }
-`, p.config.LegalFramework, seedsContext, prompt)
+`, p.config.LegalFramework.Primary, seedsContext, prompt)
 
 	resp, err := p.model.GenerateContent(ctx, genai.Text(fullPrompt))
 	if err != nil {

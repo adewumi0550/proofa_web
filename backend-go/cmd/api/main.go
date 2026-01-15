@@ -38,26 +38,19 @@ func main() {
 		// Fallback to mock for local dev if key is missing
 	}
 
-	// geminiProvider, err := ai.NewGeminiProvider(ctx, apiKey, judgeConfig)
-	_ = apiKey
-	_ = err
-	_ = ctx
-	_ = judgeConfig
+	geminiProvider, err := ai.NewGeminiProvider(ctx, apiKey, judgeConfig)
+	if err != nil {
+		log.Printf("Failed to initialize Gemini provider: %v", err)
+	}
 
 	// 3. Setup Orchestrator (Interface-driven)
 	var activeJudge ai.Judge
-	// FORCE MOCK FOR DEMO STABILITY (Bypassing Gemini 404/Auth issues)
-	log.Println("Forcing Gemma Mock Provider for consistent Local Demo.")
-	activeJudge = ai.NewGemmaProvider()
-
-	/*
-		if err == nil && geminiProvider != nil {
-			activeJudge = geminiProvider
-		} else {
-			log.Printf("Falling back to Gemma mock provider: %v", err)
-			activeJudge = ai.NewGemmaProvider()
-		}
-	*/
+	if err == nil && geminiProvider != nil {
+		activeJudge = geminiProvider
+	} else {
+		log.Printf("Falling back to Gemma mock provider")
+		activeJudge = ai.NewGemmaProvider()
+	}
 	orchestrator := ai.NewOrchestrator(activeJudge, 60*time.Second)
 
 	// 4. Initialize Database & Services
@@ -68,9 +61,10 @@ func main() {
 	proofaEngine := service.NewProofaEngine(repo, orchestrator)
 	seedEngine := service.NewSeedEngine(repo, activeJudge)
 	judgeEngine := service.NewJudgeEngine(repo, activeJudge)
+	licensingService := service.NewLicensingService(repo)
 
 	// 5. Setup Handlers
-	handler := handlers.NewAPIHandler(authService, registryService, proofaEngine, seedEngine, judgeEngine)
+	handler := handlers.NewAPIHandler(authService, registryService, proofaEngine, seedEngine, judgeEngine, licensingService)
 
 	// 6. Initialize Fiber App
 	app := fiber.New(fiber.Config{
@@ -101,6 +95,12 @@ func main() {
 	v1.Post("/proofa/init-seed", handler.SeedCheck) // Map to existing seed-check with new logic
 	v1.Post("/proofa/update-score", handler.UpdateScore)
 	v1.Get("/proofa/certificate/:id", handler.GetCertificate)
+
+	// Licensing routes
+	v1.Post("/licensing/collections", handler.CreateCollection)
+	v1.Post("/licensing/certify", handler.CertifyAuthorship)
+
+	v1.Get("/admin/users", handler.AdminUsers)
 	v1.Get("/debug/state", handler.DebugState)
 
 	log.Printf("Starting Proofa Industrial API on port 8080...")

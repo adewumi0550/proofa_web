@@ -50,3 +50,32 @@ RETURNING *;
 SELECT prompt FROM evidence_logs
 WHERE seed_id = $1
 ORDER BY created_at ASC;
+
+-- Collection-related queries
+
+-- name: CreateCollection :one
+INSERT INTO collections (user_id, name, description)
+VALUES ($1, $2, $3)
+RETURNING *;
+
+-- name: AddItemToCollection :exec
+INSERT INTO collection_items (collection_id, project_id)
+VALUES ($1, $2);
+
+-- name: GetUserCollections :many
+SELECT * FROM collections WHERE user_id = $1;
+
+-- name: GetCollectionItems :many
+SELECT p.* FROM projects p
+JOIN collection_items ci ON p.id = ci.project_id
+WHERE ci.collection_id = $1;
+
+-- Certification-related queries
+
+-- name: CreateAuthorshipCertification :one
+INSERT INTO authorship_certifications (project_id, collection_id, user_id, certification_hash, pqc_signature, audit_data)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING *;
+
+-- name: GetCertificationByProject :one
+SELECT * FROM authorship_certifications WHERE project_id = $1;
