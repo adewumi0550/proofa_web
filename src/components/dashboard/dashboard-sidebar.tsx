@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, ChevronRight, Folder, Shield, Settings, LogOut, Menu, X, LayoutDashboard, Briefcase, Activity } from "lucide-react";
+import { Plus, ChevronRight, Folder, Shield, Settings, LogOut, Menu, X, LayoutDashboard, Briefcase, Activity, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -126,6 +126,19 @@ export function DashboardSidebar({
                                         </motion.span>
                                     )}
                                 </div>
+                            )}
+                            {!isCollapsed && editingId !== project.id && (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setEditingId(project.id);
+                                        setEditValue(project.name);
+                                    }}
+                                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-all"
+                                    title="Rename"
+                                >
+                                    <Pencil className="w-3 h-3 text-gray-400 hover:text-blue-500" />
+                                </button>
                             )}
                         </button>
                     </div>
