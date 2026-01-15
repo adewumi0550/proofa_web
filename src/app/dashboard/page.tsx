@@ -131,6 +131,10 @@ export default function DashboardPage() {
         }
     };
 
+    const handleProjectRename = (id: string, newName: string) => {
+        setProjects(prev => prev.map(p => p.id === id ? { ...p, name: newName } : p));
+    };
+
     return (
         <div className="relative h-[calc(100vh-4rem)] w-full bg-[#fbfbfb] dark:bg-[#050505] transition-colors duration-500 overflow-hidden flex flex-col">
             {/* Clean, Neutral Background */}
@@ -143,9 +147,10 @@ export default function DashboardPage() {
                         projects={projects}
                         activeProjectId={registryId}
                         onProjectSelect={(id: string) => setRegistryId(id)}
+                        onProjectRename={handleProjectRename}
                     />
                 )}
-                <main className="flex-1 flex flex-col min-w-0 max-w-6xl mx-auto p-8 relative">
+                <main className="flex-1 flex flex-col min-w-0 p-8 relative">
                     {/* Centered Workspace Area - Height Stabilized */}
                     <div className="flex-1 relative min-h-0">
                         <AnimatePresence mode="popLayout" initial={false}>
@@ -243,10 +248,15 @@ export default function DashboardPage() {
                                                 <Hash className="w-3.5 h-3.5 text-gray-400" />
                                                 <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{creativeHash}</span>
                                             </div>
-                                            <div className="flex items-center gap-2">
+                                            <a
+                                                href="https://artificialintelligenceact.eu/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 hover:text-blue-500 transition-colors cursor-pointer"
+                                            >
                                                 <FileText className="w-3.5 h-3.5 text-gray-400" />
                                                 <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">EU AI ACT COMPLIANT</span>
-                                            </div>
+                                            </a>
                                         </div>
 
                                         <div className="flex items-center gap-4">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -21,7 +21,7 @@ export function Navbar() {
 
     return (
         <nav className="fixed w-full z-50 top-0 left-0 border-b border-gray-200 dark:border-white/10 bg-white/60 dark:bg-black/60 backdrop-blur-lg supports-[backdrop-filter]:bg-white/30 dark:supports-[backdrop-filter]:bg-black/30 transition-colors duration-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full px-6">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
                         <Link href="/" className="flex-shrink-0 flex items-center gap-2">
@@ -56,13 +56,21 @@ export function Navbar() {
                         {user ? (
                             <>
                                 <Link href="/dashboard">
-                                    <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+                                    <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 font-black text-[10px] uppercase tracking-widest transition-all">
                                         Dashboard
                                     </Button>
                                 </Link>
-                                <Button onClick={logout} className="bg-red-600 hover:bg-red-700 text-white border-0">
-                                    Sign Out
+                                <Button
+                                    onClick={logout}
+                                    variant="ghost"
+                                    className="text-gray-500 hover:text-red-500 hover:bg-red-500/5 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-500/10 font-black text-[10px] uppercase tracking-widest transition-all gap-2"
+                                >
+                                    <LogOut className="w-4 h-4" />
+                                    Log Out
                                 </Button>
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 border-2 border-white/20 shadow-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition-transform ml-2">
+                                    {/* User Avatar Placeholder */}
+                                </div>
                             </>
                         ) : (
                             <>

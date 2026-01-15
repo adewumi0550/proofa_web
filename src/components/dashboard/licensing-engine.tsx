@@ -12,7 +12,8 @@ import {
     Scale,
     Globe,
     Plus,
-    Archive
+    Archive,
+    ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -57,8 +58,9 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                     <Button
                         variant="ghost"
                         onClick={onBack}
-                        className="rounded-full font-bold text-[10px] uppercase tracking-widest text-gray-400"
+                        className="glass-button rounded-full font-black text-[10px] uppercase tracking-widest text-blue-600 dark:text-blue-400 flex items-center gap-2 px-6 h-10 border-0 shadow-lg"
                     >
+                        <ArrowLeft className="w-4 h-4" />
                         Back to Workspace
                     </Button>
                     <Button variant="outline" className="rounded-full border-black/10 dark:border-white/10 font-bold text-[10px] uppercase tracking-widest">

@@ -16,15 +16,19 @@ interface DashboardSidebarProps {
     projects: Project[];
     activeProjectId?: string | null;
     onProjectSelect: (id: string) => void;
+    onProjectRename?: (id: string, newName: string) => void;
 }
 
 export function DashboardSidebar({
     showAddProject = false,
     projects = [],
     activeProjectId,
-    onProjectSelect
+    onProjectSelect,
+    onProjectRename
 }: DashboardSidebarProps) {
     const [isCollapsed, setIsCollapsed] = useState(true);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editValue, setEditValue] = useState("");
 
     return (
         <motion.aside
@@ -68,29 +72,63 @@ export function DashboardSidebar({
             {/* Project List Section */}
             <nav className="flex-1 space-y-3 overflow-y-auto custom-scrollbar p-4 pt-8">
                 {projects.map((project) => (
-                    <button
-                        key={project.id}
-                        onClick={() => onProjectSelect(project.id)}
-                        title={isCollapsed ? project.name : ""}
-                        className={`
-                            w-full flex items-center gap-4 p-4 rounded-2xl transition-all group border border-transparent
-                            ${activeProjectId === project.id
-                                ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
-                                : 'text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5'}
-                            ${isCollapsed ? 'justify-center w-12 h-12 p-0 mx-auto' : ''}
-                        `}
-                    >
-                        <LayoutDashboard className="w-5 h-5 shrink-0" />
-                        {!isCollapsed && (
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="flex-1 font-bold text-[12px] whitespace-nowrap overflow-hidden text-ellipsis text-left"
-                            >
-                                {project.name}
-                            </motion.span>
-                        )}
-                    </button>
+                    <div key={project.id} className="relative group/item">
+                        <button
+                            onClick={() => {
+                                if (editingId !== project.id) {
+                                    onProjectSelect(project.id);
+                                }
+                            }}
+                            onDoubleClick={() => {
+                                if (!isCollapsed) {
+                                    setEditingId(project.id);
+                                    setEditValue(project.name);
+                                }
+                            }}
+                            title={isCollapsed ? project.name : "Double click to rename"}
+                            className={`
+                                w-full flex items-center gap-4 p-4 rounded-2xl transition-all group border border-transparent
+                                ${activeProjectId === project.id
+                                    ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
+                                    : 'text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5'}
+                                ${isCollapsed ? 'justify-center w-12 h-12 p-0 mx-auto' : ''}
+                            `}
+                        >
+                            <LayoutDashboard className="w-5 h-5 shrink-0" />
+                            {!isCollapsed && (
+                                <div className="flex-1 flex items-center min-w-0">
+                                    {editingId === project.id ? (
+                                        <input
+                                            autoFocus
+                                            value={editValue}
+                                            onChange={(e) => setEditValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    onProjectRename?.(project.id, editValue);
+                                                    setEditingId(null);
+                                                } else if (e.key === 'Escape') {
+                                                    setEditingId(null);
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                onProjectRename?.(project.id, editValue);
+                                                setEditingId(null);
+                                            }}
+                                            className="w-full bg-white/10 border-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5 text-[12px] font-bold outline-none"
+                                        />
+                                    ) : (
+                                        <motion.span
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="flex-1 font-bold text-[12px] whitespace-nowrap overflow-hidden text-ellipsis text-left"
+                                        >
+                                            {project.name}
+                                        </motion.span>
+                                    )}
+                                </div>
+                            )}
+                        </button>
+                    </div>
                 ))}
             </nav>
 
@@ -102,9 +140,6 @@ export function DashboardSidebar({
                         <Settings className="w-4 h-4 text-gray-400 cursor-pointer hover:text-blue-500 transition-colors" />
                     </div>
                 )}
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 border-2 border-white/20 shadow-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition-transform">
-                    {/* User Avatar Placeholder */}
-                </div>
             </div>
         </motion.aside>
     );
