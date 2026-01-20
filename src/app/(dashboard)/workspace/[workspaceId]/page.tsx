@@ -450,7 +450,7 @@ export default function WorkspacePage() {
 
     return (
         <div
-            className="relative h-[calc(100vh-4rem)] w-full bg-[#fbfbfb] dark:bg-[#090909] flex flex-col overflow-hidden"
+            className="relative h-full w-full bg-[#fbfbfb] dark:bg-[#090909] flex flex-col overflow-hidden"
             onDragEnter={handleDragEnter}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -471,7 +471,7 @@ export default function WorkspacePage() {
                 </div>
             </header>
 
-            <main className="flex-1 flex min-w-0 relative">
+            <main className="flex-1 flex min-w-0 relative h-full overflow-hidden">
                 {/* Chat Area */}
                 <div
                     className="flex-1 flex flex-col relative"
@@ -589,7 +589,13 @@ export default function WorkspacePage() {
                                                                             Analysis
                                                                         </div>
                                                                         <span className="text-xs text-gray-400 font-mono">
-                                                                            {new Date(Number(msg.id)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                            {(() => {
+                                                                                const timestamp = Number(msg.id);
+                                                                                if (!isNaN(timestamp)) {
+                                                                                    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                                                                }
+                                                                                return "Recent";
+                                                                            })()}
                                                                         </span>
                                                                     </div>
                                                                     {structuredData.score !== undefined && (
