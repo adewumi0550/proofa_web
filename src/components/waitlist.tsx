@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "@/components/language-context";
 
 export function Waitlist() {
+    const { t } = useLanguage();
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ export function Waitlist() {
             <form onSubmit={handleSubmit} className="relative flex items-center max-w-lg mx-auto bg-gray-100 dark:bg-zinc-900 rounded-full p-2 border border-blue-500/20 shadow-lg">
                 <Input
                     type="email"
-                    placeholder="Enter your email for early access..."
+                    placeholder={t('enterEmailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -40,7 +42,7 @@ export function Waitlist() {
                     disabled={loading || status === "success"}
                     className="rounded-full bg-white dark:bg-white text-gray-900 hover:bg-gray-50 font-medium px-6 transition-all duration-300 disabled:opacity-70"
                 >
-                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : status === "success" ? "Joined!" : "Join Waitlist"}
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : status === "success" ? "Joined!" : t('joinWaitlistBtn')}
                 </Button>
             </form>
             {status === "success" && (
