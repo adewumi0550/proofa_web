@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Link as Home, ShieldCheck, Hash, Sparkles, AlertCircle, X, Plus, ChevronRight, Upload, Paperclip, Send, FileText } from "lucide-react";
+import { Link as Home, ShieldCheck, Hash, Sparkles, AlertCircle, X, Plus, ChevronRight, Upload, Paperclip, Send, FileText, ImageIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { proofaApi } from "@/lib/api";
 import { useAuth } from "@/components/auth-context";
@@ -13,11 +13,19 @@ import Link from "next/link";
 import { AuthorshipHUD } from "@/components/dashboard/authorship-hud";
 import { LicensingEngine } from "@/components/dashboard/licensing-engine";
 import { toast } from "sonner";
-
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
 
 type Stage = "Collaboration" | "Certified" | "Licensing";
+
+interface Message {
+    id: string;
+    role: string;
+    content: string;
+    upload_url?: string; // Optimistic or from history if available
+    upload_name?: string;
+    is_image?: boolean;
+}
 
 export default function WorkspacePage() {
     const params = useParams();
@@ -27,15 +35,18 @@ export default function WorkspacePage() {
     const { t } = useLanguage();
 
     const [wsData, setWsData] = useState<any>(null);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [isMessageSending, setIsMessageSending] = useState(false);
     const [stage, setStage] = useState<Stage>("Collaboration");
     const [score, setScore] = useState(0);
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadedFileId, setUploadedFileId] = useState<string | null>(null);
     const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+    const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
 
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,6 +72,7 @@ export default function WorkspacePage() {
                             id: msg.id || Date.now().toString() + Math.random(),
                             role: msg.role,
                             content: msg.content
+                            // Logic to extract file info from content or specific fields if backend supports it in future
                         })));
                     }
                 } catch (e) {
@@ -72,26 +84,50 @@ export default function WorkspacePage() {
             }
         };
         init();
+
+        // Restore draft
+        const draft = localStorage.getItem(`draft_${workspaceId}`);
+        if (draft) setInput(draft);
     }, [workspaceId, user?.access_token]);
+
+    // Save draft
+    useEffect(() => {
+        if (workspaceId) {
+            localStorage.setItem(`draft_${workspaceId}`, input);
+        }
+    }, [input, workspaceId]);
 
     // Auto-scroll chat
     useEffect(() => {
         if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+
+            chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: "smooth"
+            });
         }
     }, [messages]);
 
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+    const handleFileProcess = async (file: File) => {
         if (!file || !user?.access_token) return;
 
         setUploading(true);
+        setUploadProgress(0);
+
+        // Optimistic preview URL
+        const previewUrl = URL.createObjectURL(file);
+        const isImage = file.type.startsWith('image/');
+
         try {
-            const res = await proofaApi.files.upload(file, user.access_token);
+            const res = await proofaApi.files.upload(file, user.access_token, (progress) => {
+                setUploadProgress(progress);
+            });
+
             if (res.data.success && res.data.data) {
                 setUploadedFileId(res.data.data.upload_id);
                 setUploadedFileName(file.name);
+                setUploadedFileUrl(isImage ? previewUrl : null);
                 toast.success("File uploaded successfully");
             } else {
                 toast.error("Upload failed");
@@ -103,25 +139,67 @@ export default function WorkspacePage() {
             setUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = "";
         }
+    }
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) handleFileProcess(file);
     };
+
+    const handleDrop = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+
+        const file = e.dataTransfer.files?.[0];
+        if (file) handleFileProcess(file);
+    }, []);
+
+    const handleDragOver = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    }, []);
+
+    const handleDragLeave = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    }, []);
+
 
     const handleSendMessage = async () => {
         if ((!input.trim() && !uploadedFileId) || !user?.access_token) return;
 
-        const userMsg = {
+        const currentUploadId = uploadedFileId;
+        const currentFileName = uploadedFileName;
+        const currentFileUrl = uploadedFileUrl;
+
+        const isImage = currentFileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+
+        const userMsg: Message = {
             id: Date.now().toString(),
             role: "user",
-            content: input || (uploadedFileId ? `Uploaded file: ${uploadedFileName}` : "")
+            content: input,
+            upload_name: currentFileName || undefined,
+            upload_url: currentFileUrl || undefined,
+            is_image: !!isImage
         };
+
+        // If solely an upload without text, we can add a system note or just show the file
+        if (!input.trim() && currentFileName) {
+            userMsg.content = `Uploaded file: ${currentFileName}`;
+        }
 
         setMessages(prev => [...prev, userMsg]);
         setIsMessageSending(true);
         setInput("");
-        const currentUploadId = uploadedFileId;
-        const currentFileName = uploadedFileName;
+        localStorage.removeItem(`draft_${workspaceId}`);
+
         // Reset upload state immediately for next message
         setUploadedFileId(null);
         setUploadedFileName(null);
+        setUploadedFileUrl(null);
 
         try {
             const res = await proofaApi.workspaces.interact(workspaceId, {
@@ -138,12 +216,14 @@ export default function WorkspacePage() {
                     content: aiResponse
                 }]);
 
-                // Refresh score implicitly if needed or if backend updates it on conversation
-                // Ideally backend returns updated score in response or we fetch it periodically
+                // Update score if returned
+                if (res.data.data.current_score !== undefined) {
+                    setScore(res.data.data.current_score);
+                }
             }
         } catch (error) {
             console.error("Interaction failed", error);
-            toast.error("Failed to send message");
+            toast.error("Failed to send message. Please refresh or relogin if this persists.");
         } finally {
             setIsMessageSending(false);
         }
@@ -153,8 +233,6 @@ export default function WorkspacePage() {
         if (!user?.access_token) return;
         try {
             const res = await proofaApi.workspaces.certify(workspaceId, user.access_token);
-            // Assuming successful call means it's certified or ready for licensing
-            // The prompt implies we check score locally first usually
             if (score >= 80) {
                 setStage("Licensing");
                 toast.success("Project Certified!");
@@ -175,6 +253,33 @@ export default function WorkspacePage() {
         );
     }
 
+    // Circular Progress Component
+    const CircularProgress = ({ value }: { value: number }) => {
+        const radius = 10;
+        const circumference = 2 * Math.PI * radius;
+        const offset = circumference - (value / 100) * circumference;
+
+        return (
+            <div className="relative w-8 h-8 flex items-center justify-center">
+                <svg className="transform -rotate-90 w-full h-full">
+                    <circle
+                        cx="16" cy="16" r={radius}
+                        stroke="currentColor" strokeWidth="3" fill="transparent"
+                        className="text-gray-200 dark:text-gray-700"
+                    />
+                    <circle
+                        cx="16" cy="16" r={radius}
+                        stroke="currentColor" strokeWidth="3" fill="transparent"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                        className="text-blue-500 transition-all duration-300 ease-in-out"
+                    />
+                </svg>
+                <div className="absolute text-[8px] font-bold text-blue-500">{value}</div>
+            </div>
+        );
+    };
+
     return (
         <div className="relative h-[calc(100vh-4rem)] w-full bg-[#fbfbfb] dark:bg-[#090909] flex flex-col overflow-hidden">
             {/* Header */}
@@ -194,7 +299,27 @@ export default function WorkspacePage() {
 
             <main className="flex-1 flex min-w-0 relative h-full">
                 {/* Chat Area */}
-                <div className="flex-1 flex flex-col relative">
+                <div
+                    className="flex-1 flex flex-col relative"
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                >
+                    {/* Drag Overlay */}
+                    <AnimatePresence>
+                        {isDragging && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute inset-0 z-50 bg-blue-500/10 backdrop-blur-sm border-2 border-dashed border-blue-500 m-4 rounded-3xl flex flex-col items-center justify-center pointer-events-none"
+                            >
+                                <Upload className="w-16 h-16 text-blue-500 mb-4 animate-bounce" />
+                                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">Drop files here to upload</h3>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
                     {/* Mobile/Tablet HUD */}
                     <div className="xl:hidden w-full z-10">
                         <AuthorshipHUD
@@ -218,7 +343,7 @@ export default function WorkspacePage() {
                     ) : (
                         <>
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6 custom-scrollbar" ref={chatContainerRef}>
+                            <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-6 custom-scrollbar pb-32" ref={chatContainerRef}>
                                 {messages.length === 0 ? (
                                     <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-50">
                                         <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center">
@@ -229,11 +354,38 @@ export default function WorkspacePage() {
                                 ) : (
                                     messages.map((msg, idx) => (
                                         <div key={msg.id || idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                                            <div className={`max-w-[70%] rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "user"
-                                                ? "bg-blue-600 text-white rounded-br-none"
-                                                : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm"
-                                                }`}>
-                                                {msg.content}
+                                            <div className={`flex flex-col gap-2 max-w-[85%] md:max-w-[70%]`}>
+                                                {/* Image Placeholder if applicable */}
+                                                {msg.upload_url && msg.is_image && (
+                                                    <div className={`p-2 rounded-2xl ${msg.role === "user" ? "bg-blue-600 rounded-br-none" : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 rounded-bl-none"} mb-1`}>
+                                                        <img
+                                                            src={msg.upload_url}
+                                                            alt="Uploaded content"
+                                                            className="rounded-xl max-w-full max-h-60 object-cover"
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                {/* File Attachment Pill if not image or as supplement */}
+                                                {msg.upload_name && !msg.is_image && (
+                                                    <div className={`flex items-center gap-2 p-3 text-xs rounded-xl ${msg.role === "user"
+                                                            ? "bg-blue-700/50 text-white"
+                                                            : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300"
+                                                        }`}>
+                                                        <FileText className="w-4 h-4" />
+                                                        <span className="truncate">{msg.upload_name}</span>
+                                                    </div>
+                                                )}
+
+                                                {/* Text Content */}
+                                                {(msg.content && msg.content !== `Uploaded file: ${msg.upload_name}`) && (
+                                                    <div className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "user"
+                                                            ? "bg-blue-600 text-white rounded-br-none"
+                                                            : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm"
+                                                        }`}>
+                                                        {msg.content}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))
@@ -250,7 +402,7 @@ export default function WorkspacePage() {
                             </div>
 
                             {/* Input Area */}
-                            <div className="p-6">
+                            <div className="p-4 md:p-6 shrink-0 z-20 bg-[#fbfbfb] dark:bg-[#090909]">
                                 <div className="max-w-4xl mx-auto relative bg-white dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg shadow-blue-500/5 p-2 flex items-end gap-2">
                                     {/* Upload Button */}
                                     <div className="relative">
@@ -268,17 +420,31 @@ export default function WorkspacePage() {
                                             onClick={() => fileInputRef.current?.click()}
                                             disabled={uploading}
                                         >
-                                            {uploading ? <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full" /> : <Paperclip className="w-5 h-5" />}
+                                            {uploading ? (
+                                                <CircularProgress value={uploadProgress} />
+                                            ) : (
+                                                <Paperclip className="w-5 h-5" />
+                                            )}
                                         </Button>
                                     </div>
 
                                     {/* Text Area */}
                                     <div className="flex-1 relative">
                                         {uploadedFileName && (
-                                            <div className="absolute -top-10 left-0 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-xs flex items-center gap-2">
-                                                <FileText className="w-3 h-3" />
-                                                <span className="truncate max-w-[200px]">{uploadedFileName}</span>
-                                                <button onClick={() => { setUploadedFileId(null); setUploadedFileName(null); }} className="hover:text-red-500"><X className="w-3 h-3" /></button>
+                                            <div className="absolute -top-12 left-0 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 px-3 py-1.5 rounded-xl text-xs flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+                                                {uploadedFileUrl && uploadedFileName.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                                                    <ImageIcon className="w-3 h-3" />
+                                                ) : (
+                                                    <FileText className="w-3 h-3" />
+                                                )}
+                                                <span className="truncate max-w-[200px] font-medium">{uploadedFileName}</span>
+                                                <button onClick={() => {
+                                                    setUploadedFileId(null);
+                                                    setUploadedFileName(null);
+                                                    setUploadedFileUrl(null);
+                                                }} className="hover:bg-blue-100 dark:hover:bg-blue-800/30 p-0.5 rounded-full transition-colors ml-1">
+                                                    <X className="w-3 h-3" />
+                                                </button>
                                             </div>
                                         )}
                                         <textarea
@@ -291,7 +457,7 @@ export default function WorkspacePage() {
                                                 }
                                             }}
                                             placeholder="Type your message..."
-                                            className="w-full bg-transparent border-none focus:ring-0 resize-none max-h-32 py-2.5 text-sm"
+                                            className="w-full bg-transparent border-none focus:ring-0 focus:outline-none resize-none max-h-32 py-2.5 text-sm"
                                             rows={1}
                                         />
                                     </div>

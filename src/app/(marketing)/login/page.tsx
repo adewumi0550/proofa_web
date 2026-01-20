@@ -116,6 +116,7 @@ export default function LoginPage() {
                                             name="password"
                                             type={showPassword ? "text" : "password"}
                                             disabled={isLoading}
+                                            autoComplete="current-password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             className="bg-white dark:bg-black border-gray-300 dark:border-white/10 pr-10"

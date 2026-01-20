@@ -162,13 +162,19 @@ export const proofaApi = {
             }),
     },
     files: {
-        upload: (file: File, token: string) => {
+        upload: (file: File, token: string, onProgress?: (progress: number) => void) => {
             const formData = new FormData();
             formData.append('document', file);
             return api.post<BackendResponse<{ storage_path: string; upload_id: string; url: string }>>('/upload', formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: (progressEvent) => {
+                    if (progressEvent.total) {
+                        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                        if (onProgress) onProgress(progress);
+                    }
                 }
             });
         },
