@@ -53,6 +53,7 @@ export default function RoleSelectionPage() {
             await completeProfile(selectedRole);
             toast.success("Profile updated!", { id: toastId });
             router.push("/dashboard");
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error("Failed to complete profile", error);
             toast.error("Failed to save profile. Please try again.", { id: toastId });

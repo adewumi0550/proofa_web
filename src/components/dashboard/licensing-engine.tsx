@@ -180,7 +180,7 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                             <div>
                                 <h5 className="text-[11px] font-black uppercase text-yellow-700 leading-none mb-1">Legal Notice</h5>
                                 <p className="text-[10px] font-bold text-yellow-800/70 leading-relaxed">
-                                    Copyright registration requires disclosure of AI tools. Proofa's Audit Trail serves as evidence of human creative control.
+                                    Copyright registration requires disclosure of AI tools. Proofa&apos;s Audit Trail serves as evidence of human creative control.
                                 </p>
                             </div>
                         </div>

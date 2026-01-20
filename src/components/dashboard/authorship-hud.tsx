@@ -10,27 +10,37 @@ interface AuthorshipHUDProps {
     stage: "Inception" | "Collaboration" | "Certified" | "Licensing";
     onCertify?: () => void;
     isCertified?: boolean;
+    verdict?: string;
+    reason?: string;
 }
 
-export function AuthorshipHUD({ score, stage, onCertify, isCertified }: AuthorshipHUDProps) {
+export function AuthorshipHUD({ score, stage, onCertify, isCertified, verdict, reason }: AuthorshipHUDProps) {
     const isEligible = score >= 80;
 
     return (
-        <div className="w-full py-4 px-6 flex flex-col items-start justify-center bg-white/50 dark:bg-black/50 backdrop-blur-md border-b border-gray-200 dark:border-white/5 z-20 sticky top-0">
+        <div className="w-full py-4 px-6 flex flex-col items-start justify-center bg-white/50 dark:bg-black/50 backdrop-blur-md border-b border-gray-200 dark:border-white/5 z-20 sticky top-0 transition-all">
             <div className="flex flex-col gap-2 w-full max-w-md">
                 {/* Top Row: Label & Info */}
-                <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black tracking-widest text-gray-400 uppercase">
-                        Authorship Strength
-                    </span>
-                    <div className="group relative z-50">
-                        <Info className="w-3 h-3 text-gray-300 dark:text-gray-600 cursor-help" />
-                        <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-[100]">
-                            <p className="text-[10px] font-bold text-gray-600 dark:text-gray-300 leading-relaxed uppercase tracking-wider">
-                                EU AI Act Art. 52 Compliance: This score measures human creative direction vs AI automation depth.
-                            </p>
+                <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black tracking-widest text-gray-400 uppercase">
+                            Authorship Strength
+                        </span>
+                        <div className="group relative z-50">
+                            <Info className="w-3 h-3 text-gray-300 dark:text-gray-600 cursor-help" />
+                            <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-[100]">
+                                <p className="text-[10px] font-bold text-gray-600 dark:text-gray-300 leading-relaxed uppercase tracking-wider">
+                                    EU AI Act Art. 52 Compliance: This score measures human creative direction vs AI automation depth.
+                                </p>
+                            </div>
                         </div>
                     </div>
+                    {verdict && (
+                        <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${score >= 80 ? 'bg-green-500/10 text-green-600 dark:text-green-400' : 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400'
+                            }`}>
+                            {verdict}
+                        </span>
+                    )}
                 </div>
 
                 {/* Middle Row: Progress Bar & Score */}
@@ -42,15 +52,32 @@ export function AuthorshipHUD({ score, stage, onCertify, isCertified }: Authorsh
                             transition={{ duration: 1, ease: "easeOut" }}
                             className="h-full rounded-full"
                             style={{
-                                background: 'linear-gradient(90deg, #2563eb 0%, #9333ea 100%)',
-                                boxShadow: score >= 80 ? '0 0 10px rgba(147, 51, 234, 0.3)' : 'none'
+                                background: score >= 80
+                                    ? 'linear-gradient(90deg, #10b981 0%, #3b82f6 100%)'
+                                    : 'linear-gradient(90deg, #f59e0b 0%, #ef4444 100%)',
+                                boxShadow: score >= 80 ? '0 0 10px rgba(59, 130, 246, 0.3)' : 'none'
                             }}
                         />
                     </div>
-                    <span className="text-sm font-black text-blue-600 dark:text-blue-400 tabular-nums">
+                    <span className={`text-sm font-black tabular-nums transition-colors ${score >= 80 ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
+                        }`}>
                         {score}%
                     </span>
                 </div>
+
+                {/* Reason / Context */}
+                <AnimatePresence>
+                    {reason && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="text-[10px] text-gray-500 dark:text-gray-400 italic leading-tight pt-1 overflow-hidden"
+                        >
+                            &quot;{reason}&quot;
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Bottom Row: Actions */}
                 <div className="flex items-center gap-4 pt-1">

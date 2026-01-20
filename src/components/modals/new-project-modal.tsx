@@ -22,7 +22,7 @@ export function NewProjectModal() {
     const startProject = async () => {
         setIsLoading(true);
         // FAIL-SAFE: If user is missing, use a temporary demo identity locally
-        let currentUser = user || {
+        const currentUser = user || {
             id: "offline-demo",
             email: "demo@offline.local",
             user_id: "offline-demo",

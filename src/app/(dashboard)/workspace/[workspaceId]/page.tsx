@@ -15,6 +15,7 @@ import { LicensingEngine } from "@/components/dashboard/licensing-engine";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
+import { useSocket } from "@/hooks/use-socket";
 
 type Stage = "Collaboration" | "Certified" | "Licensing";
 
@@ -22,9 +23,12 @@ interface Message {
     id: string;
     role: string;
     content: string;
-    upload_url?: string; // Optimistic or from history if available
+    upload_url?: string;
     upload_name?: string;
     is_image?: boolean;
+    verdict?: string;
+    reason?: string;
+    score?: number;
 }
 
 export default function WorkspacePage() {
@@ -34,6 +38,7 @@ export default function WorkspacePage() {
     const { user } = useAuth();
     const { t } = useLanguage();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [wsData, setWsData] = useState<any>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -41,6 +46,9 @@ export default function WorkspacePage() {
     const [isMessageSending, setIsMessageSending] = useState(false);
     const [stage, setStage] = useState<Stage>("Collaboration");
     const [score, setScore] = useState(0);
+    const [verdict, setVerdict] = useState<string | undefined>();
+    const [reason, setReason] = useState<string | undefined>();
+
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadedFileId, setUploadedFileId] = useState<string | null>(null);
@@ -51,6 +59,37 @@ export default function WorkspacePage() {
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const normalizeScore = (val: number) => {
+        if (val <= 1) return Math.round(val * 100);
+        return Math.round(val);
+    };
+
+    // WebSocket Integration
+    const { status: wsStatus } = useSocket({
+        url: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8080/ws', // Fallback or env
+        token: user?.access_token,
+        onMessage: (data) => {
+            console.log("WS Message:", data);
+            if (data.type === 'analysis_update') {
+                if (data.score) setScore(data.score);
+                if (data.verdict) setVerdict(data.verdict);
+                if (data.reason) setReason(data.reason);
+
+                // Optionally append a message or update the last message
+                if (data.message) {
+                    setMessages(prev => [...prev, {
+                        id: Date.now().toString(),
+                        role: "assistant",
+                        content: data.message,
+                        verdict: data.verdict,
+                        reason: data.reason,
+                        score: data.score
+                    }]);
+                }
+            }
+        }
+    });
+
     // Initial Data Fetch
     useEffect(() => {
         const init = async () => {
@@ -60,7 +99,7 @@ export default function WorkspacePage() {
                     const wsRes = await proofaApi.workspaces.get(workspaceId, user.access_token);
                     if (wsRes.data.success) {
                         setWsData(wsRes.data.data);
-                        setScore(wsRes.data.data.current_score || 0);
+                        setScore(normalizeScore(wsRes.data.data.current_score || 0));
                         if (wsRes.data.data.status === "LICENSING") setStage("Licensing");
                         else if (wsRes.data.data.status === "CERTIFIED") setStage("Certified");
                     }
@@ -68,11 +107,14 @@ export default function WorkspacePage() {
                     // 2. Get History
                     const historyRes = await proofaApi.workspaces.getHistory(workspaceId, user.access_token);
                     if (historyRes.data.success && Array.isArray(historyRes.data.data)) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         setMessages(historyRes.data.data.map((msg: any) => ({
                             id: msg.id || Date.now().toString() + Math.random(),
                             role: msg.role,
-                            content: msg.content
-                            // Logic to extract file info from content or specific fields if backend supports it in future
+                            content: msg.content,
+                            verdict: msg.verdict,
+                            reason: msg.reason,
+                            score: msg.score ? normalizeScore(msg.score) : undefined
                         })));
                     }
                 } catch (e) {
@@ -100,7 +142,6 @@ export default function WorkspacePage() {
     // Auto-scroll chat
     useEffect(() => {
         if (chatContainerRef.current) {
-
             chatContainerRef.current.scrollTo({
                 top: chatContainerRef.current.scrollHeight,
                 behavior: "smooth"
@@ -209,17 +250,30 @@ export default function WorkspacePage() {
             }, user.access_token);
 
             if (res.data.success && res.data.data) {
-                const aiResponse = res.data.data.response;
-                setMessages(prev => [...prev, {
+                const data = res.data.data;
+
+                // Structured Response Handling
+                // { success: true, message: "...", data: { score: 0.95, verdict: "...", reason: "...", reply: "..." } }
+
+                // Prioritize 'reply' or 'response' for the chat bubble
+                const aiContent = data.reply || data.response || data.message || data.answer || data.content;
+
+                const aiMsg: Message = {
                     id: Date.now().toString(),
                     role: "assistant",
-                    content: aiResponse
-                }]);
+                    content: aiContent,
+                    verdict: data.verdict,
+                    reason: data.reason,
+                    score: data.score ? normalizeScore(data.score) : undefined
+                };
 
-                // Update score if returned
-                if (res.data.data.current_score !== undefined) {
-                    setScore(res.data.data.current_score);
-                }
+                setMessages(prev => [...prev, aiMsg]);
+
+                // Update HUD state
+                if (data.score !== undefined) setScore(normalizeScore(data.score)); // Assuming backend sends 0-100 or 0.95
+                if (data.verdict) setVerdict(data.verdict);
+                if (data.reason) setReason(data.reason);
+
             }
         } catch (error) {
             console.error("Interaction failed", error);
@@ -327,6 +381,8 @@ export default function WorkspacePage() {
                             stage={stage}
                             onCertify={handleCertify}
                             isCertified={stage === "Certified" || stage === "Licensing"}
+                            verdict={verdict}
+                            reason={reason}
                         />
                     </div>
 
@@ -369,8 +425,8 @@ export default function WorkspacePage() {
                                                 {/* File Attachment Pill if not image or as supplement */}
                                                 {msg.upload_name && !msg.is_image && (
                                                     <div className={`flex items-center gap-2 p-3 text-xs rounded-xl ${msg.role === "user"
-                                                            ? "bg-blue-700/50 text-white"
-                                                            : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300"
+                                                        ? "bg-blue-700/50 text-white"
+                                                        : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300"
                                                         }`}>
                                                         <FileText className="w-4 h-4" />
                                                         <span className="truncate">{msg.upload_name}</span>
@@ -380,10 +436,29 @@ export default function WorkspacePage() {
                                                 {/* Text Content */}
                                                 {(msg.content && msg.content !== `Uploaded file: ${msg.upload_name}`) && (
                                                     <div className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "user"
-                                                            ? "bg-blue-600 text-white rounded-br-none"
-                                                            : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm"
+                                                        ? "bg-blue-600 text-white rounded-br-none"
+                                                        : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm"
                                                         }`}>
                                                         {msg.content}
+                                                    </div>
+                                                )}
+
+                                                {/* Analysis Card for AI Responses with structured data */}
+                                                {msg.role === "assistant" && (msg.verdict || msg.reason) && (
+                                                    <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20 rounded-xl p-3 text-xs">
+                                                        {msg.verdict && (
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-full font-bold uppercase text-[10px]">
+                                                                    {msg.verdict}
+                                                                </span>
+                                                                {msg.score !== undefined && (
+                                                                    <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">{msg.score}%</span>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        {msg.reason && (
+                                                            <p className="text-gray-600 dark:text-gray-400 italic">&quot;{msg.reason}&quot;</p>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
@@ -488,6 +563,8 @@ export default function WorkspacePage() {
                         stage={stage}
                         onCertify={handleCertify}
                         isCertified={stage === "Certified" || stage === "Licensing"}
+                        verdict={verdict}
+                        reason={reason}
                     />
                 </div>
             </main>

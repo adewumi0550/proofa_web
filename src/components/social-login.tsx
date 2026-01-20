@@ -14,6 +14,7 @@ export function SocialLoginButtons() {
         try {
             await loginWithGoogle();
             toast.success("Signed in with Google");
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error(error);
             // Firebase errors look like auth/popup-closed-by-user

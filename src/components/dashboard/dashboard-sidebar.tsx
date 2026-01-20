@@ -41,6 +41,7 @@ export function DashboardSidebar() {
                 try {
                     const res = await proofaApi.workspaces.list(user.access_token);
                     if (res.data.success && Array.isArray(res.data.data)) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         const newProjects = res.data.data.map((w: any) => ({
                             id: w.id,
                             name: w.name

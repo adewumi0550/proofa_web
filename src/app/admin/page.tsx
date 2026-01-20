@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { proofaApi } from "@/lib/api";
-import { Copy, Database, Server, Terminal, User } from "lucide-react";
+
+import { Copy, Database, Terminal, User } from "lucide-react";
 import axios from "axios";
 
 export default function AdminPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [state, setState] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -59,10 +60,12 @@ export default function AdminPage() {
                             </span>
                         </div>
 
+                        {/* User Registry */}
                         {loading ? (
                             <div className="animate-pulse">Loading memory dump...</div>
                         ) : (
                             <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 {state?.users && Object.values(state.users).map((u: any) => (
                                     <div key={u.ID} className="bg-green-950/20 border border-green-900/50 p-4 rounded text-sm relative group hover:bg-green-900/10 transition-colors">
                                         <div className="flex flex-col gap-1 mb-2">
@@ -113,6 +116,7 @@ export default function AdminPage() {
                             <div className="animate-pulse">Scanning registry...</div>
                         ) : (
                             <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 {state?.seeds && Object.values(state.seeds).map((s: any) => (
                                     <div key={s.ID} className="bg-green-950/20 border border-green-900/50 p-4 rounded text-sm hover:bg-green-900/10 transition-colors">
                                         <div className="flex justify-between items-start mb-2">
@@ -159,12 +163,13 @@ export default function AdminPage() {
                             <div className="animate-pulse">Decrypting logs...</div>
                         ) : (
                             <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 {state?.evidence && Object.values(state.evidence).map((e: any) => (
                                     <div key={e.ID} className="bg-green-950/20 border border-green-900/50 p-4 rounded text-sm hover:bg-green-900/10 transition-colors group">
                                         <div className="mb-3">
                                             <span className="font-mono text-green-400 text-[10px] block mb-1 opacity-50">USER PROMPT:</span>
                                             <p className="font-medium text-white text-xs bg-black/30 p-2 rounded border border-green-900/20 group-hover:border-green-500/30 transition-colors">
-                                                "{e.Prompt}"
+                                                &quot;{e.Prompt}&quot;
                                             </p>
                                         </div>
 

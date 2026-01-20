@@ -12,7 +12,7 @@ export default function FAQPage() {
                     </AccordionItem>
 
                     <AccordionItem title="How does the certification work?">
-                        We cryptographically timestamp your prompts, seed data, and generation metadata. This creates a forensic audit trail that establishes your "human-in-the-loop" contribution, which is essential for copyright claims.
+                        We cryptographically timestamp your prompts, seed data, and generation metadata. This creates a forensic audit trail that establishes your &quot;human-in-the-loop&quot; contribution, which is essential for copyright claims.
                     </AccordionItem>
 
                     <AccordionItem title="Do you support video models?">

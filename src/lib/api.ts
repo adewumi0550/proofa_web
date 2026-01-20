@@ -90,6 +90,7 @@ export interface Workspace {
     birth_hash: string;
     created_at: string;
     updated_at: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     members?: any;
 }
 
@@ -149,14 +150,17 @@ export const proofaApi = {
                 headers: { 'Authorization': `Bearer ${token}` }
             }),
         interact: (id: string, data: { prompt: string; mode: string; upload_id?: string[] }, token: string) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             api.post<BackendResponse<any>>(`/workspaces/${id}/interact`, data, {
                 headers: { 'Authorization': `Bearer ${token}` }
             }),
         certify: (id: string, token: string) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             api.post<BackendResponse<any>>(`/workspaces/${id}/certify`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` }
             }),
         getHistory: (id: string, token: string) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             api.get<BackendResponse<any>>(`/workspaces/${id}/history`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             }),
@@ -185,6 +189,7 @@ export const proofaApi = {
     },
     registry: {
         upload: (data: { user_id: string; content: string; metadata: string }) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             api.post<any>('/registry/upload', data),
     },
     proofa: {

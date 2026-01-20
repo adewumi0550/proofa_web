@@ -85,6 +85,7 @@ export default function SignupPage() {
             toast.success("Account created successfully!", { id: toastId });
             // On success, redirect to onboarding
             router.push("/onboarding/role");
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error(error);
             // Try to extract message from axios error

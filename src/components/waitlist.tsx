@@ -47,7 +47,7 @@ export function Waitlist() {
             </form>
             {status === "success" && (
                 <p className="mt-4 text-center text-sm text-green-600 dark:text-green-400 animate-in fade-in slide-in-from-bottom-2">
-                    Thanks for joining! We'll be in touch soon. 🚀
+                    Thanks for joining! We&apos;ll be in touch soon. 🚀
                 </p>
             )}
         </div>

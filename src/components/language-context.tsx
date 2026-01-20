@@ -15,15 +15,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguageState] = useState<Language>('en');
 
     useEffect(() => {
-        const savedLang = localStorage.getItem('proofa-language') as Language;
-        if (savedLang && (savedLang === 'en' || savedLang === 'ru' || savedLang === 'de')) {
-            setLanguageState(savedLang);
-        } else {
-            const browserLang = navigator.language.split('-')[0];
-            if (browserLang === 'ru') setLanguageState('ru');
-            else if (browserLang === 'de') setLanguageState('de');
-            else setLanguageState('en');
-        }
+        setTimeout(() => {
+            const savedLang = localStorage.getItem('proofa-language') as Language;
+            if (savedLang && (savedLang === 'en' || savedLang === 'ru' || savedLang === 'de')) {
+                setLanguageState(savedLang);
+            } else {
+                const browserLang = navigator.language.split('-')[0];
+                if (browserLang === 'ru') setLanguageState('ru');
+                else if (browserLang === 'de') setLanguageState('de');
+                else setLanguageState('en');
+            }
+        }, 0);
     }, []);
 
     const setLanguage = (lang: Language) => {
