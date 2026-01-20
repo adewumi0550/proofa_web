@@ -458,34 +458,77 @@ export default function WorkspacePage() {
                                                     </div>
                                                 )}
 
-                                                {/* Text Content */}
-                                                {(msg.content && msg.content !== `Uploaded file: ${msg.upload_name}`) && (
-                                                    <div className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "user"
-                                                        ? "bg-blue-600 text-white rounded-br-none"
-                                                        : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm"
-                                                        }`}>
-                                                        {msg.content}
-                                                    </div>
-                                                )}
+                                                {/* Text Content or Analysis Card */}
+                                                {(() => {
+                                                    // Helper to check for JSON content
+                                                    let structuredData = null;
+                                                    if (msg.content && msg.role === 'assistant') {
+                                                        try {
+                                                            // Only attempt parse if it looks like JSON object
+                                                            if (msg.content.trim().startsWith('{') && msg.content.trim().endsWith('}')) {
+                                                                const parsed = JSON.parse(msg.content);
+                                                                if (parsed.verdict || parsed.score !== undefined || parsed.reason) {
+                                                                    structuredData = parsed;
+                                                                }
+                                                            }
+                                                        } catch (e) {
+                                                            // Not JSON, ignore
+                                                        }
+                                                    }
 
-                                                {/* Analysis Card for AI Responses with structured data */}
-                                                {msg.role === "assistant" && (msg.verdict || msg.reason) && (
-                                                    <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20 rounded-xl p-3 text-xs">
-                                                        {msg.verdict && (
-                                                            <div className="flex items-center gap-2 mb-1">
-                                                                <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-full font-bold uppercase text-[10px]">
-                                                                    {msg.verdict}
-                                                                </span>
-                                                                {msg.score !== undefined && (
-                                                                    <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">{msg.score}%</span>
+                                                    if (structuredData) {
+                                                        return (
+                                                            <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-2xl rounded-bl-none p-4 shadow-sm w-full max-w-md">
+                                                                <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100 dark:border-white/5">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider">
+                                                                            Analysis
+                                                                        </div>
+                                                                        <span className="text-xs text-gray-400 font-mono">
+                                                                            {new Date(Number(msg.id)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                        </span>
+                                                                    </div>
+                                                                    {structuredData.score !== undefined && (
+                                                                        <div className="flex items-center gap-1.5">
+                                                                            <span className="text-xs text-gray-500">Score</span>
+                                                                            <span className="text-sm font-bold text-gray-900 dark:text-white">
+                                                                                {structuredData.score > 1 ? structuredData.score : Math.round(structuredData.score * 100)}%
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                {structuredData.verdict && (
+                                                                    <div className={`text-sm font-bold mb-2 ${structuredData.verdict.toLowerCase().includes('denied')
+                                                                        ? "text-red-600 dark:text-red-400"
+                                                                        : "text-green-600 dark:text-green-400"
+                                                                        }`}>
+                                                                        {structuredData.verdict}
+                                                                    </div>
+                                                                )}
+
+                                                                {structuredData.reason && (
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-0">
+                                                                        {structuredData.reason}
+                                                                    </p>
                                                                 )}
                                                             </div>
-                                                        )}
-                                                        {msg.reason && (
-                                                            <p className="text-gray-600 dark:text-gray-400 italic">&quot;{msg.reason}&quot;</p>
-                                                        )}
-                                                    </div>
-                                                )}
+                                                        );
+                                                    }
+
+                                                    // Standard Text Fallback
+                                                    if (msg.content && msg.content !== `Uploaded file: ${msg.upload_name}`) {
+                                                        return (
+                                                            <div className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "user"
+                                                                ? "bg-blue-600 text-white rounded-br-none"
+                                                                : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm"
+                                                                }`}>
+                                                                {msg.content}
+                                                            </div>
+                                                        );
+                                                    }
+                                                    return null;
+                                                })()}
                                             </div>
                                         </div>
                                     ))
