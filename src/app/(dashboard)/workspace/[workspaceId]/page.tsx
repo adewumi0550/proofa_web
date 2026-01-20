@@ -27,6 +27,7 @@ interface Message {
     upload_url?: string;
     upload_name?: string;
     is_image?: boolean;
+    is_video?: boolean;
     verdict?: string;
     reason?: string;
     score?: number;
@@ -57,6 +58,7 @@ export default function WorkspacePage() {
     const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
     const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const dragCounter = useRef(0);
 
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -147,9 +149,11 @@ export default function WorkspacePage() {
                     // 2. Get History
                     const historyRes = await proofaApi.workspaces.getHistory(workspaceId, user.access_token);
                     if (historyRes.data.success && Array.isArray(historyRes.data.data)) {
-                        const history = historyRes.data.data;
+                        // The backend now returns newest items first, but we want oldest-first for the chat transcript
+                        const history = [...historyRes.data.data].reverse();
+
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        setMessages(history.map((msg: any) => {
+                        const mappedHistory = history.map((msg: any) => {
                             let v = msg.verdict;
                             let r = msg.reason;
                             let s = msg.score ? normalizeScore(msg.score) : undefined;
@@ -167,6 +171,22 @@ export default function WorkspacePage() {
                                 } catch (e) { /* ignore */ }
                             }
 
+                            // Robust media detection
+                            const firstFileUrl = (Array.isArray(msg.file_urls) ? msg.file_urls[0] : msg.file_urls) || msg.upload_url || msg.url;
+
+                            const urlLooksLikeImage = firstFileUrl ? /\.(jpg|jpeg|png|gif|webp)/i.test(firstFileUrl) : false;
+                            const urlLooksLikeVideo = firstFileUrl ? /\.(mp4|mov|webm|ogg)/i.test(firstFileUrl) : false;
+
+                            let isImg = msg.is_image;
+                            if (isImg === undefined || isImg === null || (!isImg && urlLooksLikeImage)) {
+                                isImg = urlLooksLikeImage || (msg.upload_name ? /\.(jpg|jpeg|png|gif|webp)/i.test(msg.upload_name) : false);
+                            }
+
+                            let isVid = msg.is_video;
+                            if (isVid === undefined || isVid === null || (!isVid && urlLooksLikeVideo)) {
+                                isVid = urlLooksLikeVideo || (msg.upload_name ? /\.(mp4|mov|webm|ogg)/i.test(msg.upload_name) : false);
+                            }
+
                             return {
                                 id: msg.id || Date.now().toString() + Math.random(),
                                 role: msg.role,
@@ -174,34 +194,21 @@ export default function WorkspacePage() {
                                 verdict: v,
                                 reason: r,
                                 score: s,
-                                upload_url: msg.upload_url,
-                                upload_name: msg.upload_name,
-                                is_image: msg.is_image
+                                upload_url: firstFileUrl,
+                                upload_name: msg.upload_name || (firstFileUrl ? "Attachment" : undefined),
+                                is_image: !!isImg,
+                                is_video: !!isVid
                             };
-                        }));
+                        });
+
+                        setMessages(mappedHistory);
 
                         // Restore HUD state from latest assistant analysis if history exists
-                        const latestAssistant = [...history].reverse().find(m => m.role === 'assistant' && (m.score || m.verdict || (m.content && m.content.trim().startsWith('{'))));
+                        const latestAssistant = [...mappedHistory].reverse().find(m => m.role === 'assistant' && (m.score !== undefined || m.verdict || (m.content && m.content.trim().startsWith('{'))));
                         if (latestAssistant) {
-                            let v = latestAssistant.verdict;
-                            let r = latestAssistant.reason;
-                            let s = latestAssistant.score !== undefined ? normalizeScore(latestAssistant.score) : undefined;
-
-                            if (latestAssistant.content && latestAssistant.content.trim().startsWith('{')) {
-                                try {
-                                    const parsed = JSON.parse(latestAssistant.content);
-                                    if (!v) v = parsed.verdict || parsed.authorship_verdict;
-                                    if (!r) r = parsed.reason || parsed.summary_judgment;
-                                    if (s === undefined) {
-                                        const rawS = parsed.score ?? parsed.overall_authorship_score;
-                                        if (rawS !== undefined) s = normalizeScore(rawS);
-                                    }
-                                } catch (e) { /* ignore */ }
-                            }
-
-                            if (s !== undefined) setScore(s);
-                            if (v) setVerdict(v);
-                            if (r) setReason(r);
+                            if (latestAssistant.score !== undefined) setScore(latestAssistant.score);
+                            if (latestAssistant.verdict) setVerdict(latestAssistant.verdict);
+                            if (latestAssistant.reason) setReason(latestAssistant.reason);
                         }
                     }
                 } catch (e) {
@@ -253,9 +260,11 @@ export default function WorkspacePage() {
             });
 
             if (res.data.success && res.data.data) {
-                setUploadedFileId(res.data.data.upload_id);
+                const uploadData = res.data.data;
+                setUploadedFileId(uploadData.upload_id);
                 setUploadedFileName(file.name);
-                setUploadedFileUrl(isImage ? previewUrl : null);
+                // Use backend URL if available, otherwise fallback to blob preview
+                setUploadedFileUrl(isImage ? (uploadData.url || previewUrl) : null);
                 toast.success("File uploaded successfully");
             } else {
                 toast.error("Upload failed");
@@ -274,25 +283,38 @@ export default function WorkspacePage() {
         if (file) handleFileProcess(file);
     };
 
-    const handleDrop = useCallback((e: React.DragEvent) => {
+    const handleDragEnter = useCallback((e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setIsDragging(false);
-
-        const file = e.dataTransfer.files?.[0];
-        if (file) handleFileProcess(file);
+        dragCounter.current++;
+        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+            setIsDragging(true);
+        }
     }, []);
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setIsDragging(true);
+        // Necessary to allow drop
     }, []);
 
     const handleDragLeave = useCallback((e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        dragCounter.current--;
+        if (dragCounter.current === 0) {
+            setIsDragging(false);
+        }
+    }, []);
+
+    const handleDrop = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
         setIsDragging(false);
+        dragCounter.current = 0;
+
+        const file = e.dataTransfer.files?.[0];
+        if (file) handleFileProcess(file);
     }, []);
 
 
@@ -303,7 +325,7 @@ export default function WorkspacePage() {
         const currentFileName = uploadedFileName;
         const currentFileUrl = uploadedFileUrl;
 
-        const isImage = currentFileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+        const isImage = !!currentFileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i);
 
         const userMsg: Message = {
             id: Date.now().toString(),
@@ -311,7 +333,7 @@ export default function WorkspacePage() {
             content: input,
             upload_name: currentFileName || undefined,
             upload_url: currentFileUrl || undefined,
-            is_image: !!isImage
+            is_image: isImage
         };
 
         // If solely an upload without text, we can add a system note or just show the file
@@ -427,7 +449,13 @@ export default function WorkspacePage() {
     };
 
     return (
-        <div className="relative h-[calc(100vh-4rem)] w-full bg-[#fbfbfb] dark:bg-[#090909] flex flex-col overflow-hidden">
+        <div
+            className="relative h-[calc(100vh-4rem)] w-full bg-[#fbfbfb] dark:bg-[#090909] flex flex-col overflow-hidden"
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+        >
             {/* Header */}
             <header className="flex items-center justify-between shrink-0 px-4 md:px-8 pt-6 pb-4 border-b border-gray-100 dark:border-white/5 mx-0 md:mx-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
@@ -443,13 +471,10 @@ export default function WorkspacePage() {
                 </div>
             </header>
 
-            <main className="flex-1 flex min-w-0 relative h-full">
+            <main className="flex-1 flex min-w-0 relative">
                 {/* Chat Area */}
                 <div
                     className="flex-1 flex flex-col relative"
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
                 >
                     {/* Drag Overlay */}
                     <AnimatePresence>
@@ -491,7 +516,7 @@ export default function WorkspacePage() {
                     ) : (
                         <>
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-6 custom-scrollbar pb-32" ref={chatContainerRef}>
+                            <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-6 custom-scrollbar pb-8" ref={chatContainerRef}>
                                 {messages.length === 0 ? (
                                     <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-50">
                                         <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center">
@@ -503,7 +528,7 @@ export default function WorkspacePage() {
                                     messages.map((msg, idx) => (
                                         <div key={msg.id || idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                                             <div className={`flex flex-col gap-2 max-w-[85%] md:max-w-[70%]`}>
-                                                {/* Image Placeholder if applicable */}
+                                                {/* Image Rendering */}
                                                 {msg.upload_url && msg.is_image && (
                                                     <div className={`p-2 rounded-2xl ${msg.role === "user" ? "bg-blue-600 rounded-br-none" : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 rounded-bl-none"} mb-1`}>
                                                         <img
@@ -514,8 +539,19 @@ export default function WorkspacePage() {
                                                     </div>
                                                 )}
 
-                                                {/* File Attachment Pill if not image or as supplement */}
-                                                {msg.upload_name && !msg.is_image && (
+                                                {/* Video Rendering */}
+                                                {msg.upload_url && msg.is_video && (
+                                                    <div className={`p-2 rounded-2xl ${msg.role === "user" ? "bg-blue-600 rounded-br-none" : "bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 rounded-bl-none"} mb-1`}>
+                                                        <video
+                                                            src={msg.upload_url}
+                                                            controls
+                                                            className="rounded-xl max-w-full max-h-60"
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                {/* File Attachment Pill if not image/video or as supplement */}
+                                                {msg.upload_name && !msg.is_image && !msg.is_video && (
                                                     <div className={`flex items-center gap-2 p-3 text-xs rounded-xl ${msg.role === "user"
                                                         ? "bg-blue-700/50 text-white"
                                                         : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300"
@@ -529,17 +565,18 @@ export default function WorkspacePage() {
                                                 {(() => {
                                                     // Helper to check for JSON content
                                                     let structuredData = null;
-                                                    if (msg.content && msg.role === 'assistant') {
+                                                    if (msg.content) {
+                                                        const trimmed = msg.content.trim();
                                                         try {
-                                                            // Only attempt parse if it looks like JSON object
-                                                            if (msg.content.trim().startsWith('{') && msg.content.trim().endsWith('}')) {
-                                                                const parsed = JSON.parse(msg.content);
+                                                            // Detect if the message is or contains a JSON object
+                                                            if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                                                                const parsed = JSON.parse(trimmed);
                                                                 if (parsed.verdict || parsed.score !== undefined || parsed.reason) {
                                                                     structuredData = parsed;
                                                                 }
                                                             }
                                                         } catch (e) {
-                                                            // Not JSON, ignore
+                                                            // Not valid JSON object, ignore
                                                         }
                                                     }
 
@@ -617,7 +654,7 @@ export default function WorkspacePage() {
                             </div>
 
                             {/* Input Area */}
-                            <div className="p-4 md:p-6 shrink-0 z-20 bg-[#fbfbfb] dark:bg-[#090909]">
+                            <div className="p-4 md:p-6 shrink-0 z-20 bg-white dark:bg-[#090909] border-t border-gray-100 dark:border-white/5">
                                 <div className="max-w-4xl mx-auto relative bg-white dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg shadow-blue-500/5 p-2 flex items-end gap-2">
                                     {/* Upload Button */}
                                     <div className="relative">
