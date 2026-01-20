@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 
 interface LicensingEngineProps {
     projectID: string | null;
+    projectName?: string;
     humanScore: number;
     creativeHash: string | null;
     onBack: () => void;
@@ -26,6 +27,7 @@ interface LicensingEngineProps {
 
 export const LicensingEngine: React.FC<LicensingEngineProps> = ({
     projectID,
+    projectName,
     humanScore,
     creativeHash,
     onBack

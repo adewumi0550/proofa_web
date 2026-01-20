@@ -78,6 +78,7 @@ export const translations = {
         dontHaveAccount: "Don't have an account?",
         orContinuingWith: "Or continue with",
         orSignUpWith: "Or sign up with",
+        sessionExpired: "Session expired. Please sign in again.",
         forgotPassword: "Forgot?",
 
         // Community
@@ -181,6 +182,24 @@ export const translations = {
         security: "Security",
         footerDesc: "The certification layer for AI-generated assets. Monetize your creativity with legal protection.",
         rightsReserved: "© 2025 Proofa Inc. All rights reserved.",
+
+        // New Pages
+        communities: "Communities",
+        searchCommunities: "Search communities...",
+        joinCommunity: "Join Community",
+        myCommunities: "My Communities",
+        trendingCommunities: "Trending Communities",
+        subscriptions: "Subscriptions",
+        activeSubscription: "Active Subscription",
+        billingCycle: "Billing Cycle",
+        nextPayment: "Next Payment",
+        paymentMethod: "Payment Method",
+        managePlan: "Manage Plan",
+        upgradePlan: "Upgrade Plan",
+        currentPlan: "Current Plan",
+        planDetails: "Plan Details",
+        standardSupport: "Standard Support",
+        prioritySupport: "Priority Support",
     },
     ru: {
         // Navbar
@@ -259,6 +278,7 @@ export const translations = {
         dontHaveAccount: "Нет аккаунта?",
         orContinuingWith: "Или войдите через",
         orSignUpWith: "Или зарегистрируйтесь через",
+        sessionExpired: "Сессия истекла. Пожалуйста, войдите снова.",
         forgotPassword: "Забыли?",
 
         // Community
@@ -362,6 +382,24 @@ export const translations = {
         security: "Безопасность",
         footerDesc: "Слой сертификации для AI-активов. Монетизируйте ваше творчество с правовой защитой.",
         rightsReserved: "© 2025 Proofa Inc. Все права защищены.",
+
+        // New Pages
+        communities: "Сообщества",
+        searchCommunities: "Поиск сообществ...",
+        joinCommunity: "Вступить",
+        myCommunities: "Мои Сообщества",
+        trendingCommunities: "Популярные Сообщества",
+        subscriptions: "Подписки",
+        activeSubscription: "Активная Подписка",
+        billingCycle: "Платежный Цикл",
+        nextPayment: "Следующий Платеж",
+        paymentMethod: "Способ Оплаты",
+        managePlan: "Управление Планом",
+        upgradePlan: "Улучшить План",
+        currentPlan: "Текущий План",
+        planDetails: "Детали Плана",
+        standardSupport: "Стандартная Поддержка",
+        prioritySupport: "Приоритетная Поддержка",
     },
     de: {
         // Navbar
@@ -440,6 +478,7 @@ export const translations = {
         dontHaveAccount: "Haben Sie kein Konto?",
         orContinuingWith: "Oder weiter mit",
         orSignUpWith: "Oder registrieren mit",
+        sessionExpired: "Sitzung abgelaufen. Bitte melden Sie sich erneut an.",
         forgotPassword: "Vergessen?",
 
         // Community
@@ -543,5 +582,23 @@ export const translations = {
         security: "Sicherheit",
         footerDesc: "Die Zertifizierungsschicht für KI-generierte Assets. Monetarisieren Sie Ihre Kreativität.",
         rightsReserved: "© 2025 Proofa Inc. Alle Rechte vorbehalten.",
+
+        // New Pages
+        communities: "Gemeinschaften",
+        searchCommunities: "Gemeinschaften suchen...",
+        joinCommunity: "Gemeinschaft beitreten",
+        myCommunities: "Meine Gemeinschaften",
+        trendingCommunities: "Trend-Gemeinschaften",
+        subscriptions: "Abonnements",
+        activeSubscription: "Aktives Abonnement",
+        billingCycle: "Abrechnungszyklus",
+        nextPayment: "Nächste Zahlung",
+        paymentMethod: "Zahlungsmethode",
+        managePlan: "Plan verwalten",
+        upgradePlan: "Plan aktualisieren",
+        currentPlan: "Aktueller Plan",
+        planDetails: "Plan-Details",
+        standardSupport: "Standard-Unterstützung",
+        prioritySupport: "Prioritäts-Support",
     },
 };

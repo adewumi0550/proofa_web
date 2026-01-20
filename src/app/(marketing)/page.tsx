@@ -19,13 +19,17 @@ export default function Home() {
       <FadeIn>
         <div className="relative pt-24 pb-32 sm:pt-32 sm:pb-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-300 mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
               <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
-              {t('buildingFuture')}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 animate-gradient-x font-bold">
+                {t('buildingFuture')}
+              </span>
             </div>
 
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-sans tracking-tight font-bold text-gray-900 dark:text-white mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
-              {t('heroTitle')}
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-sans tracking-tight font-bold mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white animate-gradient-x pb-2">
+                {t('heroTitle')}
+              </span>
             </h1>
 
             <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">

@@ -5,14 +5,15 @@ import Link from "next/link";
 import { SocialLoginButtons } from "@/components/social-login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FadeIn } from "@/components/fade-in";
 import { Eye, EyeOff } from "lucide-react";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth-context";
 import { toast } from "sonner";
 import { useLanguage } from "@/components/language-context";
+
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
@@ -20,8 +21,18 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { login } = useAuth();
     const { t } = useLanguage();
+
+    useEffect(() => {
+        const error = searchParams.get("error");
+        if (error === "session_expired") {
+            toast.error(t('sessionExpired') || "Session expired. Please sign in again.", {
+                id: "session-expired",
+            });
+        }
+    }, [searchParams, t]);
 
     const isValid = email.length > 0 && password.length > 0;
 
@@ -34,7 +45,13 @@ export default function LoginPage() {
             router.push("/dashboard");
         } catch (error: any) {
             console.error(error);
-            const message = error.message || "Login failed. Please check your credentials.";
+            let message = error.response?.data?.message || error.message || "Login failed. Please check your credentials.";
+
+            // Map backend error codes to user-friendly messages
+            if (error.response?.data?.error === "INVALID_LOGIN_CREDENTIALS") {
+                message = "Invalid credentials";
+            }
+
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -59,7 +76,7 @@ export default function LoginPage() {
 
                 <div className="w-full max-w-md space-y-8 bg-gray-50 dark:bg-white/5 p-8 rounded-2xl border border-gray-200 dark:border-white/10">
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('welcomeBack')}</h2>
+                        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white animate-gradient-x pb-1">{t('welcomeBack')}</h2>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{t('enterDetails')}</p>
                     </div>
 

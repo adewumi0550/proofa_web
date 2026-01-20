@@ -1,11 +1,27 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://proofa-backend-40641038540.europe-west1.run.app',
+    baseURL: '/api/proxy',
     headers: {
         'Content-Type': 'application/json',
     },
 });
+
+// Interceptor for Session Expiry
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Check if we are already on the login page to avoid loops (optional but good practice)
+            if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+                console.warn("Session expired. Redirecting to login.");
+                localStorage.removeItem("proofa_user");
+                window.location.href = "/login?error=session_expired";
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 
 // Standard Backend Response Wrapper
 export interface BackendResponse<T> {
@@ -25,6 +41,14 @@ export interface User {
     pqc_public_key?: string;
     access_token?: string;
     user_id?: string; // Alias for id, used in some components
+    credits?: number;
+    plan?: string;
+    kyc_verified?: boolean;
+    trust_score?: number;
+    projects_count?: number;
+    certified_count?: number;
+    avatar_url?: string;
+    location?: string;
 }
 
 export interface LoginResult {
@@ -54,6 +78,21 @@ export interface CertificateResponse {
 
 // API Methods
 // API Methods
+// API Methods
+// Workspace Interface
+export interface Workspace {
+    id: string;
+    user_id: string;
+    name: string;
+    seed_content: string;
+    status: string;
+    current_score: number;
+    birth_hash: string;
+    created_at: string;
+    updated_at: string;
+    members?: any;
+}
+
 // API Methods
 export const proofaApi = {
     auth: {
@@ -89,6 +128,54 @@ export const proofaApi = {
                     'Authorization': `Bearer ${token}`
                 }
             }),
+        updateProfile: (data: { first_name?: string; last_name?: string }, token: string) =>
+            api.put<BackendResponse<User>>("/auth/profile", data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }),
+    },
+    workspaces: {
+        create: (data: { name: string; seed_content: string; oath_signed: boolean }, token: string) =>
+            api.post<BackendResponse<Workspace>>('/workspaces', data, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+        list: (token: string) =>
+            api.get<BackendResponse<Workspace[]>>('/workspaces', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+        get: (id: string, token: string) =>
+            api.get<BackendResponse<Workspace>>(`/workspaces/${id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+        interact: (id: string, data: { prompt: string; mode: string; upload_id?: string[] }, token: string) =>
+            api.post<BackendResponse<any>>(`/workspaces/${id}/interact`, data, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+        certify: (id: string, token: string) =>
+            api.post<BackendResponse<any>>(`/workspaces/${id}/certify`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+        getHistory: (id: string, token: string) =>
+            api.get<BackendResponse<any>>(`/workspaces/${id}/history`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+    },
+    files: {
+        upload: (file: File, token: string) => {
+            const formData = new FormData();
+            formData.append('document', file);
+            return api.post<BackendResponse<{ storage_path: string; upload_id: string; url: string }>>('/upload', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        },
+        analyze: (data: { content: string; content_type: string; upload_id: string }, token: string) =>
+            api.post('/api/v1/analyze', data, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
     },
     registry: {
         upload: (data: { user_id: string; content: string; metadata: string }) =>

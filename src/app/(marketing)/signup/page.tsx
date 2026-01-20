@@ -113,7 +113,7 @@ export default function SignupPage() {
 
                 <div className="w-full max-w-md space-y-8 bg-gray-50 dark:bg-white/5 p-8 rounded-2xl border border-gray-200 dark:border-white/10">
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('createAccount')}</h2>
+                        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white animate-gradient-x pb-1">{t('createAccount')}</h2>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{t('startCertifying')}</p>
                     </div>
 

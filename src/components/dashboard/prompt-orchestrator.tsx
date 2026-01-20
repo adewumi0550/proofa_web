@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
     id: string;
@@ -23,13 +24,14 @@ interface Message {
 }
 
 interface PromptOrchestratorProps {
-    onPromptSent: (content: string) => boolean | Promise<boolean> | void;
-    onFileUpload: (file: File) => void;
+    onPromptSent: (content: string, file?: File) => boolean | Promise<boolean> | void;
+    // onFileUpload removed as we handle it internally and pass with prompt
     messages: Message[];
 }
 
-export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: PromptOrchestratorProps) {
+export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestratorProps) {
     const [input, setInput] = useState("");
+    const [stagedFile, setStagedFile] = useState<File | null>(null); // New state for staged file
     const [selectedModel, setSelectedModel] = useState("Pro v1.5 Engine");
     const [activeMode, setActiveMode] = useState<"art" | "video" | "music" | "voice">("art");
     const [isModelsOpen, setIsModelsOpen] = useState(false);
@@ -37,6 +39,7 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dragCounter = useRef(0);
 
+    // ... (availableModels and scroll logic unchanged)
     const [availableModels] = useState([
         "Pro v1.5 Engine",
         "Creative Diffusion",
@@ -55,16 +58,23 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
     }, [messages]);
 
     const handleSend = async () => {
-        if (!input.trim()) return;
-        const result = await onPromptSent(input);
-        if (result !== false) setInput("");
+        if (!input.trim() && !stagedFile) return;
+
+        // Pass both input and stagedFile
+        const result = await onPromptSent(input, stagedFile || undefined);
+
+        if (result !== false) {
+            setInput("");
+            setStagedFile(null); // Clear staged file after send
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) onFileUpload(file);
+        if (file) setStagedFile(file); // Stage it
     };
 
+    // ... (Drag handlers mostly same, but update drop)
     const handleDragEnter = (e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -95,7 +105,7 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
         dragCounter.current = 0;
 
         const file = e.dataTransfer.files[0];
-        if (file) onFileUpload(file);
+        if (file) setStagedFile(file); // Stage it
     };
 
     return (
@@ -123,13 +133,13 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
                                 <Upload className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                             </div>
                             <h3 className="text-xl font-black text-gray-900 dark:text-white mb-2">Drop File Here</h3>
-                            <p className="text-sm font-bold text-gray-500">Add assets to your workspace</p>
+                            <p className="text-sm font-bold text-gray-500">Add assets to your prompt</p>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* Model Selection & Mode Bar */}
+            {/* ... (Model Selection & Mode Bar unchanged) ... */}
             <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 bg-gray-50/50 dark:bg-white/2">
                 <div className="relative">
                     <button
@@ -181,6 +191,7 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
                 ref={scrollContainerRef}
                 className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar"
             >
+                {/* ... (Existing Message Map) ... */}
                 {messages.length === 0 ? (
                     <div
                         className={`
@@ -188,7 +199,6 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
                             ${isDragging ? 'opacity-0' : 'opacity-100'}
                         `}
                     >
-                        {/* Empty State Call to Action - Click to Upload fallback */}
                         <button
                             onClick={() => fileInputRef.current?.click()}
                             className="w-20 h-20 border-2 border-dashed border-gray-300 dark:border-white/20 hover:border-blue-500 hover:bg-blue-500/5 rounded-3xl flex items-center justify-center mb-6 transition-all duration-300 group"
@@ -208,7 +218,14 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
                                     ? 'bg-blue-600 text-white shadow-xl shadow-blue-500/10'
                                     : 'crystal-view text-gray-900 dark:text-gray-100 border-0'}
               `}>
-                                {m.content}
+                                <ReactMarkdown
+                                    components={{
+                                        p: ({ node, ...props }) => <p {...props} className="mb-2 last:mb-0" />,
+                                        strong: ({ node, ...props }) => <span {...props} className="font-black text-blue-600 dark:text-blue-400" />
+                                    }}
+                                >
+                                    {m.content}
+                                </ReactMarkdown>
                             </div>
                         </div>
                     ))
@@ -218,49 +235,70 @@ export function PromptOrchestrator({ onPromptSent, onFileUpload, messages }: Pro
             {/* Input Section - Smart & Responsive */}
             <div className="shrink-0 p-4 md:p-6 pt-0">
                 <div className="relative group p-[1px] rounded-[24px] bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 hover:from-blue-500/40 hover:via-purple-500/40 hover:to-blue-500/40 transition-all duration-300">
-                    <div className="flex items-end gap-2 bg-white dark:bg-[#0A0A0A] backdrop-blur-xl rounded-[23px] p-2 pl-4 shadow-2xl shadow-blue-900/5">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            className="hidden"
-                            onChange={handleFileChange}
-                        />
-                        <button
-                            onClick={() => fileInputRef.current?.click()}
-                            className="p-3 mb-1 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-500 dark:text-gray-300 rounded-full transition-all"
-                            title="Add Attachment"
-                        >
-                            <Plus className="w-5 h-5" />
-                        </button>
+                    <div className="flex flex-col bg-white dark:bg-[#0A0A0A] backdrop-blur-xl rounded-[23px] p-2 shadow-2xl shadow-blue-900/5">
 
-                        <div className="h-8 w-px bg-gray-100 dark:bg-white/5 mb-2 mx-1" />
+                        {/* Staged File Preview */}
+                        {stagedFile && (
+                            <div className="flex items-center justify-between px-4 py-2 mb-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
+                                <div className="flex items-center gap-2 overflow-hidden">
+                                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-lg flex items-center justify-center shrink-0">
+                                        <ImageIcon className="w-4 h-4 text-blue-600 dark:text-blue-300" />
+                                    </div>
+                                    <span className="text-xs font-bold text-blue-900 dark:text-blue-100 truncate">{stagedFile.name}</span>
+                                </div>
+                                <button
+                                    onClick={() => setStagedFile(null)}
+                                    className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 rounded-lg transition-colors"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
 
-                        <textarea
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    handleSend();
-                                }
-                            }}
-                            placeholder={`Enter creative command for ${activeMode} mode...`}
-                            className="flex-1 bg-transparent border-none focus:ring-0 focus:outline-none text-sm md:text-base font-medium text-gray-900 dark:text-white resize-none min-h-[56px] py-4 px-2 custom-scrollbar placeholder:text-gray-400"
-                            style={{ maxHeight: '200px' }}
-                        />
+                        <div className="flex items-end gap-2 pl-2">
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                className="hidden"
+                                onChange={handleFileChange}
+                            />
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="p-3 mb-1 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-500 dark:text-gray-300 rounded-full transition-all"
+                                title="Add Attachment"
+                            >
+                                <Plus className="w-5 h-5" />
+                            </button>
 
-                        <Button
-                            onClick={handleSend}
-                            disabled={!input.trim()}
-                            className={`
-                                mb-1 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
-                                ${input.trim()
-                                    ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 scale-100'
-                                    : 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-gray-600 scale-90 cursor-not-allowed'}
-                            `}
-                        >
-                            <Send className="w-5 h-5 ml-0.5" />
-                        </Button>
+                            <div className="h-8 w-px bg-gray-100 dark:bg-white/5 mb-2 mx-1" />
+
+                            <textarea
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSend();
+                                    }
+                                }}
+                                placeholder={stagedFile ? "Describe this file or assert authorship..." : `Enter creative command for ${activeMode} mode...`}
+                                className="flex-1 bg-transparent border-none focus:ring-0 focus:outline-none text-sm md:text-base font-medium text-gray-900 dark:text-white resize-none min-h-[56px] py-4 px-2 custom-scrollbar placeholder:text-gray-400"
+                                style={{ maxHeight: '200px' }}
+                            />
+
+                            <Button
+                                onClick={handleSend}
+                                disabled={!input.trim() && !stagedFile}
+                                className={`
+                                    mb-1 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
+                                    ${(input.trim() || stagedFile)
+                                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 scale-100'
+                                        : 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-gray-600 scale-90 cursor-not-allowed'}
+                                `}
+                            >
+                                <Send className="w-5 h-5 ml-0.5" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
