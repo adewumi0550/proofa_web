@@ -117,6 +117,7 @@ export const translations = {
 
         // Pricing
         pricingTitle: "Simple, Transparent Pricing",
+        monetizeAndProtect: "Monetize & Protect Your Art",
         pricingSubtitle: "Choose the plan that's right for your creative journey.",
         comparePlans: "Compare Plans",
         compareSubtitle: "Find the perfect fit for your needs.",
@@ -295,6 +296,7 @@ export const translations = {
 
         // Pricing
         pricingTitle: "Простые и прозрачные цены",
+        monetizeAndProtect: "Монетизируйте и защищайте свое искусство",
         pricingSubtitle: "Выберите план, который подходит именно вам.",
         comparePlans: "Сравнить планы",
         compareSubtitle: "Найдите идеальный вариант для ваших нужд.",
@@ -473,6 +475,7 @@ export const translations = {
 
         // Pricing
         pricingTitle: "Einfache, transparente Preise",
+        monetizeAndProtect: "Monetarisieren und schützen Sie Ihre Kunst",
         pricingSubtitle: "Wählen Sie den Plan, der zu Ihrer kreativen Reise passt.",
         comparePlans: "Pläne vergleichen",
         compareSubtitle: "Finden Sie die perfekte Passform.",

@@ -61,7 +61,7 @@ export function PricingTable() {
                 <div className="mx-auto max-w-4xl text-center">
                     <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('pricing')}</h2>
                     <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-                        Monetize & Protect Your Art
+                        {t('monetizeAndProtect')}
                     </p>
                     <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
                         {t('pricingSubtitle')}
