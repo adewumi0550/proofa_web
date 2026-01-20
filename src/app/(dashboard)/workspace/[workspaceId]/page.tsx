@@ -59,6 +59,26 @@ export default function WorkspacePage() {
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const thinkingSteps = [
+        "Analyzing context...",
+        "Checking copyright rules...",
+        "Validating authorship...",
+        "Cross-referencing database...",
+        "Finalizing verdict..."
+    ];
+    const [thinkingStep, setThinkingStep] = useState(0);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (isMessageSending) {
+            setThinkingStep(0);
+            interval = setInterval(() => {
+                setThinkingStep((prev) => (prev + 1) % thinkingSteps.length);
+            }, 2000);
+        }
+        return () => clearInterval(interval);
+    }, [isMessageSending]);
+
     const normalizeScore = (val: number) => {
         if (val <= 1) return Math.round(val * 100);
         return Math.round(val);
@@ -256,23 +276,28 @@ export default function WorkspacePage() {
                 // { success: true, message: "...", data: { score: 0.95, verdict: "...", reason: "...", reply: "..." } }
 
                 // Prioritize 'reply' or 'response' for the chat bubble
-                const aiContent = data.reply || data.response || data.message || data.answer || data.content;
+                // Map backend fields: overall_authorship_score -> score, authorship_verdict -> verdict, summary_judgment -> reason
+                const aiContent = data.reply || data.response || data.message || data.answer || data.content || data.summary_judgment;
+
+                const scoreVal = data.score ?? data.overall_authorship_score;
+                const verdictVal = data.verdict || data.authorship_verdict;
+                const reasonVal = data.reason || data.summary_judgment;
 
                 const aiMsg: Message = {
                     id: Date.now().toString(),
                     role: "assistant",
                     content: aiContent,
-                    verdict: data.verdict,
-                    reason: data.reason,
-                    score: data.score ? normalizeScore(data.score) : undefined
+                    verdict: verdictVal,
+                    reason: reasonVal,
+                    score: scoreVal !== undefined ? normalizeScore(scoreVal) : undefined
                 };
 
                 setMessages(prev => [...prev, aiMsg]);
 
                 // Update HUD state
-                if (data.score !== undefined) setScore(normalizeScore(data.score)); // Assuming backend sends 0-100 or 0.95
-                if (data.verdict) setVerdict(data.verdict);
-                if (data.reason) setReason(data.reason);
+                if (scoreVal !== undefined) setScore(normalizeScore(scoreVal));
+                if (verdictVal) setVerdict(verdictVal);
+                if (reasonVal) setReason(reasonVal);
 
             }
         } catch (error) {
@@ -467,10 +492,15 @@ export default function WorkspacePage() {
                                 )}
                                 {isMessageSending && (
                                     <div className="flex justify-start">
-                                        <div className="flex items-center space-x-2 bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm">
-                                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" />
-                                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-75" />
-                                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-150" />
+                                        <div className="flex items-center space-x-3 bg-white dark:bg-[#111] border border-gray-100 dark:border-white/5 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm">
+                                            <div className="flex space-x-1">
+                                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" />
+                                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-75" />
+                                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-150" />
+                                            </div>
+                                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium min-w-[140px]">
+                                                {thinkingSteps[thinkingStep]}
+                                            </span>
                                         </div>
                                     </div>
                                 )}
