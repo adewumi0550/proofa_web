@@ -11,7 +11,7 @@ import { useLanguage } from "@/components/language-context";
 import { useNewProject } from "@/components/new-project-context";
 
 import { proofaApi } from "@/lib/api";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 
 export function DashboardSidebar() {
     const [isCollapsed, setIsCollapsed] = useState(false);

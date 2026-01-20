@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-context";
 import { LanguageProvider } from "@/components/language-context";
 import { Toaster } from "sonner";
+import { ProofaPreloader } from "@/components/preloader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
           <AuthProvider>
             <LanguageProvider>
               <Toaster />
+              <ProofaPreloader />
               {children}
             </LanguageProvider>
           </AuthProvider>
