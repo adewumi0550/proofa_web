@@ -400,6 +400,23 @@ export const translations = {
         planDetails: "Детали Плана",
         standardSupport: "Стандартная Поддержка",
         prioritySupport: "Приоритетная Поддержка",
+
+        // Subscription Features
+        subFeatureProjects: "До 7 активных проектов",
+        subFeatureModels: "Стандартный доступ к AI моделям",
+        subFeatureCertification: "Базовая сертификация IP",
+        subFeatureSupport: "Стандартная поддержка",
+        subFeatureCredits: "15 кредитов в месяц",
+        needMorePower: "Нужно больше мощности?",
+        upgradeToProText: "Улучшите до Pro Creator, чтобы открыть 50 проектов, премиум модели и защиту IP на $1M.",
+        managingSubscriptions: "Управление подписками?",
+        manageBillingDesc: "Теперь вы можете управлять счетами и подписками на специальной странице подписок.",
+        goToSubscriptions: "Перейти к подпискам",
+        recentActivity: "Недавняя активность",
+        credits: "Кредиты",
+        status: "Статус",
+        active: "Активен",
+        poweringWorkflows: "Обеспечивает ваши ежедневные творческие процессы.",
     },
     de: {
         // Navbar

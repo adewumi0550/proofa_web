@@ -23,11 +23,11 @@ export default function SubscriptionsPage() {
     }, []);
 
     const planFeatures = [
-        "Up to 3 active projects",
-        "Standard AI model access",
-        "Basic IP certification",
-        "Standard support",
-        "15 Monthly credits"
+        t('subFeatureProjects'),
+        t('subFeatureModels'),
+        t('subFeatureCertification'),
+        t('subFeatureSupport'),
+        t('subFeatureCredits')
     ];
 
     return (
@@ -81,13 +81,13 @@ export default function SubscriptionsPage() {
                                     </div>
 
                                     <h2 className="text-4xl font-black mb-1 capitalize">{user?.plan || "Free"} {t('classic') || "Classic"}</h2>
-                                    <p className="text-gray-400 text-sm mb-8">Your creative journey is powered by the {user?.plan || "Free"} plan.</p>
+                                    <p className="text-gray-400 text-sm mb-8">{t('poweringWorkflows') || "Powering your daily creative workflows."}</p>
 
                                     <div className="space-y-4 pt-6 border-t border-white/10">
                                         <div className="flex justify-between items-center px-4 py-3 bg-white/5 rounded-2xl border border-white/10">
                                             <div className="flex items-center gap-3">
                                                 <Zap className="w-5 h-5 text-yellow-400" />
-                                                <span className="text-sm font-medium text-gray-300">Remaining Credits</span>
+                                                <span className="text-sm font-medium text-gray-300">{t('remainingCredits') || "Remaining Credits"}</span>
                                             </div>
                                             <span className="text-xl font-black text-white">{user?.credits || 0}</span>
                                         </div>
@@ -137,9 +137,9 @@ export default function SubscriptionsPage() {
                         </div>
 
                         <div className="mt-12 p-6 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30">
-                            <h4 className="font-bold text-blue-900 dark:text-blue-100 mb-2 truncate">Need more power?</h4>
+                            <h4 className="font-bold text-blue-900 dark:text-blue-100 mb-2 truncate">{t('needMorePower')}</h4>
                             <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
-                                Upgrade to <span className="font-bold">Pro Creator</span> to unlock 50 projects, premium models, and $1M IP Shield protection.
+                                {t('upgradeToProText')}
                             </p>
                             <Button variant="link" className="px-0 h-auto text-xs font-bold text-blue-600 mt-2">
                                 {t('upgradePlan') || "Upgrade Plan"} →

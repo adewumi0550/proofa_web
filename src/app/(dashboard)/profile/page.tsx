@@ -234,32 +234,32 @@ export default function ProfilePage() {
                             <div className="relative z-10">
                                 <div className="flex items-center gap-2 mb-2">
                                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                                    <span className="text-xs font-bold text-yellow-400 uppercase tracking-widest">Active Plan</span>
+                                    <span className="text-xs font-bold text-yellow-400 uppercase tracking-widest">{t('activeSubscription') || "Active Subscription"}</span>
                                 </div>
                                 <h3 className="text-2xl font-black mb-1 capitalize">{user?.plan || "Free"}</h3>
-                                <p className="text-gray-400 text-sm mb-6">Powering your daily creative workflows.</p>
+                                <p className="text-gray-400 text-sm mb-6">{t('poweringWorkflows') || "Powering your daily creative workflows."}</p>
 
                                 <div className="space-y-3 pt-6 border-t border-white/10">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Credits</span>
+                                        <span className="text-gray-400">{t('credits') || "Credits"}</span>
                                         <span className="font-bold text-blue-400">{user?.credits || 0}</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Status</span>
-                                        <span className="font-bold text-green-400">Active</span>
+                                        <span className="text-gray-400">{t('status') || "Status"}</span>
+                                        <span className="font-bold text-green-400">{t('active') || "Active"}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="p-6 rounded-3xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30">
-                            <h4 className="font-bold text-blue-900 dark:text-blue-100 mb-2 truncate">Managing Subscriptions?</h4>
+                            <h4 className="font-bold text-blue-900 dark:text-blue-100 mb-2 truncate">{t('managingSubscriptions') || "Managing Subscriptions?"}</h4>
                             <p className="text-xs text-blue-700 dark:text-blue-300 mb-4 leading-relaxed">
-                                You can now manage your billing and invoices on the dedicated Subscriptions page.
+                                {t('manageBillingDesc') || "You can now manage your billing and invoices on the dedicated Subscriptions page."}
                             </p>
                             <Link href="/subscriptions">
                                 <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold">
-                                    Go to Subscriptions
+                                    {t('goToSubscriptions') || "Go to Subscriptions"}
                                 </Button>
                             </Link>
                         </div>
