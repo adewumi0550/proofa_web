@@ -15,6 +15,7 @@ export const translations = {
 
         // Landing Page
         heroTitle: "Certify Your AI Creative Workflows",
+        buildingFuture: "Building the Future of Creative AI",
         heroSubtitle: "Monetize and protect your art. Orchestrate the world\'s most powerful models. From ChatGPT to Veo 3, transform your original work into a licensed commercial asset.",
         joinWaitlist: "Join 2,850+ creators waiting for early access.",
         statsFoundingUsers: "Founding Users",
@@ -192,6 +193,7 @@ export const translations = {
 
         // Landing Page
         heroTitle: "Сертифицируйте Ваши AI Процессы",
+        buildingFuture: "Строим будущее креативного ИИ",
         heroSubtitle: "Монетизируйте и защищайте свое искусство. Управляйте самыми мощными моделями мира. От ChatGPT до Veo 3, превратите вашу работу в лицензированный актив.",
         joinWaitlist: "Присоединяйтесь к 2,850+ авторам в списке ожидания.",
         statsFoundingUsers: "Пользователей",
@@ -369,6 +371,7 @@ export const translations = {
 
         // Landing Page
         heroTitle: "Zertifizieren Sie Ihre KI-Workflows",
+        buildingFuture: "Die Zukunft der kreativen KI gestalten",
         heroSubtitle: "Monetarisieren und schützen Sie Ihre Kunst. Orchestrieren Sie die mächtigsten Modelle der Welt. Von ChatGPT bis Veo 3.",
         joinWaitlist: "Schließen Sie sich 2.850+ Kreativen an.",
         statsFoundingUsers: "Gründungsmitglieder",

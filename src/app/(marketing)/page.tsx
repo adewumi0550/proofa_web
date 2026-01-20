@@ -21,7 +21,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-300 mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
               <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
-              Building the Future of Creative AI
+              {t('buildingFuture')}
             </div>
 
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-sans tracking-tight font-bold text-gray-900 dark:text-white mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
