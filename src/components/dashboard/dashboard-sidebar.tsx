@@ -24,6 +24,18 @@ export function DashboardSidebar() {
     const router = useRouter();
 
 
+    // Mobile Detection & Auto-collapse
+    React.useEffect(() => {
+        const checkMobile = () => {
+            if (window.innerWidth < 768) {
+                setIsCollapsed(true);
+            }
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     // Fetch Projects
     React.useEffect(() => {
         const fetchProjects = async () => {

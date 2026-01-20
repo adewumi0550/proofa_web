@@ -18,6 +18,7 @@ export default function DashboardPage() {
     const [projects, setProjects] = useState<Array<{ id: string, name: string, updated_at?: string, current_score?: number }>>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const { user } = useAuth();
     const { t } = useLanguage();
     const { openNewProjectModal } = useNewProject();
@@ -109,26 +110,55 @@ export default function DashboardPage() {
             <main className="flex-1 flex flex-col min-w-0 relative h-full">
 
                 {/* Top Header */}
-                <header className="flex items-center justify-between mb-8 shrink-0 px-8 pt-6">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <span className="font-semibold text-gray-900 dark:text-gray-200">{t('dashboard')}</span>
-                        <ChevronRight className="w-4 h-4" />
-                        <span>{t('overview')}</span>
+                <header className="flex items-center justify-between mb-8 shrink-0 px-4 md:px-8 pt-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
+                        <span className="font-semibold text-gray-900 dark:text-gray-200 shrink-0">{t('dashboard')}</span>
+                        <ChevronRight className="w-4 h-4 shrink-0" />
+                        <span className="truncate">{t('overview')}</span>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <div className="relative">
-                            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                placeholder={t('searchProjects')}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-9 pr-4 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                            />
+                    <div className="flex items-center gap-2 md:gap-4">
+                        {/* Collapsible Search */}
+                        <div className="flex items-center relative">
+                            {/* Mobile Toggle */}
+                            <button
+                                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                                className="md:hidden p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            >
+                                <Search className="w-5 h-5" />
+                            </button>
+
+                            {/* Desktop Input / Mobile Expandable */}
+                            <div className={`
+                                ${isSearchOpen ? 'fixed inset-x-0 top-0 p-4 bg-white dark:bg-[#090909] z-[100] flex items-center gap-2 border-b dark:border-white/10' : 'hidden md:block'}
+                                md:relative md:inset-auto md:p-0 md:bg-transparent md:border-0 md:flex
+                            `}>
+                                <div className="relative w-full">
+                                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <input
+                                        placeholder={t('searchProjects')}
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="pl-9 pr-4 py-2 bg-gray-100 dark:bg-white/5 border border-transparent dark:border-white/10 rounded-full text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
+                                        autoFocus={isSearchOpen}
+                                    />
+                                </div>
+                                {isSearchOpen && (
+                                    <button
+                                        onClick={() => setIsSearchOpen(false)}
+                                        className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2"
+                                    >
+                                        Cancel
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                        <LanguageSwitcher />
-                        <ThemeToggle />
-                        <UserDropdown />
+
+                        <div className="flex items-center gap-1 md:gap-3 shrink-0">
+                            <LanguageSwitcher />
+                            <ThemeToggle />
+                            <UserDropdown />
+                        </div>
                     </div>
                 </header>
 
@@ -137,10 +167,10 @@ export default function DashboardPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="max-w-7xl mx-auto px-8"
+                        className="max-w-7xl mx-auto px-4 md:px-8"
                     >
-                        <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">{t('welcomeBack')}, {user?.first_name || "Creator"}</h1>
-                        <p className="text-gray-500 dark:text-gray-400 mb-8">{t('manageProjects')}</p>
+                        <h1 className="text-xl md:text-3xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">{t('welcomeBack')}, {user?.first_name || "Creator"}</h1>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">{t('manageProjects')}</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {/* New Project Card */}
