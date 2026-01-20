@@ -7,28 +7,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { FadeIn } from "@/components/fade-in";
+import { Eye, EyeOff } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-context";
+import { toast } from "sonner";
+import { useLanguage } from "@/components/language-context";
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const router = useRouter();
     const { login } = useAuth();
+    const { t } = useLanguage();
+
+    const isValid = email.length > 0 && password.length > 0;
 
     async function onSubmit(event: React.FormEvent) {
         event.preventDefault();
         setIsLoading(true);
 
-        const formData = new FormData(event.target as HTMLFormElement);
-        const email = formData.get("email") as string;
-
         try {
-            await login(email);
+            await login(email, password);
             router.push("/dashboard");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("Login failed. Is backend running?");
+            const message = error.message || "Login failed. Please check your credentials.";
+            toast.error(message);
         } finally {
             setIsLoading(false);
         }
@@ -43,6 +50,7 @@ export default function LoginPage() {
                             src="/proofa.png"
                             alt="Proofa Logo"
                             fill
+                            sizes="40px"
                             className="object-contain"
                         />
                     </div>
@@ -51,8 +59,8 @@ export default function LoginPage() {
 
                 <div className="w-full max-w-md space-y-8 bg-gray-50 dark:bg-white/5 p-8 rounded-2xl border border-gray-200 dark:border-white/10">
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Sign in to your account</p>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('welcomeBack')}</h2>
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{t('enterDetails')}</p>
                     </div>
 
                     <div className="grid gap-6">
@@ -60,7 +68,7 @@ export default function LoginPage() {
                             <div className="grid gap-4">
                                 <div className="grid gap-2">
                                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-900 dark:text-gray-300" htmlFor="email">
-                                        Email
+                                        {t('email')}
                                     </label>
                                     <Input
                                         id="email"
@@ -71,30 +79,52 @@ export default function LoginPage() {
                                         autoComplete="email"
                                         autoCorrect="off"
                                         disabled={isLoading}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         className="bg-white dark:bg-black border-gray-300 dark:border-white/10"
                                     />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center justify-between">
                                         <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-900 dark:text-gray-300" htmlFor="password">
-                                            Password
+                                            {t('password')}
                                         </label>
                                         <Link href="/forgot-password" className="text-xs text-blue-600 hover:text-blue-500">
-                                            Forgot?
+                                            {t('forgotPassword')}
                                         </Link>
                                     </div>
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        disabled={isLoading}
-                                        className="bg-white dark:bg-black border-gray-300 dark:border-white/10"
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            id="password"
+                                            name="password"
+                                            type={showPassword ? "text" : "password"}
+                                            disabled={isLoading}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="bg-white dark:bg-black border-gray-300 dark:border-white/10 pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
-                                <Button disabled={isLoading}>
+                                <Button
+                                    type="submit"
+                                    disabled={isLoading || !isValid}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
                                     {isLoading && (
                                         <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                                     )}
-                                    Sign In with Email
+                                    {t('signIn')}
                                 </Button>
                             </div>
                         </form>
@@ -105,7 +135,7 @@ export default function LoginPage() {
                             </div>
                             <div className="relative flex justify-center text-xs uppercase">
                                 <span className="bg-gray-50 dark:bg-black px-2 text-gray-500">
-                                    Or continue with
+                                    {t('orContinuingWith')}
                                 </span>
                             </div>
                         </div>
@@ -114,9 +144,9 @@ export default function LoginPage() {
                     </div>
 
                     <div className="mt-6 text-center text-sm">
-                        <span className="text-gray-500 dark:text-gray-400">Don&apos;t have an account? </span>
+                        <span className="text-gray-500 dark:text-gray-400">{t('dontHaveAccount')} </span>
                         <Link href="/signup" className="font-semibold text-blue-600 hover:text-blue-500">
-                            Sign up
+                            {t('createAccount')}
                         </Link>
                     </div>
                 </div>

@@ -7,16 +7,19 @@ import { ThemeToggle } from "./theme-toggle";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useAuth } from "@/components/auth-context";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useLanguage } from "@/components/language-context";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useAuth();
+    const { t } = useLanguage();
 
     const navLinks = [
-        { name: "Model Garden", href: "/model-garden" },
-        { name: "Pricing", href: "/pricing" },
-        { name: "Community", href: "/community" },
-        { name: "Show-off", href: "/show-off" },
+        { name: t('modelGarden'), href: "/model-garden" },
+        { name: t('pricing'), href: "/pricing" },
+        { name: t('community'), href: "/community" },
+        { name: t('showOff'), href: "/show-off" },
     ];
 
     return (
@@ -52,12 +55,13 @@ export function Navbar() {
                         </div>
                     </div>
                     <div className="hidden md:flex items-center gap-4">
+                        <LanguageSwitcher />
                         <ThemeToggle />
                         {user ? (
                             <>
                                 <Link href="/dashboard">
                                     <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 font-black text-[10px] uppercase tracking-widest transition-all">
-                                        Dashboard
+                                        {t('dashboard')}
                                     </Button>
                                 </Link>
                                 <Button
@@ -66,7 +70,7 @@ export function Navbar() {
                                     className="text-gray-500 hover:text-red-500 hover:bg-red-500/5 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-500/10 font-black text-[10px] uppercase tracking-widest transition-all gap-2"
                                 >
                                     <LogOut className="w-4 h-4" />
-                                    Log Out
+                                    {t('logOut')}
                                 </Button>
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 border-2 border-white/20 shadow-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition-transform ml-2">
                                     {/* User Avatar Placeholder */}
@@ -76,12 +80,12 @@ export function Navbar() {
                             <>
                                 <Link href="/login">
                                     <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                                        Sign In
+                                        {t('signIn')}
                                     </Button>
                                 </Link>
                                 <Link href="/signup">
                                     <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0">
-                                        Get Started
+                                        {t('getStarted')}
                                     </Button>
                                 </Link>
                             </>
@@ -113,16 +117,19 @@ export function Navbar() {
                             </Link>
                         ))}
                         <div className="flex items-center justify-between px-3 py-4 border-t border-gray-200 dark:border-white/10 mt-4">
-                            <ThemeToggle />
+                            <div className="flex items-center gap-2">
+                                <ThemeToggle />
+                                <LanguageSwitcher />
+                            </div>
                             <div className="flex gap-2">
                                 <Link href="/login" onClick={() => setIsOpen(false)}>
                                     <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300">
-                                        Sign In
+                                        {t('signIn')}
                                     </Button>
                                 </Link>
                                 <Link href="/signup" onClick={() => setIsOpen(false)}>
                                     <Button size="sm" className="bg-blue-600">
-                                        Get Started
+                                        {t('getStarted')}
                                     </Button>
                                 </Link>
                             </div>

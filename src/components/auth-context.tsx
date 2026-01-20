@@ -1,22 +1,26 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { proofaApi, RegisterResponse } from "@/lib/api";
+import { proofaApi, User } from "@/lib/api";
+import { auth, googleProvider } from "@/lib/firebase";
+import { signInWithPopup } from "firebase/auth";
 
 import { useRouter } from "next/navigation";
 
 interface AuthContextType {
-    user: RegisterResponse | null;
+    user: User | null;
     isAuthenticated: boolean;
     login: (email: string, password?: string) => Promise<void>;
-    register: (userData: { email: string; password?: string; fullName?: string }) => Promise<void>;
+    loginWithGoogle: () => Promise<void>;
+    register: (userData: { email: string; password?: string; fullName?: string; newsletterSubscribed?: boolean; termsAccepted?: boolean }) => Promise<void>;
+    completeProfile: (persona: string) => Promise<void>;
     logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<RegisterResponse | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
 
     // Initial check (mock persistence)
@@ -40,28 +44,124 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const login = async (email: string, password?: string) => {
-        // For Proofa Demo, Login is essentially re-registering or mocking fetch
-        await register({ email, password });
+        try {
+            if (!password) throw new Error("Password is required");
+
+            const res = await proofaApi.auth.login(email, password);
+            console.log("Logged in:", res.data);
+
+            if (!res.data.success || !res.data.data) {
+                throw new Error(res.data.message || "Invalid response from server");
+            }
+
+            const { user, access_token } = res.data.data;
+
+            // Attach token if missing in user object but present in response
+            if (access_token && !user.access_token) {
+                user.access_token = access_token;
+            }
+
+            localStorage.setItem("proofa_user", JSON.stringify(user));
+            setUser(user);
+
+            // Redirect logic same as social login
+            if (!user.persona) {
+                router.push("/onboarding/role");
+            } else {
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            console.error("Login failed", error);
+            throw error;
+        }
     };
 
-    const register = async (userData: { email: string; password?: string; fullName?: string }) => {
+    const loginWithGoogle = async () => {
+        try {
+            const userCredential = await signInWithPopup(auth, googleProvider);
+            const idToken = await userCredential.user.getIdToken();
+
+            const res = await proofaApi.auth.socialLogin(idToken);
+            console.log("Social Login:", res.data);
+
+            if (!res.data.success || !res.data.data) {
+                console.error("Invalid response structure:", res.data);
+                throw new Error(res.data.message || "Invalid response from server");
+            }
+
+            const { user, access_token } = res.data.data;
+
+            if (access_token && !user.access_token) {
+                user.access_token = access_token;
+            }
+
+            localStorage.setItem("proofa_user", JSON.stringify(user));
+            setUser(user);
+
+            // Redirect logic
+            if (!user.persona) {
+                router.push("/onboarding/role");
+            } else {
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            console.error("Google login failed", error);
+            throw error;
+        }
+    };
+
+    const register = async (userData: { email: string; password?: string; fullName?: string; newsletterSubscribed?: boolean; termsAccepted?: boolean }) => {
         try {
             // Split Full Name
             const [firstName, ...lastNameParts] = (userData.fullName || "").split(" ");
             const lastName = lastNameParts.join(" ");
 
-            const res = await proofaApi.auth.register(userData.email, userData.password || "", firstName || "", lastName || "");
+            const res = await proofaApi.auth.register(
+                userData.email,
+                userData.password || "",
+                firstName || "",
+                lastName || "",
+                userData.newsletterSubscribed ?? true,
+                userData.termsAccepted ?? true
+            );
             console.log("Registered:", res.data);
 
-            // Backend might return empty email/id in demo mode sometimes, so fallback
-            let storedUser = res.data;
-            if (!storedUser.email) storedUser.email = userData.email;
+            if (!res.data.success || !res.data.data) {
+                throw new Error(res.data.message || "Registration failed");
+            }
 
-            localStorage.setItem("proofa_user", JSON.stringify(storedUser));
-            setUser(storedUser);
+            const { user, access_token } = res.data.data;
+            if (access_token && !user.access_token) {
+                user.access_token = access_token;
+            }
+
+            localStorage.setItem("proofa_user", JSON.stringify(user));
+            setUser(user);
             router.push("/onboarding/role");
         } catch (error) {
             console.error("Registration failed", error);
+            throw error;
+        }
+    };
+
+    const completeProfile = async (persona: string) => {
+        try {
+            // Use stored token or fallback for demo
+            const token = user?.access_token || "";
+
+            const res = await proofaApi.auth.completeProfile(persona, token);
+            console.log("Profile completed:", res.data);
+
+            if (!res.data.success || !res.data.data) {
+                throw new Error(res.data.message || "Failed to complete profile");
+            }
+
+            // Update local user state
+            const updatedUser = { ...user!, persona };
+            localStorage.setItem("proofa_user", JSON.stringify(updatedUser));
+            setUser(updatedUser);
+        } catch (error) {
+            console.error("Complete profile failed", error);
             throw error;
         }
     };
@@ -72,7 +172,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, loginWithGoogle, register, completeProfile, logout }}>
             {children}
         </AuthContext.Provider>
     );

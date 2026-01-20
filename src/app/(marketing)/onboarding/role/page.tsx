@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth-context";
+import { toast } from "sonner";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -36,6 +39,27 @@ const roles = [
 
 export default function RoleSelectionPage() {
     const [selectedRole, setSelectedRole] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const { completeProfile } = useAuth();
+
+    async function handleComplete() {
+        if (!selectedRole) return;
+
+        setIsLoading(true);
+        const toastId = toast.loading("Saving profile...");
+
+        try {
+            await completeProfile(selectedRole);
+            toast.success("Profile updated!", { id: toastId });
+            router.push("/dashboard");
+        } catch (error: any) {
+            console.error("Failed to complete profile", error);
+            toast.error("Failed to save profile. Please try again.", { id: toastId });
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return (
         <div className="min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center p-4">
@@ -81,15 +105,17 @@ export default function RoleSelectionPage() {
                 </div>
 
                 <div className="flex justify-end pt-8">
-                    <Link href="/dashboard">
-                        <Button
-                            size="lg"
-                            className="px-8 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                            disabled={!selectedRole}
-                        >
-                            Complete Setup
-                        </Button>
-                    </Link>
+                    <Button
+                        size="lg"
+                        className="px-8 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                        disabled={!selectedRole || isLoading}
+                        onClick={handleComplete}
+                    >
+                        {isLoading && (
+                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        )}
+                        Complete Setup
+                    </Button>
                 </div>
             </div>
         </div>

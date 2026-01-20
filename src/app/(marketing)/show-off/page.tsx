@@ -1,9 +1,11 @@
 "use client";
 
-import { Heart, AppWindow, Share2, MoreHorizontal } from "lucide-react";
+import { Share2, MoreHorizontal, Heart, AppWindow } from "lucide-react";
 import { FadeIn } from "@/components/fade-in";
+import { useLanguage } from "@/components/language-context";
 
 export default function ShowOffPage() {
+    const { t } = useLanguage();
     const trendingItems = [
         { id: 1, title: "Cyber-Noir Cityscape", author: "NeonDreamer", likes: "12.5k", views: "45k", aspect: "video" },
         { id: 2, title: "Abstract Emotion #4", author: "ArtFlow", likes: "8.2k", views: "32k", aspect: "square" },
@@ -18,10 +20,9 @@ export default function ShowOffPage() {
             <FadeIn>
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Showcase</h1>
+                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t('showOff')}</h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                            Discover trending certified workflows and assets.
-                            Licensed and ready for commercial use.
+                            {t('showcaseSubtitle')}
                         </p>
                     </div>
 

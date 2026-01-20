@@ -6,8 +6,10 @@ import Link from "next/link";
 import { ArrowRight, Shield, Zap, Lock } from "lucide-react";
 import { PricingTable } from "@/components/pricing-table";
 import { FadeIn } from "@/components/fade-in";
+import { useLanguage } from "@/components/language-context";
 
 export default function Home() {
+  const { t } = useLanguage();
   return (
     <div className="relative overflow-hidden min-h-[calc(100vh-4rem)] bg-white dark:bg-black transition-colors duration-300">
       {/* Background Elements */}
@@ -23,15 +25,11 @@ export default function Home() {
             </div>
 
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-sans tracking-tight font-bold text-gray-900 dark:text-white mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
-              Certify Your AI <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-500 dark:to-pink-500">
-                Creative Workflows
-              </span>
+              {t('heroTitle')}
             </h1>
 
             <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              Monetize and protect your art. Orchestrate the world&apos;s most powerful models.
-              From ChatGPT to Veo 3, transform your original work into a licensed commercial asset.
+              {t('heroSubtitle')}
             </p>
 
             <div className="animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 mb-8">
@@ -39,7 +37,7 @@ export default function Home() {
             </div>
 
             <p className="mt-8 text-sm text-gray-500 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
-              Join 2,850+ creators waiting for early access.
+              {t('joinWaitlist')}
             </p>
           </div>
         </div>
@@ -52,19 +50,19 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">2,850</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Founding Users</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsFoundingUsers')}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">9,500</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">AI Models Tracked</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsModelsTracked')}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">$1.2M+</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Asset Value</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsAssetValue')}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">140+</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Licensed Engines</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsLicensedEngines')}</div>
               </div>
             </div>
           </div>
@@ -76,12 +74,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeIn>
             <div className="mx-auto max-w-2xl text-center mb-16">
-              <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">Deploy Faster</h2>
+              <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('deployFaster')}</h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                Everything you need to scale your creativity
+                {t('scaleCreativity')}
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-                Proofa gives you the legal and technical infrastructure to turn your AI generations into professional assets.
+                {t('proofaInfrastructure')}
               </p>
             </div>
           </FadeIn>
@@ -92,9 +90,9 @@ export default function Home() {
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6 text-blue-600 dark:text-blue-400">
                   <Shield className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Legal Immunity</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('legalImmunity')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Our certification layer provides a robust evidence package for copyright claims and IP protection.
+                  {t('legalImmunityDesc')}
                 </p>
               </div>
             </FadeIn>
@@ -104,9 +102,9 @@ export default function Home() {
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Instant Licensing</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('instantLicensing')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Monetize your workflow immediately. Generate smart contracts for your assets in seconds.
+                  {t('instantLicensingDesc')}
                 </p>
               </div>
             </FadeIn>
@@ -116,9 +114,9 @@ export default function Home() {
                 <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center mb-6 text-pink-600 dark:text-pink-400">
                   <Lock className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Private Registry</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('privateRegistry')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Keep your prompts and seed data secure. Share only what you want, when you want.
+                  {t('privateRegistryDesc')}
                 </p>
               </div>
             </FadeIn>
@@ -127,7 +125,7 @@ export default function Home() {
           <FadeIn delay={0.4} className="mt-16 text-center">
             <Link href="/features">
               <Button variant="outline" className="text-base px-8 py-6 rounded-full border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                View All Features <ArrowRight className="ml-2 w-4 h-4" />
+                {t('viewAllFeatures')} <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
           </FadeIn>
@@ -146,19 +144,19 @@ export default function Home() {
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-white/20 to-transparent"></div>
         <FadeIn>
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Ready to certify your workflow?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">{t('readyToCertify')}</h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-10">
-              Join the waitlist today and get early access to the Model Garden and advanced licensing tools.
+              {t('joinWaitlistToday')}
             </p>
             <div className="flex justify-center gap-4">
               <Link href="/pricing">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-12">
-                  Check Pricing
+                  {t('checkPricing')}
                 </Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline" className="rounded-full px-8 h-12 border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                  Contact Education
+                  {t('contactEducation')}
                 </Button>
               </Link>
             </div>

@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, ChevronRight, Folder, Shield, Settings, LogOut, Menu, X, LayoutDashboard, Briefcase, Activity, Pencil } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, Settings, MessageSquare, LayoutDashboard, UserCircle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useAuth } from "@/components/auth-context";
+import Image from "next/image";
+import { useLanguage } from "@/components/language-context";
 
 interface Project {
     id: string;
@@ -20,140 +22,101 @@ interface DashboardSidebarProps {
 }
 
 export function DashboardSidebar({
-    showAddProject = false,
+    showAddProject = true, // Default to true as per ChatGPT style
     projects = [],
     activeProjectId,
     onProjectSelect,
     onProjectRename
 }: DashboardSidebarProps) {
-    const [isCollapsed, setIsCollapsed] = useState(true);
+    const [isCollapsed, setIsCollapsed] = useState(false); // Expanded by default like ChatGPT
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editValue, setEditValue] = useState("");
+    const { user, logout } = useAuth();
+    const { t } = useLanguage();
 
     return (
         <motion.aside
-            animate={{ width: isCollapsed ? 80 : 280 }}
-            transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
-            className={`flex flex-col h-full transition-all relative group crystal-view z-40 overflow-hidden`}
+            initial={false}
+            animate={{ width: isCollapsed ? 60 : 260 }}
+            className="flex flex-col h-full bg-white dark:bg-[#0d0d0d] border-r border-gray-200 dark:border-white/5 relative shrink-0 transition-colors duration-300"
         >
-            {/* Header Section */}
-            <div className={`flex flex-col p-6 pb-2 ${isCollapsed ? 'items-center' : ''}`}>
-                <div className="flex items-center justify-between mb-10">
-                    <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                    >
-                        <Menu className="w-5 h-5 text-gray-500" />
-                    </button>
-                    {!isCollapsed && (
-                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Collections</span>
-                    )}
+            {/* Toggle Button - Floating or precise */}
+            <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="absolute -right-3 top-1/2 -translate-y-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-white transition-colors shadow-sm"
+            >
+                {isCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+            </button>
+
+            {/* Header: Logo & New Chat */}
+            <div className="p-3 pb-2 space-y-4">
+                {/* Brand - Only visible when expanded usually, or icon when collapsed */}
+                <div className={`flex items-center gap-2 pl-2 ${isCollapsed ? 'justify-center pl-0' : ''}`}>
+                    <div className="relative w-8 h-8 shrink-0">
+                        <Image src="/proofa.png" alt="Proofa Logo" fill className="object-contain" />
+                    </div>
+                    {!isCollapsed && <span className="font-bold text-gray-900 dark:text-white tracking-wide">PROOFA</span>}
                 </div>
 
-                {showAddProject && (
-                    <Button
-                        onClick={() => window.location.href = '/dashboard'} // Simple reset for demo
-                        className={`justify-start gap-4 h-12 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-2xl shadow-xl active:scale-95 transition-all w-full ${isCollapsed ? 'px-0 justify-center w-12 h-12' : ''}`}
-                    >
-                        <Plus className="w-5 h-5 shrink-0" />
-                        {!isCollapsed && (
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="font-black text-[10px] uppercase tracking-widest whitespace-nowrap"
-                            >
-                                New Project
-                            </motion.span>
-                        )}
-                    </Button>
-                )}
+                <Button
+                    onClick={() => window.location.href = '/dashboard'}
+                    variant="outline"
+                    className={`
+                        w-full justify-start gap-2 border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-900 dark:text-white transition-all
+                        ${isCollapsed ? 'px-0 justify-center h-10 w-10 border-0 rounded-full' : 'rounded-lg h-10'}
+                    `}
+                >
+                    <Plus className="w-5 h-5 opacity-70" />
+                    {!isCollapsed && <span className="text-sm font-medium">{t('newProject')}</span>}
+                </Button>
             </div>
 
-            {/* Project List Section */}
-            <nav className="flex-1 space-y-3 overflow-y-auto custom-scrollbar p-4 pt-8">
+            {/* Scrollable Project/History List */}
+            <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 custom-scrollbar">
+                {!isCollapsed && <div className="px-3 pb-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{t('recents')}</div>}
                 {projects.map((project) => (
-                    <div key={project.id} className="relative group/item">
-                        <button
-                            onClick={() => {
-                                if (editingId !== project.id) {
-                                    onProjectSelect(project.id);
-                                }
-                            }}
-                            onDoubleClick={() => {
-                                if (!isCollapsed) {
-                                    setEditingId(project.id);
-                                    setEditValue(project.name);
-                                }
-                            }}
-                            title={isCollapsed ? project.name : "Double click to rename"}
-                            className={`
-                                w-full flex items-center gap-4 p-4 rounded-2xl transition-all group border border-transparent
-                                ${activeProjectId === project.id
-                                    ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
-                                    : 'text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5'}
-                                ${isCollapsed ? 'justify-center w-12 h-12 p-0 mx-auto' : ''}
-                            `}
-                        >
-                            <LayoutDashboard className="w-5 h-5 shrink-0" />
-                            {!isCollapsed && (
-                                <div className="flex-1 flex items-center min-w-0">
-                                    {editingId === project.id ? (
-                                        <input
-                                            autoFocus
-                                            value={editValue}
-                                            onChange={(e) => setEditValue(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') {
-                                                    onProjectRename?.(project.id, editValue);
-                                                    setEditingId(null);
-                                                } else if (e.key === 'Escape') {
-                                                    setEditingId(null);
-                                                }
-                                            }}
-                                            onBlur={() => {
-                                                onProjectRename?.(project.id, editValue);
-                                                setEditingId(null);
-                                            }}
-                                            className="w-full bg-white/10 border-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5 text-[12px] font-bold outline-none"
-                                        />
-                                    ) : (
-                                        <motion.span
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            className="flex-1 font-bold text-[12px] whitespace-nowrap overflow-hidden text-ellipsis text-left"
-                                        >
-                                            {project.name}
-                                        </motion.span>
-                                    )}
-                                </div>
-                            )}
-                            {!isCollapsed && editingId !== project.id && (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setEditingId(project.id);
-                                        setEditValue(project.name);
-                                    }}
-                                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-all"
-                                    title="Rename"
-                                >
-                                    <Pencil className="w-3 h-3 text-gray-400 hover:text-blue-500" />
-                                </button>
-                            )}
-                        </button>
-                    </div>
+                    <button
+                        key={project.id}
+                        onClick={() => onProjectSelect(project.id)}
+                        className={`
+                            w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors group relative
+                            ${activeProjectId === project.id ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200'}
+                            ${isCollapsed ? 'justify-center px-0' : ''}
+                        `}
+                    >
+                        <MessageSquare className="w-4 h-4 shrink-0 opacity-70" />
+                        {!isCollapsed && (
+                            <span className="truncate flex-1 text-left">{project.name}</span>
+                        )}
+                    </button>
                 ))}
-            </nav>
+            </div>
 
-            {/* Footer Section */}
-            <div className="mt-auto p-4 border-t border-black/5 dark:border-white/5 items-center flex flex-col gap-4 pb-8">
+            {/* Footer: User Profile */}
+            <div className="p-3 border-t border-gray-200 dark:border-white/5 mt-auto">
+                <button className={`
+                    w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 text-gray-900 dark:text-gray-300 transition-colors
+                    ${isCollapsed ? 'justify-center' : ''}
+                 `}>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                        {user?.first_name?.charAt(0) || "U"}
+                    </div>
+                    {!isCollapsed && (
+                        <div className="flex-1 text-left overflow-hidden">
+                            <div className="text-sm font-medium truncate text-gray-900 dark:text-white">{user?.first_name || "User"}</div>
+                            <div className="text-xs text-gray-500 truncate">{user?.email}</div>
+                        </div>
+                    )}
+                </button>
                 {!isCollapsed && (
-                    <div className="w-full flex items-center justify-between px-2 mb-2">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">v1.1.2 Metal</span>
-                        <Settings className="w-4 h-4 text-gray-400 cursor-pointer hover:text-blue-500 transition-colors" />
+                    <div className="mt-1 px-1">
+                        <button onClick={logout} className="flex items-center gap-2 text-xs text-gray-500 hover:text-red-500 dark:hover:text-red-400 py-1 px-1 transition-colors w-full text-left">
+                            <LogOut className="w-3 h-3" /> {t('signOut')}
+                        </button>
                     </div>
                 )}
             </div>
         </motion.aside>
     );
 }
+
