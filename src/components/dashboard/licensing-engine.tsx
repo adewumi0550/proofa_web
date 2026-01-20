@@ -16,6 +16,8 @@ import {
     ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import confetti from "canvas-confetti";
+import { toast } from "sonner";
 
 interface LicensingEngineProps {
     projectID: string | null;
@@ -44,6 +46,16 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
 
     const handleCertify = () => {
         setIsCertified(true);
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#3b82f6', '#10b981', '#ffffff']
+        });
+        toast.success("Identity Verified & Asset Certified!", {
+            description: "Your authorship certificate has been generated and stored on the Proofa network.",
+            duration: 5000,
+        });
     };
 
     return (

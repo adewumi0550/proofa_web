@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
 import { useSocket } from "@/hooks/use-socket";
+import confetti from "canvas-confetti";
 
 type Stage = "Collaboration" | "Certified" | "Licensing";
 
@@ -48,6 +49,7 @@ export default function WorkspacePage() {
     const [score, setScore] = useState(0);
     const [verdict, setVerdict] = useState<string | undefined>();
     const [reason, setReason] = useState<string | undefined>();
+    const [lastEligibleRef, setLastEligibleRef] = useState(false);
 
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -110,6 +112,24 @@ export default function WorkspacePage() {
         }
     });
 
+    // Watch for eligibility to trigger celebration
+    useEffect(() => {
+        const isEligible = score >= 85; // Using 85 as the threshold for 'congratulations'
+        if (isEligible && !lastEligibleRef && !isLoading) {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.7 },
+                colors: ['#3b82f6', '#10b981', '#ffffff']
+            });
+            toast.success("Congratulations! Your work is eligible for IP Certification.", {
+                description: "You can now certify this asset and unlock licensing options.",
+                duration: 5000,
+            });
+        }
+        setLastEligibleRef(isEligible);
+    }, [score, lastEligibleRef, isLoading]);
+
     // Initial Data Fetch
     useEffect(() => {
         const init = async () => {
@@ -127,15 +147,62 @@ export default function WorkspacePage() {
                     // 2. Get History
                     const historyRes = await proofaApi.workspaces.getHistory(workspaceId, user.access_token);
                     if (historyRes.data.success && Array.isArray(historyRes.data.data)) {
+                        const history = historyRes.data.data;
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        setMessages(historyRes.data.data.map((msg: any) => ({
-                            id: msg.id || Date.now().toString() + Math.random(),
-                            role: msg.role,
-                            content: msg.content,
-                            verdict: msg.verdict,
-                            reason: msg.reason,
-                            score: msg.score ? normalizeScore(msg.score) : undefined
-                        })));
+                        setMessages(history.map((msg: any) => {
+                            let v = msg.verdict;
+                            let r = msg.reason;
+                            let s = msg.score ? normalizeScore(msg.score) : undefined;
+
+                            // If content is JSON, parse it to populate missing fields
+                            if (msg.role === 'assistant' && msg.content && msg.content.trim().startsWith('{')) {
+                                try {
+                                    const parsed = JSON.parse(msg.content);
+                                    if (!v) v = parsed.verdict || parsed.authorship_verdict;
+                                    if (!r) r = parsed.reason || parsed.summary_judgment;
+                                    if (s === undefined) {
+                                        const rawS = parsed.score ?? parsed.overall_authorship_score;
+                                        if (rawS !== undefined) s = normalizeScore(rawS);
+                                    }
+                                } catch (e) { /* ignore */ }
+                            }
+
+                            return {
+                                id: msg.id || Date.now().toString() + Math.random(),
+                                role: msg.role,
+                                content: msg.content,
+                                verdict: v,
+                                reason: r,
+                                score: s,
+                                upload_url: msg.upload_url,
+                                upload_name: msg.upload_name,
+                                is_image: msg.is_image
+                            };
+                        }));
+
+                        // Restore HUD state from latest assistant analysis if history exists
+                        const latestAssistant = [...history].reverse().find(m => m.role === 'assistant' && (m.score || m.verdict || (m.content && m.content.trim().startsWith('{'))));
+                        if (latestAssistant) {
+                            let v = latestAssistant.verdict;
+                            let r = latestAssistant.reason;
+                            let s = latestAssistant.score !== undefined ? normalizeScore(latestAssistant.score) : undefined;
+
+                            if (latestAssistant.content && latestAssistant.content.trim().startsWith('{')) {
+                                try {
+                                    const parsed = JSON.parse(latestAssistant.content);
+                                    if (!v) v = parsed.verdict || parsed.authorship_verdict;
+                                    if (!r) r = parsed.reason || parsed.summary_judgment;
+                                    if (s === undefined) {
+                                        const rawS = parsed.score ?? parsed.overall_authorship_score;
+                                        if (rawS !== undefined) s = normalizeScore(rawS);
+                                    }
+                                } catch (e) { /* ignore */ }
+                            }
+
+                            if (s !== undefined) setScore(s);
+                            if (v) setVerdict(v);
+                            if (r) setReason(r);
+                        }
                     }
                 } catch (e) {
                     console.error("Failed to load workspace", e);
