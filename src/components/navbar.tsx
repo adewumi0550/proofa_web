@@ -80,7 +80,7 @@ export function Navbar() {
                             <>
                                 <Link href="/login">
                                     <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                                        {t('signIn')}
+                                        {t('login')}
                                     </Button>
                                 </Link>
                                 <Link href="/signup">
@@ -124,7 +124,7 @@ export function Navbar() {
                             <div className="flex gap-2">
                                 <Link href="/login" onClick={() => setIsOpen(false)}>
                                     <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300">
-                                        {t('signIn')}
+                                        {t('login')}
                                     </Button>
                                 </Link>
                                 <Link href="/signup" onClick={() => setIsOpen(false)}>

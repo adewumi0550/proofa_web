@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, ChevronLeft, ChevronRight, Settings, MessageSquare, LayoutDashboard, UserCircle, LogOut } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, Settings, MessageSquare, LayoutDashboard, UserCircle, LogOut, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/auth-context";
@@ -11,7 +11,7 @@ import { useLanguage } from "@/components/language-context";
 import { useNewProject } from "@/components/new-project-context";
 
 import { proofaApi } from "@/lib/api";
-import { useParams, useRouter, usePathname } from "next/navigation";
+import { useParams, useRouter, usePathname, useSearchParams } from "next/navigation";
 
 export function DashboardSidebar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -22,6 +22,9 @@ export function DashboardSidebar() {
     const params = useParams();
     const activeProjectId = params?.workspaceId as string;
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const activeTab = searchParams.get("tab") || "overview";
 
 
     // Mobile Detection & Auto-collapse
@@ -79,9 +82,9 @@ export function DashboardSidebar() {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className="absolute -right-3 top-1/2 -translate-y-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-white transition-colors shadow-sm"
+                className="absolute -right-4 top-24 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-1.5 shadow-lg shadow-blue-500/40 transition-all scale-110 border-2 border-white dark:border-[#0d0d0d]"
             >
-                {isCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+                {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
 
             {/* Header: Logo & New Chat */}
@@ -106,41 +109,73 @@ export function DashboardSidebar() {
                 </Button>
             </div>
 
-            {/* Scrollable Project/History List */}
+            {/* Navigation Sections */}
             <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 custom-scrollbar">
-                {!isCollapsed && <div className="px-3 pb-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{t('recents')}</div>}
-
-                {/* Dashboard Home Link */}
                 <Link
                     href="/dashboard"
                     className={`
                         w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors group relative
-                        ${!activeProjectId ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200'}
+                        ${(!activeProjectId && activeTab === 'overview' && pathname === '/dashboard') ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200'}
                         ${isCollapsed ? 'justify-center px-0' : ''}
                     `}
                 >
                     <LayoutDashboard className="w-4 h-4 shrink-0 opacity-70" />
-                    {!isCollapsed && (
-                        <span className="truncate flex-1 text-left">{t('dashboard')}</span>
-                    )}
+                    {!isCollapsed && <span className="truncate flex-1 text-left">{t('dashboard')}</span>}
                 </Link>
 
-                {projects.map((project) => (
+                <div className="pt-2 pb-1">
+                    {!isCollapsed && <div className="px-3 pb-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Discovery</div>}
+
                     <Link
-                        key={project.id}
-                        href={`/workspace/${project.id}`}
+                        href="/dashboard?tab=garden"
                         className={`
-                            w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors group relative
-                            ${activeProjectId === project.id ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200'}
+                            w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors group relative
+                            text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200
+                            ${activeTab === 'garden' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : ''}
                             ${isCollapsed ? 'justify-center px-0' : ''}
                         `}
                     >
-                        <MessageSquare className="w-4 h-4 shrink-0 opacity-70" />
-                        {!isCollapsed && (
-                            <span className="truncate flex-1 text-left">{project.name}</span>
-                        )}
+                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            <Sparkles className="w-3.5 h-3.5 opacity-70 text-blue-500" />
+                        </div>
+                        {!isCollapsed && <span className="truncate flex-1 text-left">Modern Garden</span>}
                     </Link>
-                ))}
+
+                    <Link
+                        href="/dashboard?tab=showoff"
+                        className={`
+                            w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors group relative
+                            text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200
+                            ${activeTab === 'showoff' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : ''}
+                            ${isCollapsed ? 'justify-center px-0' : ''}
+                        `}
+                    >
+                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm" />
+                        </div>
+                        {!isCollapsed && <span className="truncate flex-1 text-left">Show Off</span>}
+                    </Link>
+                </div>
+
+                <div className="my-4 pt-4 border-t border-gray-100 dark:border-white/5">
+                    {!isCollapsed && <div className="px-3 pb-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{t('recents')}</div>}
+                    {projects.slice(0, 5).map((project) => (
+                        <Link
+                            key={project.id}
+                            href={`/workspace/${project.id}`}
+                            className={`
+                                w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors group relative
+                                ${activeProjectId === project.id ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200'}
+                                ${isCollapsed ? 'justify-center px-0' : ''}
+                            `}
+                        >
+                            <MessageSquare className="w-4 h-4 shrink-0 opacity-70" />
+                            {!isCollapsed && (
+                                <span className="truncate flex-1 text-left">{project.name}</span>
+                            )}
+                        </Link>
+                    ))}
+                </div>
             </div>
 
             {/* Footer: User Profile */}

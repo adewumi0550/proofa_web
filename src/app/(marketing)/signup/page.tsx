@@ -241,7 +241,7 @@ export default function SignupPage() {
                     <div className="mt-6 text-center text-sm">
                         <span className="text-gray-500 dark:text-gray-400">{t('alreadyHaveAccount')} </span>
                         <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-500">
-                            {t('signIn')}
+                            {t('login')}
                         </Link>
                     </div>
                 </div >

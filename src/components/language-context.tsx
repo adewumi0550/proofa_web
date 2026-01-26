@@ -17,12 +17,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         setTimeout(() => {
             const savedLang = localStorage.getItem('proofa-language') as Language;
-            if (savedLang && (savedLang === 'en' || savedLang === 'ru' || savedLang === 'de')) {
+            if (savedLang && (savedLang === 'en' || savedLang === 'de')) {
                 setLanguageState(savedLang);
             } else {
                 const browserLang = navigator.language.split('-')[0];
-                if (browserLang === 'ru') setLanguageState('ru');
-                else if (browserLang === 'de') setLanguageState('de');
+                if (browserLang === 'de') setLanguageState('de');
                 else setLanguageState('en');
             }
         }, 0);

@@ -46,8 +46,8 @@ export function NewProjectModal() {
                     const newWorkspace = res.data.data;
                     const newId = newWorkspace.id;
 
-                    // Redirect to dashboard with new project ID
-                    router.push(`/dashboard?projectId=${newId}`);
+                    // Redirect to dedicated workspace
+                    router.push(`/workspace/${newId}`);
                 }
             } else {
                 throw new Error("No access token available (Offline Mode)");
@@ -56,8 +56,8 @@ export function NewProjectModal() {
         } catch (error) {
             console.error("Backend request failed, using Local Mode:", error);
             const mockId = "local-seed-" + Date.now();
-            // In local mode, we also redirect
-            router.push(`/dashboard?projectId=${mockId}`);
+            // In local mode, we also redirect to workspace
+            router.push(`/workspace/${mockId}`);
         } finally {
             setIsLoading(false);
             // Reset and Close

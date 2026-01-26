@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth-context";
 import { toast } from "sonner";
 import { useLanguage } from "@/components/language-context";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 
 export default function LoginPage() {
@@ -60,7 +61,10 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen py-20 flex items-center justify-center bg-white dark:bg-black transition-colors duration-300 px-4">
+        <div className="min-h-screen py-20 flex items-center justify-center bg-white dark:bg-black transition-colors duration-300 px-4 relative">
+            <div className="absolute top-8 right-8">
+                <LanguageSwitcher />
+            </div>
             <FadeIn className="w-full max-w-md flex flex-col items-center">
                 <Link href="/" className="mb-8 flex items-center gap-2">
                     <div className="relative h-10 w-10">
@@ -143,7 +147,7 @@ export default function LoginPage() {
                                     {isLoading && (
                                         <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                                     )}
-                                    {t('signIn')}
+                                    {t('login')}
                                 </Button>
                             </div>
                         </form>

@@ -10,8 +10,17 @@ import { useAuth } from "@/components/auth-context";
 import { useLanguage } from "@/components/language-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { AuthorshipHUD } from "@/components/dashboard/authorship-hud";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { ComplianceFooter } from "@/components/dashboard/compliance-footer";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 import { LicensingEngine } from "@/components/dashboard/licensing-engine";
+import { AuthorshipPassport } from "@/components/dashboard/authorship-passport";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
@@ -33,6 +42,13 @@ interface Message {
     score?: number;
 }
 
+const MEDIA_MODELS = {
+    Art: ["Pro v1.5 Engine", "Midjourney v6", "DALL-E 3", "Stable Diffusion XL"],
+    Video: ["Sora v1", "Runway Gen-2", "Pika 1.0", "Stable Video Diffusion"],
+    Music: ["Suno v3", "Udio Pro", "MusicLM", "AudioCraft"],
+    Voice: ["ElevenLabs Multi", "OpenAI TTS-1", "Google WaveNet", "Bark v1"]
+};
+
 export default function WorkspacePage() {
     const params = useParams();
     const router = useRouter();
@@ -51,6 +67,9 @@ export default function WorkspacePage() {
     const [verdict, setVerdict] = useState<string | undefined>();
     const [reason, setReason] = useState<string | undefined>();
     const [lastEligibleRef, setLastEligibleRef] = useState(false);
+
+    const [activeMediaType, setActiveMediaType] = useState<keyof typeof MEDIA_MODELS>("Art");
+    const [activeModel, setActiveModel] = useState(MEDIA_MODELS.Art[0]);
 
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -402,8 +421,8 @@ export default function WorkspacePage() {
         try {
             const res = await proofaApi.workspaces.certify(workspaceId, user.access_token);
             if (score >= 80) {
-                setStage("Licensing");
-                toast.success("Project Certified!");
+                setStage("Certified");
+                toast.success("Identity Verified & Asset Certified!");
             } else {
                 toast.error(`Score is ${score}/100. Needs 80+ to certify.`);
             }
@@ -466,10 +485,12 @@ export default function WorkspacePage() {
                     <span className="font-bold text-gray-900 dark:text-gray-200 truncate">{wsData?.name || "Project Workspace"}</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 shrink-0">
+                    <LanguageSwitcher />
                     <ThemeToggle />
                     <UserDropdown />
                 </div>
             </header>
+
 
             <main className="flex-1 flex min-w-0 relative h-full overflow-hidden">
                 {/* Chat Area */}
@@ -491,17 +512,7 @@ export default function WorkspacePage() {
                         )}
                     </AnimatePresence>
 
-                    {/* Mobile/Tablet HUD */}
-                    <div className="xl:hidden w-full z-10">
-                        <AuthorshipHUD
-                            score={score}
-                            stage={stage}
-                            onCertify={handleCertify}
-                            isCertified={stage === "Certified" || stage === "Licensing"}
-                            verdict={verdict}
-                            reason={reason}
-                        />
-                    </div>
+
 
                     {stage === "Licensing" ? (
                         <div className="flex-1 p-8 overflow-y-auto">
@@ -513,8 +524,95 @@ export default function WorkspacePage() {
                                 onBack={() => setStage("Collaboration")}
                             />
                         </div>
+                    ) : stage === "Certified" ? (
+                        <AuthorshipPassport
+                            projectName={wsData?.name || "Project"}
+                            humanScore={score}
+                            assetHash={wsData?.birth_hash || "0xPENDING"}
+                            timestamp={new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                            onBack={() => setStage("Collaboration")}
+                        />
                     ) : (
-                        <>
+                        <div className="flex-1 flex flex-col min-h-0">
+                            {/* Sticky Media Toolbar */}
+                            <div className="sticky top-0 z-30 px-4 md:px-8 py-3 bg-[#fbfbfb]/80 dark:bg-[#090909]/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5 flex items-center justify-between gap-3 overflow-x-auto no-scrollbar">
+                                <div className="flex items-center gap-1.5 md:gap-3">
+                                    {/* Model Selector Dropdown */}
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-blue-500/50 transition-all group shrink-0">
+                                                <div className="w-4 h-4 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                                    <Sparkles className="w-2.5 h-2.5 text-blue-500" />
+                                                </div>
+                                                <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300">{activeModel}</span>
+                                                <ChevronDown className="w-3 h-3 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="start" className="w-48 rounded-xl p-1 bg-white dark:bg-[#111] border-gray-100 dark:border-white/5 shadow-xl">
+                                            <div className="px-2 py-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100 dark:border-white/5 mb-1">
+                                                {activeMediaType} Models
+                                            </div>
+                                            {MEDIA_MODELS[activeMediaType].map((model) => (
+                                                <DropdownMenuItem
+                                                    key={model}
+                                                    onClick={() => setActiveModel(model)}
+                                                    className={`text-xs font-bold rounded-lg px-3 py-2 cursor-pointer transition-colors ${activeModel === model ? 'text-blue-500 bg-blue-50/50 dark:bg-blue-500/10' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5'}`}
+                                                >
+                                                    {model}
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+
+                                <div className="flex items-center gap-1.5 md:gap-3">
+                                    <button
+                                        onClick={() => {
+                                            setActiveMediaType("Art");
+                                            setActiveModel(MEDIA_MODELS.Art[0]);
+                                        }}
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all group shrink-0 ${activeMediaType === "Art" ? "bg-blue-500 text-white border-blue-500" : "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-blue-500/50"}`}
+                                    >
+                                        <ImageIcon className={`w-3.5 h-3.5 ${activeMediaType === "Art" ? "text-white" : "text-blue-500"}`} />
+                                        <span className={`text-[11px] font-bold ${activeMediaType === "Art" ? "text-white" : "text-gray-700 dark:text-gray-300"}`}>Art</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setActiveMediaType("Video");
+                                            setActiveModel(MEDIA_MODELS.Video[0]);
+                                        }}
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all group shrink-0 ${activeMediaType === "Video" ? "bg-purple-500 text-white border-purple-500" : "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-purple-500/50"}`}
+                                    >
+                                        <div className="w-3.5 h-3.5 flex items-center justify-center">
+                                            <div className={`w-2.5 h-2.5 rounded-[2px] ${activeMediaType === "Video" ? "bg-white" : "bg-purple-500"}`} />
+                                        </div>
+                                        <span className={`text-[11px] font-bold ${activeMediaType === "Video" ? "text-white" : "text-gray-700 dark:text-gray-300"}`}>Video</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setActiveMediaType("Music");
+                                            setActiveModel(MEDIA_MODELS.Music[0]);
+                                        }}
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all group shrink-0 ${activeMediaType === "Music" ? "bg-emerald-500 text-white border-emerald-500" : "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-emerald-500/50"}`}
+                                    >
+                                        <div className={`w-3.5 h-3.5 border-2 rounded-full flex items-center justify-center ${activeMediaType === "Music" ? "border-white" : "border-emerald-500"}`}>
+                                            <div className={`w-1 h-1 rounded-full ${activeMediaType === "Music" ? "bg-white" : "bg-emerald-500"}`} />
+                                        </div>
+                                        <span className={`text-[11px] font-bold ${activeMediaType === "Music" ? "text-white" : "text-gray-700 dark:text-gray-300"}`}>Music</span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setActiveMediaType("Voice");
+                                            setActiveModel(MEDIA_MODELS.Voice[0]);
+                                        }}
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all group shrink-0 ${activeMediaType === "Voice" ? "bg-orange-500 text-white border-orange-500" : "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-orange-500/50"}`}
+                                    >
+                                        <Hash className={`w-3.5 h-3.5 ${activeMediaType === "Voice" ? "text-white" : "text-orange-500"}`} />
+                                        <span className={`text-[11px] font-bold ${activeMediaType === "Voice" ? "text-white" : "text-gray-700 dark:text-gray-300"}`}>Voice</span>
+                                    </button>
+                                </div>
+                            </div>
+
                             {/* Messages */}
                             <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-6 custom-scrollbar pb-8" ref={chatContainerRef}>
                                 {messages.length === 0 ? (
@@ -729,29 +827,19 @@ export default function WorkspacePage() {
                                         <Send className="w-4 h-4" />
                                     </Button>
                                 </div>
-                                <div className="text-center mt-3">
-                                    <p className="text-[10px] text-gray-400">
-                                        AI may display inaccurate info, so verify its output.
-                                    </p>
-                                </div>
+                                <ComplianceFooter
+                                    score={score}
+                                    stage={stage as any}
+                                    onCertify={handleCertify}
+                                    isCertified={(stage as string) === "Certified" || (stage as string) === "Licensing"}
+                                />
                             </div>
-                        </>
+                        </div>
                     )}
-                </div>
-
-                {/* Right Sidebar - HUD */}
-                <div className="w-80 border-l border-gray-100 dark:border-white/5 bg-white dark:bg-[#0c0c0c] p-6 hidden xl:flex flex-col">
-                    <AuthorshipHUD
-                        score={score}
-                        stage={stage}
-                        onCertify={handleCertify}
-                        isCertified={stage === "Certified" || stage === "Licensing"}
-                        verdict={verdict}
-                        reason={reason}
-                    />
                 </div>
             </main>
         </div>
     );
 }
+
 
