@@ -21,6 +21,47 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+
+  to {
+    height: 0;
+  }
+}
+
+/* Fallback classes if Tailwind utility generation fails */
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+/* Robust override for Accordion Content matching standard Tailwind pattern */
+[data-state="open"][class*="animate-accordion-down"] {
+  animation: accordion-down 0.2s ease-out !important;
+}
+
+[data-state="closed"][class*="animate-accordion-up"] {
+  animation: accordion-up 0.2s ease-out !important;
 }
 
 .dark {
@@ -124,9 +165,11 @@ body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }

@@ -3,11 +3,13 @@
 import { Waitlist } from "@/components/waitlist";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Shield, Zap, Lock } from "lucide-react";
+import { ArrowRight, Shield, Zap, Lock, Video, Image, Music, MessageSquareText } from "lucide-react";
 import { PricingTable } from "@/components/pricing-table";
 import { FadeIn } from "@/components/fade-in";
 import { useLanguage } from "@/components/language-context";
 import { TeamSection } from "@/components/team-section";
+import { Testimonials } from "@/components/testimonials";
+import { Faq } from "@/components/faq";
 
 export default function Home() {
   const { t } = useLanguage();
@@ -23,27 +25,32 @@ export default function Home() {
             <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
               <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 animate-gradient-x font-bold">
-                {t('buildingFuture')}
+                Security & Integrity
               </span>
             </div>
 
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-sans tracking-tight font-bold mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white animate-gradient-x pb-2">
-                {t('heroTitle')}
+                Issue Your Digital Authorship Passport
               </span>
             </h1>
 
+            <p className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-4 animate-in fade-in slide-in-from-bottom-7 duration-1000 delay-150">
+              Secure your unique creative footprint.
+            </p>
+
             <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              {t('heroSubtitle')}
+              Orchestrate professional AI models in a unified workspace. Proofa logs your creative decisions to link your identity to the final result.
             </p>
 
-            <div className="animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 mb-8">
-              <Waitlist />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 mb-8">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-12 w-full sm:w-auto">
+                Get Started
+              </Button>
+              <Button size="lg" variant="outline" className="rounded-full px-8 h-12 w-full sm:w-auto border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+                View Documentation
+              </Button>
             </div>
-
-            <p className="mt-8 text-sm text-gray-500 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
-              {t('joinWaitlist')}
-            </p>
           </div>
         </div>
       </FadeIn>
@@ -52,23 +59,33 @@ export default function Home() {
       <FadeIn delay={0.2}>
         <div className="border-y border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 backdrop-blur-sm transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">2,850</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsFoundingUsers')}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">9,500</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsModelsTracked')}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">$1.2M+</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsAssetValue')}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">140+</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('statsLicensedEngines')}</div>
-              </div>
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+              {[
+                { name: "Veo 3", type: "Video Generation", icon: Video, link: "https://deepmind.google/technologies/veo/" },
+                { name: "Nano Banana", type: "Image Generation", icon: Image, link: "https://nano-banana.ai/" },
+                { name: "Imagen", type: "Image Generation", icon: Image, link: "https://deepmind.google/technologies/imagen-3/" },
+                { name: "Gemini", type: "Text Generation", icon: MessageSquareText, link: "https://deepmind.google/technologies/gemini/" },
+                { name: "Lyria", type: "Music Generation", icon: Music, link: "https://deepmind.google/technologies/lyria/" },
+                { name: "Suno", type: "Music Generation", icon: Music, link: "https://suno.com/" },
+              ].map((model) => (
+                <Link
+                  key={model.name}
+                  href={model.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center group opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-500 cursor-pointer"
+                >
+                  <div className="p-3 rounded-full bg-gray-100 dark:bg-white/5 mb-3 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors duration-500">
+                    <model.icon className="w-6 h-6 text-gray-500 group-hover:text-blue-500 transition-colors duration-500" />
+                  </div>
+                  <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 group-hover:from-blue-600 group-hover:to-purple-600 dark:group-hover:from-blue-400 dark:group-hover:to-purple-400 transition-all duration-500">
+                    {model.name}
+                  </span>
+                  <span className="text-xs font-medium text-gray-400 dark:text-gray-500 mt-1 uppercase tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500">
+                    {model.type}
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -95,9 +112,10 @@ export default function Home() {
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6 text-blue-600 dark:text-blue-400">
                   <Shield className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('legalImmunity')}</h3>
+                <div className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2">The Passport</div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Authorship Passport</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {t('legalImmunityDesc')}
+                  Create an immutable link between you and your work. A permanent record of your creative journey stored on a secure ledger.
                 </p>
               </div>
             </FadeIn>
@@ -107,9 +125,10 @@ export default function Home() {
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('instantLicensing')}</h3>
+                <div className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-2">The Audit</div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Proprietary Verification Logic</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {t('instantLicensingDesc')}
+                  Our system analyzes your workflow activity to distinguish human intent from full automation, providing a high-trust score for your work.
                 </p>
               </div>
             </FadeIn>
@@ -119,25 +138,64 @@ export default function Home() {
                 <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center mb-6 text-pink-600 dark:text-pink-400">
                   <Lock className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('privateRegistry')}</h3>
+                <div className="text-sm font-semibold text-pink-600 dark:text-pink-400 mb-2">The Ledger</div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Private Asset Registry</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {t('privateRegistryDesc')}
+                  Secure your creative process data in a private environment. Own your proof of authorship before you share it with the world.
                 </p>
               </div>
             </FadeIn>
           </div>
 
-          <FadeIn delay={0.4} className="mt-16 text-center">
-            <Link href="/features">
-              <Button variant="outline" className="text-base px-8 py-6 rounded-full border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                {t('viewAllFeatures')} <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
-          </FadeIn>
+
         </div>
       </div>
 
       {/* Team Section */}
+      <FadeIn delay={0.4} className="mt-24">
+        <div className="mx-auto max-w-2xl text-center mb-16">
+          <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">Step-by-Step</h2>
+          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            How it Works
+          </p>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+            {[
+              {
+                step: "01",
+                title: "Orchestrate Workflow",
+                desc: "Use advanced models within a professional environment designed for human-led creation."
+              },
+              {
+                step: "02",
+                title: "Activity Audit",
+                desc: "Our logic monitors your creative steps to confirm your authorship and creative control."
+              },
+              {
+                step: "03",
+                title: "Secure Your Passport",
+                desc: "Finalize your creation and receive a Digital Authorship Passport on the secure ledger."
+              },
+              {
+                step: "04",
+                title: "Future Licensing (Upcoming)",
+                desc: "We are developing the infrastructure to turn your verified Passports into direct commercial licenses."
+              }
+            ].map((item, index) => (
+              <div key={item.step} className="relative p-6 bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="text-4xl font-black text-gray-100 dark:text-white/5 mb-4 absolute top-4 right-4">{item.step}</div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 relative z-10">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 relative z-10">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </FadeIn>
+
+      <Testimonials />
+
       <TeamSection />
 
       {/* Pricing Section */}
@@ -146,6 +204,8 @@ export default function Home() {
           <PricingTable />
         </FadeIn>
       </div>
+
+      <Faq />
 
       {/* CTA Footer Section */}
       <div className="relative py-24 overflow-hidden">
@@ -171,6 +231,6 @@ export default function Home() {
           </div>
         </FadeIn>
       </div>
-    </div>
+    </div >
   );
 }
