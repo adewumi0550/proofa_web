@@ -7,6 +7,7 @@ import { ArrowRight, Shield, Zap, Lock } from "lucide-react";
 import { PricingTable } from "@/components/pricing-table";
 import { FadeIn } from "@/components/fade-in";
 import { useLanguage } from "@/components/language-context";
+import { TeamSection } from "@/components/team-section";
 
 export default function Home() {
   const { t } = useLanguage();
@@ -135,6 +136,9 @@ export default function Home() {
           </FadeIn>
         </div>
       </div>
+
+      {/* Team Section */}
+      <TeamSection />
 
       {/* Pricing Section */}
       <div className="bg-gray-50 dark:bg-black transition-colors duration-300 border-t border-gray-200 dark:border-white/5">
