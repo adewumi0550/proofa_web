@@ -6,6 +6,7 @@ import { Linkedin, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useLanguage } from "@/components/language-context";
 
 interface TeamMember {
     name: string;
@@ -15,34 +16,33 @@ interface TeamMember {
     description: string;
 }
 
-const team: TeamMember[] = [
-    {
-        name: "Anna Muzykina",
-        role: "Founder & CEO",
-        image: "/team/anna.jpg",
-        linkedin: "https://www.linkedin.com/in/anna-muzykina/",
-        description:
-            'The visionary and architectural heart of Proofa. Anna is the creator of the original concept of "Human Creative Energy" and the architect of the platform’s logic. Combining her background as a developer with a deep understanding of the LegalTech landscape, she drives the platform\'s introduction to the world. Anna ensures that every line of code and every feature aligns with the core mission: protecting the "Human Spark" in the age of AI.',
-    },
-    {
-        name: "Denys Doroshev",
-        role: "Co-founder & COO",
-        image: "/team/denys_v2.png",
-        linkedin: "https://www.linkedin.com/in/denys-doroshev/",
-        description:
-            "The strategic engine of the project. Denys is responsible for the operational stability and growth of Proofa. He manages the complex world of documentation, controls legal and business meetings, and identifies key market opportunities. His focus is on building the bridge between Proofa’s innovative technology and its practical application in the business and legal sectors.",
-    },
-    {
-        name: "Saheed Adewumi",
-        role: "Co-founder & CTO",
-        image: "/team/saheed_v2.png",
-        linkedin: "https://www.linkedin.com/in/saheed-adewumi-015489159/",
-        description:
-            "The technical powerhouse. Saheed leads the development and execution of the platform’s complex architecture. Working in close collaboration with Anna, he translates her vision and creative logic into a robust, scalable codebase. As the hands-on lead for Proofa’s technical infrastructure, he ensures the platform remains at the cutting edge of Web3 and AI-verification technology.",
-    },
-];
-
 export function TeamSection() {
+    const { t } = useLanguage();
+
+    const team: TeamMember[] = [
+        {
+            name: "Anna Muzykina",
+            role: t('team_anna_role'),
+            image: "/team/anna.jpg",
+            linkedin: "https://www.linkedin.com/in/anna-muzykina/",
+            description: t('team_anna_desc'),
+        },
+        {
+            name: "Denys Doroshev",
+            role: t('team_denys_role'),
+            image: "/team/denys_v2.png",
+            linkedin: "https://www.linkedin.com/in/denys-doroshev/",
+            description: t('team_denys_desc'),
+        },
+        {
+            name: "Saheed Adewumi",
+            role: t('team_saheed_role'),
+            image: "/team/saheed_v2.png",
+            linkedin: "https://www.linkedin.com/in/saheed-adewumi-015489159/",
+            description: t('team_saheed_desc'),
+        },
+    ];
+
     const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
     return (
@@ -53,13 +53,13 @@ export function TeamSection() {
                 <FadeIn>
                     <div className="mx-auto max-w-2xl text-center mb-16">
                         <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">
-                            Our Leadership
+                            {t('teamTitle')}
                         </h2>
                         <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                            Meet the Team
+                            {t('teamSubtitle')}
                         </p>
                         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-                            The minds behind Proofa dedicated to protecting human creativity.
+                            {t('teamDesc')}
                         </p>
                     </div>
                 </FadeIn>

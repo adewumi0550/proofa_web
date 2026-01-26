@@ -25,30 +25,26 @@ export default function Home() {
             <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
               <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 animate-gradient-x font-bold">
-                Security & Integrity
+                {t('buildingFuture')}
               </span>
             </div>
 
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-sans tracking-tight font-bold mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white animate-gradient-x pb-2">
-                Issue Your Digital Authorship Passport
+                {t('heroTitle')}
               </span>
             </h1>
 
-            <p className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-4 animate-in fade-in slide-in-from-bottom-7 duration-1000 delay-150">
-              Secure your unique creative footprint.
-            </p>
-
             <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-400 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              Orchestrate professional AI models in a unified workspace. Proofa logs your creative decisions to link your identity to the final result.
+              {t('heroSubtitle')}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 mb-8">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-12 w-full sm:w-auto">
-                Get Started
+                {t('getStarted')}
               </Button>
               <Button size="lg" variant="outline" className="rounded-full px-8 h-12 w-full sm:w-auto border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                View Documentation
+                {t('viewAllFeatures')}
               </Button>
             </div>
           </div>
@@ -61,12 +57,12 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
               {[
-                { name: "Veo 3", type: "Video Generation", icon: Video, link: "https://deepmind.google/technologies/veo/" },
-                { name: "Nano Banana", type: "Image Generation", icon: Image, link: "https://nano-banana.ai/" },
-                { name: "Imagen", type: "Image Generation", icon: Image, link: "https://deepmind.google/technologies/imagen-3/" },
-                { name: "Gemini", type: "Text Generation", icon: MessageSquareText, link: "https://deepmind.google/technologies/gemini/" },
-                { name: "Lyria", type: "Music Generation", icon: Music, link: "https://deepmind.google/technologies/lyria/" },
-                { name: "Suno", type: "Music Generation", icon: Music, link: "https://suno.com/" },
+                { name: "Veo 3", typeKey: "videoGeneration", icon: Video, link: "https://deepmind.google/technologies/veo/" },
+                { name: "Nano Banana", typeKey: "imageGeneration", icon: Image, link: "https://nano-banana.ai/" },
+                { name: "Imagen", typeKey: "imageGeneration", icon: Image, link: "https://deepmind.google/technologies/imagen-3/" },
+                { name: "Gemini", typeKey: "textGeneration", icon: MessageSquareText, link: "https://deepmind.google/technologies/gemini/" },
+                { name: "Lyria", typeKey: "musicGeneration", icon: Music, link: "https://deepmind.google/technologies/lyria/" },
+                { name: "Suno", typeKey: "musicGeneration", icon: Music, link: "https://suno.com/" },
               ].map((model) => (
                 <Link
                   key={model.name}
@@ -82,7 +78,7 @@ export default function Home() {
                     {model.name}
                   </span>
                   <span className="text-xs font-medium text-gray-400 dark:text-gray-500 mt-1 uppercase tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500">
-                    {model.type}
+                    {t(model.typeKey as any)}
                   </span>
                 </Link>
               ))}
@@ -113,9 +109,9 @@ export default function Home() {
                   <Shield className="w-6 h-6" />
                 </div>
                 <div className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2">The Passport</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Authorship Passport</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('feat_passport_title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Create an immutable link between you and your work. A permanent record of your creative journey stored on a secure ledger.
+                  {t('feat_passport_desc')}
                 </p>
               </div>
             </FadeIn>
@@ -126,9 +122,9 @@ export default function Home() {
                   <Zap className="w-6 h-6" />
                 </div>
                 <div className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-2">The Audit</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Proprietary Verification Logic</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('feat_audit_title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Our system analyzes your workflow activity to distinguish human intent from full automation, providing a high-trust score for your work.
+                  {t('feat_audit_desc')}
                 </p>
               </div>
             </FadeIn>
@@ -139,9 +135,9 @@ export default function Home() {
                   <Lock className="w-6 h-6" />
                 </div>
                 <div className="text-sm font-semibold text-pink-600 dark:text-pink-400 mb-2">The Ledger</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Private Asset Registry</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('feat_ledger_title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Secure your creative process data in a private environment. Own your proof of authorship before you share it with the world.
+                  {t('feat_ledger_desc')}
                 </p>
               </div>
             </FadeIn>
@@ -154,9 +150,9 @@ export default function Home() {
       {/* Team Section */}
       <FadeIn delay={0.4} className="mt-24">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">Step-by-Step</h2>
+          <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('hiw_stepTitle')}</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-            How it Works
+            {t('hiw_title')}
           </p>
         </div>
 
@@ -165,23 +161,23 @@ export default function Home() {
             {[
               {
                 step: "01",
-                title: "Orchestrate Workflow",
-                desc: "Use advanced models within a professional environment designed for human-led creation."
+                title: t('hiw_step1_title'),
+                desc: t('hiw_step1_desc')
               },
               {
                 step: "02",
-                title: "Activity Audit",
-                desc: "Our logic monitors your creative steps to confirm your authorship and creative control."
+                title: t('hiw_step2_title'),
+                desc: t('hiw_step2_desc')
               },
               {
                 step: "03",
-                title: "Secure Your Passport",
-                desc: "Finalize your creation and receive a Digital Authorship Passport on the secure ledger."
+                title: t('hiw_step3_title'),
+                desc: t('hiw_step3_desc')
               },
               {
                 step: "04",
-                title: "Future Licensing (Upcoming)",
-                desc: "We are developing the infrastructure to turn your verified Passports into direct commercial licenses."
+                title: t('hiw_step4_title'),
+                desc: t('hiw_step4_desc')
               }
             ].map((item, index) => (
               <div key={item.step} className="relative p-6 bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300">

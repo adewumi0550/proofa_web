@@ -218,6 +218,68 @@ export const translations = {
         status: "Status",
         active: "Active",
         poweringWorkflows: "Powering your daily creative workflows.",
+
+        // FAQ
+        faqTitle: "FAQ: Technical & Secure",
+        faqSubtitle: "Common Questions",
+        faqDesc: "Everything you need to know about securing your creative future.",
+        faq_q1: "What is a Digital Authorship Passport?",
+        faq_a1: "It is a technical record of your work’s development. Proofa captures the activity logs and specific iterations of your creative process to establish a verifiable link between you and the final output.",
+        faq_q2: "How does the verification work?",
+        faq_a2: "The platform utilizes proprietary logic to audit your workflow. By analyzing the sequence of your creative decisions, the system generates a score that confirms human-led authorship over automated generation.",
+        faq_q3: "Which models are supported in the workspace?",
+        faq_a3: "The environment allows you to orchestrate various professional models. Our logic is model-agnostic; it monitors the creator's interaction with the tools, not the tools themselves.",
+        faq_q4: "Is my creative process private?",
+        faq_a4: "Yes. Your workflow data is stored on a secure, private ledger. This allows you to maintain a permanent record of your authorship without exposing your work or your prompts to the public.",
+        faq_q5: "What does 'Future Licensing' mean?",
+        faq_a5: "Securing a Passport today creates a foundational record of your authorship. This technical proof is designed to be the basis for future asset management and commercial use within our evolving ecosystem.",
+
+        // Team
+        teamTitle: "Our Leadership",
+        teamSubtitle: "Meet the Team",
+        teamDesc: "The minds behind Proofa dedicated to protecting human creativity.",
+        team_anna_role: "Founder & CEO",
+        team_anna_desc: 'The visionary and architectural heart of Proofa. Anna is the creator of the original concept of "Human Creative Energy" and the architect of the platform’s logic. Combining her background as a developer with a deep understanding of the LegalTech landscape, she drives the platform\'s introduction to the world. Anna ensures that every line of code and every feature aligns with the core mission: protecting the "Human Spark" in the age of AI.',
+        team_denys_role: "Co-founder & COO",
+        team_denys_desc: "The strategic engine of the project. Denys is responsible for the operational stability and growth of Proofa. He manages the complex world of documentation, controls legal and business meetings, and identifies key market opportunities. His focus is on building the bridge between Proofa’s innovative technology and its practical application in the business and legal sectors.",
+        team_saheed_role: "Co-founder & CTO",
+        team_saheed_desc: "The technical powerhouse. Saheed leads the development and execution of the platform’s complex architecture. Working in close collaboration with Anna, he translates her vision and creative logic into a robust, scalable codebase. As the hands-on lead for Proofa’s technical infrastructure, he ensures the platform remains at the cutting edge of Web3 and AI-verification technology.",
+
+        // Feature Cards (Home)
+        feat_passport_title: "Authorship Passport",
+        feat_passport_desc: "Create an immutable link between you and your work. A permanent record of your creative journey stored on a secure ledger.",
+        feat_audit_title: "Proprietary Verification Logic",
+        feat_audit_desc: "Our system analyzes your workflow activity to distinguish human intent from full automation, providing a high-trust score for your work.",
+        feat_ledger_title: "Private Asset Registry",
+        feat_ledger_desc: "Secure your creative process data in a private environment. Own your proof of authorship before you share it with the world.",
+
+        // How It Works
+        hiw_stepTitle: "Step-by-Step",
+        hiw_title: "How it Works",
+        hiw_step1_title: "Orchestrate Workflow",
+        hiw_step1_desc: "Use advanced models within a professional environment designed for human-led creation.",
+        hiw_step2_title: "Activity Audit",
+        hiw_step2_desc: "Our logic monitors your creative steps to confirm your authorship and creative control.",
+        hiw_step3_title: "Secure Your Passport",
+        hiw_step3_desc: "Finalize your creation and receive a Digital Authorship Passport on the secure ledger.",
+        hiw_step4_title: "Future Licensing (Upcoming)",
+        hiw_step4_desc: "We are developing the infrastructure to turn your verified Passports into direct commercial licenses.",
+
+        // Social Proof Models
+        videoGeneration: "Video Generation",
+        imageGeneration: "Image Generation",
+        textGeneration: "Text Generation",
+        musicGeneration: "Music Generation",
+
+        // Testimonials
+        socialProofTitle: "Social Proof",
+        trustedByTitle: "Trusted by Early Adopters",
+        testimonial_elena: "Proofa provides the exact legal layer we needed to integrate AI into our professional workflow without risking IP ownership. The Authorship Passport is a game changer.",
+        role_elena: "Creative Director, Studio X",
+        testimonial_marcus: "Finally, a way to prove my human input in the creative process. The audit logic is transparent and gives my clients the confidence they need.",
+        role_marcus: "Freelance Concept Artist",
+        testimonial_sarah: "The ability to secure my workflow data privately before licensing is exactly what the industry was missing. A secure and professional environment.",
+        role_sarah: "Head of Innovation, TechArt",
     },
 
     de: {
@@ -236,7 +298,7 @@ export const translations = {
         // Landing Page
         heroTitle: "Zertifizieren Sie Ihre KI-Workflows",
         buildingFuture: "Die Zukunft der kreativen KI gestalten",
-        heroSubtitle: "Monetarisieren und schützen Sie Ihre Kunst. Orchestrieren Sie die mächtigsten Modelle der Welt. Von ChatGPT bis Veo 3.",
+        heroSubtitle: "Monetarisieren und schützen Sie Ihre Kunst. Orchestrieren Sie die mächtigsten Modelle der Welt. Von ChatGPT bis Veo 3, verwandeln Sie Ihr Originalwerk in ein lizenziertes kommerzielles Asset.",
         joinWaitlist: "Schließen Sie sich 2.850+ Kreativen an.",
         joinWaitlistBtn: "Warteliste beitreten",
         enterEmailPlaceholder: "E-Mail für frühen Zugang eingeben",
@@ -437,5 +499,67 @@ export const translations = {
         status: "Status",
         active: "Aktiv",
         poweringWorkflows: "Unterstützt Ihre täglichen kreativen Arbeitsabläufe.",
+
+        // FAQ
+        faqTitle: "FAQ: Technisch & Sicher",
+        faqSubtitle: "Häufige Fragen",
+        faqDesc: "Alles, was Sie wissen müssen, um Ihre kreative Zukunft zu sichern.",
+        faq_q1: "Was ist ein Digital Authorship Passport?",
+        faq_a1: "Es ist eine technische Aufzeichnung der Entwicklung Ihrer Arbeit. Proofa erfasst die Aktivitätsprotokolle und spezifischen Iterationen Ihres kreativen Prozesses, um eine überprüfbare Verbindung zwischen Ihnen und dem Endergebnis herzustellen.",
+        faq_q2: "Wie funktioniert die Verifikation?",
+        faq_a2: "Die Plattform nutzt eine proprietäre Logik, um Ihren Workflow zu prüfen. Durch die Analyse der Abfolge Ihrer kreativen Entscheidungen generiert das System eine Punktzahl, die die menschliche Urheberschaft über die automatisierte Generierung bestätigt.",
+        faq_q3: "Welche Modelle werden im Arbeitsbereich unterstützt?",
+        faq_a3: "Die Umgebung ermöglicht es Ihnen, verschiedene professionelle Modelle zu orchestrieren. Unsere Logik ist modellunabhängig; sie überwacht die Interaktion des Erstellers mit den Werkzeugen, nicht die Werkzeuge selbst.",
+        faq_q4: "Ist mein kreativer Prozess privat?",
+        faq_a4: "Ja. Ihre Workflow-Daten werden in einem sicheren, privaten Register gespeichert. Dies ermöglicht es Ihnen, eine dauerhafte Aufzeichnung Ihrer Urheberschaft zu führen, ohne Ihre Arbeit oder Ihre Prompts der Öffentlichkeit preiszugeben.",
+        faq_q5: "Was bedeutet 'Zukünftige Lizenzierung'?",
+        faq_a5: "Die Sicherung eines Passes schafft heute eine grundlegende Aufzeichnung Ihrer Urheberschaft. Dieser technische Beweis soll die Grundlage für die zukünftige Vermögensverwaltung und kommerzielle Nutzung in unserem sich entwickelnden Ökosystem bilden.",
+
+        // Team
+        teamTitle: "Unsere Führung",
+        teamSubtitle: "Treffen Sie das Team",
+        teamDesc: "Die Köpfe hinter Proofa, die sich dem Schutz der menschlichen Kreativität widmen.",
+        team_anna_role: "Gründerin & CEO",
+        team_anna_desc: 'Das visionäre und architektonische Herz von Proofa. Anna ist die Schöpferin des ursprünglichen Konzepts der "Menschlichen Kreativen Energie" und die Architektin der Logik der Plattform. Mit ihrem Hintergrund als Entwicklerin und einem tiefen Verständnis der LegalTech-Landschaft treibt sie die Einführung der Plattform in die Welt voran. Anna stellt sicher, dass jede Zeile Code und jede Funktion mit der Kernmission übereinstimmt: den "Human Spark" im Zeitalter der KI zu schützen.',
+        team_denys_role: "Mitbegründer & COO",
+        team_denys_desc: "Der strategische Motor des Projekts. Denys ist verantwortlich für die operative Stabilität und das Wachstum von Proofa. Er verwaltet die komplexe Welt der Dokumentation, kontrolliert Rechts- und Geschäftstermine und identifiziert wichtige Marktchancen. Sein Fokus liegt darauf, die Brücke zwischen der innovativen Technologie von Proofa und ihrer praktischen Anwendung im Geschäfts- und Rechtssektor zu schlagen.",
+        team_saheed_role: "Mitbegründer & CTO",
+        team_saheed_desc: "Das technische Kraftpaket. Saheed leitet die Entwicklung und Ausführung der komplexen Architektur der Plattform. In enger Zusammenarbeit mit Anna übersetzt er ihre Vision und kreative Logik in eine robuste, skalierbare Codebasis. Als praktischer Leiter der technischen Infrastruktur von Proofa stellt er sicher, dass die Plattform an der Spitze der Web3- und KI-Verifikationstechnologie bleibt.",
+
+        // Feature Cards (Home)
+        feat_passport_title: "Autorenschaftspass",
+        feat_passport_desc: "Erstellen Sie eine unveränderliche Verbindung zwischen Ihnen und Ihrer Arbeit. Eine dauerhafte Aufzeichnung Ihrer kreativen Reise, gespeichert in einem sicheren Register.",
+        feat_audit_title: "Proprietäre Verifikationslogik",
+        feat_audit_desc: "Unser System analysiert Ihre Workflow-Aktivität, um menschliche Absicht von vollständiger Automatisierung zu unterscheiden und bietet eine hohe Vertrauensbewertung für Ihre Arbeit.",
+        feat_ledger_title: "Privates Vermögensregister",
+        feat_ledger_desc: "Sichern Sie Ihre kreativen Prozessdaten in einer privaten Umgebung. Besitzen Sie Ihren Urheberschaftsnachweis, bevor Sie ihn mit der Welt teilen.",
+
+        // How It Works
+        hiw_stepTitle: "Schritt-für-Schritt",
+        hiw_title: "Wie es funktioniert",
+        hiw_step1_title: "Workflow Orchestrieren",
+        hiw_step1_desc: "Nutzen Sie fortschrittliche Modelle in einer professionellen Umgebung, die für menschlich geführte Kreation entwickelt wurde.",
+        hiw_step2_title: "Aktivitätsprüfung",
+        hiw_step2_desc: "Unsere Logik überwacht Ihre kreativen Schritte, um Ihre Urheberschaft und kreative Kontrolle zu bestätigen.",
+        hiw_step3_title: "Sichern Sie Ihren Pass",
+        hiw_step3_desc: "Finalisieren Sie Ihre Kreation und erhalten Sie einen Digital Authorship Passport im sicheren Register.",
+        hiw_step4_title: "Zukünftige Lizenzierung (Demnächst)",
+        hiw_step4_desc: "Wir entwickeln die Infrastruktur, um Ihre verifizierten Pässe in direkte kommerzielle Lizenzen zu verwandeln.",
+
+        // Social Proof Models
+        videoGeneration: "Videogenerierung",
+        imageGeneration: "Bildgenerierung",
+        textGeneration: "Textgenerierung",
+        musicGeneration: "Musikgenerierung",
+
+        // Testimonials
+        socialProofTitle: "Sozialer Beweis",
+        trustedByTitle: "Vertraut von Early Adopters",
+        testimonial_elena: "Proofa bietet genau die rechtliche Ebene, die wir brauchten, um KI in unseren professionellen Workflow zu integrieren, ohne das geistige Eigentum zu gefährden. Der Autorenschaftspass ändert alles.",
+        role_elena: "Kreativdirektorin, Studio X",
+        testimonial_marcus: "Endlich ein Weg, meinen menschlichen Beitrag im kreativen Prozess zu beweisen. Die Audit-Logik ist transparent und gibt meinen Kunden das Vertrauen, das sie brauchen.",
+        role_marcus: "Freiberuflicher Konzeptkünstler",
+        testimonial_sarah: "Die Möglichkeit, meine Workflow-Daten privat zu sichern, bevor ich sie lizenziere, ist genau das, was der Branche gefehlt hat. Eine sichere und professionelle Umgebung.",
+        role_sarah: "Leiterin Innovation, TechArt",
     },
 };

@@ -3,31 +3,34 @@
 import { useState } from "react";
 import { FadeIn } from "@/components/fade-in";
 import { ChevronDown } from "lucide-react";
-
-const faqs = [
-    {
-        question: "What is a Digital Authorship Passport?",
-        answer: "It is a technical record of your work’s development. Proofa captures the activity logs and specific iterations of your creative process to establish a verifiable link between you and the final output."
-    },
-    {
-        question: "How does the verification work?",
-        answer: "The platform utilizes proprietary logic to audit your workflow. By analyzing the sequence of your creative decisions, the system generates a score that confirms human-led authorship over automated generation."
-    },
-    {
-        question: "Which models are supported in the workspace?",
-        answer: "The environment allows you to orchestrate various professional models. Our logic is model-agnostic; it monitors the creator's interaction with the tools, not the tools themselves."
-    },
-    {
-        question: "Is my creative process private?",
-        answer: "Yes. Your workflow data is stored on a secure, private ledger. This allows you to maintain a permanent record of your authorship without exposing your work or your prompts to the public."
-    },
-    {
-        question: "What does 'Future Licensing' mean?",
-        answer: "Securing a Passport today creates a foundational record of your authorship. This technical proof is designed to be the basis for future asset management and commercial use within our evolving ecosystem."
-    }
-];
+import { useLanguage } from "@/components/language-context";
 
 export function Faq() {
+    const { t } = useLanguage();
+
+    const faqs = [
+        {
+            question: t('faq_q1'),
+            answer: t('faq_a1')
+        },
+        {
+            question: t('faq_q2'),
+            answer: t('faq_a2')
+        },
+        {
+            question: t('faq_q3'),
+            answer: t('faq_a3')
+        },
+        {
+            question: t('faq_q4'),
+            answer: t('faq_a4')
+        },
+        {
+            question: t('faq_q5'),
+            answer: t('faq_a5')
+        }
+    ];
+
     // 1. Structural Logic: Single state variable
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -41,12 +44,12 @@ export function Faq() {
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <FadeIn>
                     <div className="mx-auto max-w-2xl text-center mb-16">
-                        <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">FAQ: Technical & Secure</h2>
+                        <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('faqTitle')}</h2>
                         <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                            Common Questions
+                            {t('faqSubtitle')}
                         </p>
                         <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-                            Everything you need to know about securing your creative future.
+                            {t('faqDesc')}
                         </p>
                     </div>
                 </FadeIn>

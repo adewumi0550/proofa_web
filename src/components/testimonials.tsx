@@ -2,37 +2,41 @@
 
 import { FadeIn } from "@/components/fade-in";
 import { Star } from "lucide-react";
-
-const testimonials = [
-    {
-        content: "Proofa provides the exact legal layer we needed to integrate AI into our professional workflow without risking IP ownership. The Authorship Passport is a game changer.",
-        author: "Elena R.",
-        role: "Creative Director, Studio X",
-        rating: 5
-    },
-    {
-        content: "Finally, a way to prove my human input in the creative process. The audit logic is transparent and gives my clients the confidence they need.",
-        author: "Marcus J.",
-        role: "Freelance Concept Artist",
-        rating: 5
-    },
-    {
-        content: "The ability to secure my workflow data privately before licensing is exactly what the industry was missing. A secure and professional environment.",
-        author: "Sarah L.",
-        role: "Head of Innovation, TechArt",
-        rating: 5
-    }
-];
+import { useLanguage } from "@/components/language-context";
 
 export function Testimonials() {
+    const { t } = useLanguage();
+
+    const testimonials = [
+        {
+            content: t('testimonial_elena'),
+            author: "Elena R.",
+            role: "Creative Director, Studio X", // Keeping this hardcoded or use a key if strictly needed, but role_elena exists
+            roleKey: "role_elena",
+            rating: 5
+        },
+        {
+            content: t('testimonial_marcus'),
+            author: "Marcus J.",
+            roleKey: "role_marcus",
+            rating: 5
+        },
+        {
+            content: t('testimonial_sarah'),
+            author: "Sarah L.",
+            roleKey: "role_sarah",
+            rating: 5
+        }
+    ];
+
     return (
         <section className="py-24 bg-gray-50 dark:bg-white/5 border-y border-gray-200 dark:border-white/5">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <FadeIn>
                     <div className="mx-auto max-w-2xl text-center mb-16">
-                        <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">Social Proof</h2>
+                        <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('socialProofTitle')}</h2>
                         <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                            Trusted by Early Adopters
+                            {t('trustedByTitle')}
                         </p>
                     </div>
                 </FadeIn>
@@ -57,7 +61,7 @@ export function Testimonials() {
                                     </div>
                                     <div>
                                         <div className="font-semibold text-gray-900 dark:text-white">{testimonial.author}</div>
-                                        <div className="text-sm text-gray-500 dark:text-gray-500">{testimonial.role}</div>
+                                        <div className="text-sm text-gray-500 dark:text-gray-500">{t(testimonial.roleKey as any)}</div>
                                     </div>
                                 </div>
                             </div>
