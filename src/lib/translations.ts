@@ -40,6 +40,10 @@ export const translations = {
         checkPricing: "Check Pricing",
         contactEducation: "Contact Education",
 
+        // Careers
+        careersTitle: "Join the Team",
+        noOpenings: "No open positions at the moment. Please check back later.",
+
         // Dashboard
         overview: "Overview",
         projectWorkspace: "Project Workspace",
@@ -388,6 +392,10 @@ export const translations = {
         joinWaitlistToday: "Treten Sie der Warteliste bei und erhalten Sie frühen Zugang.",
         checkPricing: "Preise Prüfen",
         contactEducation: "Kontakt Bildung",
+
+        // Careers
+        careersTitle: "Werden Sie Teil des Teams",
+        noOpenings: "Derzeit keine offenen Stellen. Bitte schauen Sie später wieder vorbei.",
 
         // Dashboard
         overview: "Übersicht",
