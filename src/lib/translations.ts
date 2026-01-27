@@ -283,6 +283,11 @@ export const translations = {
 
         // Warnings
         betaWarning: "⚠️ Protocol Beta: This is a prototype for a closed focus group. Not for public commercial use. Transactions are simulated.",
+
+        // Cookie Consent
+        cookieMessage: "We use cookies to improve your experience. By using Proofa, you agree to our ",
+        cookieAccept: "Accept",
+        cookieDecline: "Decline",
     },
 
     de: {
@@ -567,5 +572,10 @@ export const translations = {
 
         // Warnings
         betaWarning: "⚠️ Protokoll Beta: Dies ist ein Prototyp für eine geschlossene Fokusgruppe. Nicht für den öffentlichen kommerziellen Gebrauch bestimmt. Transaktionen werden simuliert.",
+
+        // Cookie Consent
+        cookieMessage: "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die Nutzung von Proofa stimmen Sie unserer ",
+        cookieAccept: "Akzeptieren",
+        cookieDecline: "Ablehnen",
     },
 };

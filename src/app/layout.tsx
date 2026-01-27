@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/components/language-context";
 import { Toaster } from "sonner";
 import { ProofaPreloader } from "@/components/preloader";
 import { BetaBanner } from "@/components/beta-banner";
+import { CookieConsent } from "@/components/cookie-consent";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({
             <LanguageProvider>
               {/* Closed Beta Warning Banner */}
               <BetaBanner />
+              <CookieConsent />
               <Toaster />
               <ProofaPreloader />
               {children}
