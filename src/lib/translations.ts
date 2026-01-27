@@ -44,6 +44,39 @@ export const translations = {
         careersTitle: "Join the Team",
         noOpenings: "No open positions at the moment. Please check back later.",
 
+        // About Us
+        aboutMetaTitle: "About Us | Proofa",
+        missionHeader: "Our Mission: Protecting the Human Spark.",
+        missionGap: "Current AI landscapes often ignore the journey of the creator, treating art as mere data.",
+        missionSolution: "Proofa is built to change that. We provide a professional workspace that aggregates the world’s best AI models while securing your unique creative intent.",
+        missionValue: "We believe that while AI handles the execution, the human remains the architect.",
+
+        whatIsProofaHeader: "What is Proofa?",
+        featureAggregatorTitle: "Model Aggregator",
+        featureAggregatorDesc: "A unified ecosystem to orchestrate professional AI engines in one interface.",
+        featurePassportTitle: "Authorship Passport",
+        featurePassportDesc: "A technical document generated via a private ledger that logs your creative footprint, making your authorship verifiable and permanent.",
+
+        teamHeader: "The Team",
+        teamAnnaRole: "Founder & CEO",
+        teamAnnaBio: "The visionary leading the movement to redefine digital authorship and protect creators' rights.",
+        teamDenysRole: "Co-Founder & COO",
+        teamDenysBio: "The strategic lead managing operations and building the framework for Proofa’s growth.",
+        teamSaheedRole: "Co-Founder & CTO",
+        teamSaheedBio: "The technical architect ensuring the security of our ledger and the integrity of the model aggregation logic.",
+        teamNote: "Born from pure enthusiasm and a shared belief that technology must serve human creativity.",
+
+        statusHeader: "Legal & Development Status",
+        statusPhase: "Proofa is currently in its Focus Group Phase.",
+        statusRoadmap: "We are in the process of official legal entity formation (GmbH). This prototype is our first step toward a global standard for creative proof.",
+
+        historyHeader: "Our Journey",
+        historyIdea: "Idea",
+        historyPrototype: "Prototype",
+        historyLaunch: "Launch",
+
+        joinMovement: "Join the Movement",
+
         // Dashboard
         overview: "Overview",
         projectWorkspace: "Project Workspace",
@@ -102,12 +135,25 @@ export const translations = {
         showcaseSubtitle: "Discover trending certified workflows and assets. Licensed and ready for commercial use.",
 
         // Contact
-        contactTitle: "Get in touch",
-        contactSubtitle: "Have questions? We'd love to hear from you.",
+        contactTitle: "Connect with the Founder",
+        contactSubtitle: "Direct access for partners, creators, and visionaries.",
         yourName: "Your Name",
         yourEmail: "Your Email",
-        howCanWeHelp: "How can we help?",
+        howCanWeHelp: "Topic",
+        messageLabel: "Message",
         sendMessage: "Send Message",
+
+        // Contact Details
+        trustBadge: "Direct communication with the Founder for high-priority inquiries.",
+        locationCity: "Ahlen NRW Germany",
+
+        // Form Topics
+        topicFocusGroup: "Focus Group",
+        topicPartnership: "Partnership",
+        topicSupport: "Support",
+
+        // Safety
+        captchaHint: "Safety Check: What is 2 + 3?",
 
         // Features
         featuresTitle: "Powerful Features for",
@@ -397,6 +443,39 @@ export const translations = {
         careersTitle: "Werden Sie Teil des Teams",
         noOpenings: "Derzeit keine offenen Stellen. Bitte schauen Sie später wieder vorbei.",
 
+        // About Us
+        aboutMetaTitle: "Über Uns | Proofa",
+        missionHeader: "Unsere Mission: Den menschlichen Funken schützen.",
+        missionGap: "Aktuelle KI-Landschaften ignorieren oft die Reise des Schöpfers und behandeln Kunst als bloße Daten.",
+        missionSolution: "Proofa wurde gebaut, um das zu ändern. Wir bieten einen professionellen Arbeitsbereich, der die weltweit besten KI-Modelle bündelt und gleichzeitig Ihre einzigartige kreative Absicht sichert.",
+        missionValue: "Wir glauben, dass während die KI die Ausführung übernimmt, der Mensch der Architekt bleibt.",
+
+        whatIsProofaHeader: "Was ist Proofa?",
+        featureAggregatorTitle: "Modell-Aggregator",
+        featureAggregatorDesc: "Ein einheitliches Ökosystem zur Orchestrierung professioneller KI-Engines in einer Schnittstelle.",
+        featurePassportTitle: "Autorenschafts-Pass",
+        featurePassportDesc: "Ein technisches Dokument, das über ein privates Register generiert wird und Ihren kreativen Fußabdruck protokolliert, wodurch Ihre Autorenschaft überprüfbar und dauerhaft wird.",
+
+        teamHeader: "Das Team",
+        teamAnnaRole: "Gründerin & CEO",
+        teamAnnaBio: "Die Visionärin, die die Bewegung anführt, um digitale Autorenschaft neu zu definieren und Urheberrechte zu schützen.",
+        teamDenysRole: "Mitgründer & COO",
+        teamDenysBio: "Der strategische Leiter, der den Betrieb führt und den Rahmen für das Wachstum von Proofa bildet.",
+        teamSaheedRole: "Mitgründer & CTO",
+        teamSaheedBio: "Der technische Architekt, der die Sicherheit unseres Registers und die Integrität der Modell-Aggregationslogik gewährleistet.",
+        teamNote: "Geboren aus reinem Enthusiasmus und dem gemeinsamen Glauben, dass Technologie der menschlichen Kreativität dienen muss.",
+
+        statusHeader: "Rechtlicher & Entwicklungsstatus",
+        statusPhase: "Proofa befindet sich derzeit in der Fokusgruppen-Phase.",
+        statusRoadmap: "Wir befinden uns im Prozess der offiziellen Gründung einer juristischen Person (GmbH). Dieser Prototyp ist unser erster Schritt zu einem globalen Standard für kreativen Nachweis.",
+
+        historyHeader: "Unsere Reise",
+        historyIdea: "Idee",
+        historyPrototype: "Prototyp",
+        historyLaunch: "Start",
+
+        joinMovement: "Der Bewegung beitreten",
+
         // Dashboard
         overview: "Übersicht",
         projectWorkspace: "Projektarbeitsbereich",
@@ -455,12 +534,25 @@ export const translations = {
         showcaseSubtitle: "Entdecken Sie trendige zertifizierte Workflows und Assets. Lizenziert und bereit für die kommerzielle Nutzung.",
 
         // Contact
-        contactTitle: "Kontakt aufnehmen",
-        contactSubtitle: "Haben Sie Fragen? Wir helfen gerne.",
+        contactTitle: "Verbinden Sie sich mit der Gründerin",
+        contactSubtitle: "Direkter Zugang für Partner, Schöpfer und Visionäre.",
         yourName: "Ihr Name",
         yourEmail: "Ihre E-Mail",
-        howCanWeHelp: "Wie können wir helfen?",
+        howCanWeHelp: "Thema",
+        messageLabel: "Nachricht",
         sendMessage: "Nachricht senden",
+
+        // Contact Details
+        trustBadge: "Direkte Kommunikation mit der Gründerin für Anfragen mit hoher Priorität.",
+        locationCity: "Ahlen NRW Deutschland",
+
+        // Form Topics
+        topicFocusGroup: "Fokusgruppe",
+        topicPartnership: "Partnerschaft",
+        topicSupport: "Unterstützung",
+
+        // Safety
+        captchaHint: "Sicherheitsfrage: Was ist 2 + 3?",
 
         // Features
         featuresTitle: "Leistungsstarke Funktionen für",
