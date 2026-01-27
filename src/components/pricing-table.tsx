@@ -1,7 +1,6 @@
 "use client";
 
 import { Check, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-context";
 
 export function PricingTable() {
@@ -22,6 +21,7 @@ export function PricingTable() {
             ],
             cta: t('startFree'),
             popular: false,
+            disabled: false,
         },
         {
             name: t('proCreator'),
@@ -37,9 +37,10 @@ export function PricingTable() {
             ],
             cta: t('goPro'),
             popular: true,
+            disabled: true,
         },
         {
-            name: t('classic'),
+            name: t('enterprise'),
             price: "Custom",
             period: "",
             description: "Enterprise-grade legal immunity.",
@@ -52,6 +53,7 @@ export function PricingTable() {
             ],
             cta: t('contactSales'),
             popular: false,
+            disabled: true,
         },
     ];
 
@@ -71,16 +73,25 @@ export function PricingTable() {
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
-                            className={`rounded-3xl p-8 ring-1 xl:p-10 transition-all duration-300 hover:scale-105 ${plan.popular
-                                ? "bg-white dark:bg-white/5 ring-blue-50 shadow-2xl shadow-blue-500/20"
-                                : "bg-gray-50 dark:bg-white/5 ring-gray-200 dark:ring-white/10 hover:ring-gray-300 dark:hover:ring-white/20"
+                            className={`relative rounded-3xl p-8 ring-1 xl:p-10 transition-all duration-300 ${plan.disabled
+                                    ? "bg-gray-100 dark:bg-zinc-900/50 ring-gray-200 dark:ring-zinc-800 opacity-70 scale-95 select-none grayscale-[0.5] blur-[1px]"
+                                    : "scale-105 bg-white dark:bg-white/5 ring-gray-200 dark:ring-white/10 hover:ring-blue-500/50 shadow-2xl shadow-blue-500/10"
                                 }`}
                         >
+                            {/* Coming Soon Overlay for Disabled Plans */}
+                            {plan.disabled && (
+                                <div className="absolute inset-0 flex items-center justify-center z-10">
+                                    <div className="bg-black/80 dark:bg-white/90 text-white dark:text-black px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wider transform -rotate-12 shadow-xl border border-white/20">
+                                        {t('comingSoon')}
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="flex items-center justify-between gap-x-4">
                                 <h3 id={plan.name} className="text-lg font-semibold leading-8 text-gray-900 dark:text-white">
                                     {plan.name}
                                 </h3>
-                                {plan.popular && (
+                                {plan.popular && !plan.disabled && (
                                     <span className="rounded-full bg-blue-100 dark:bg-blue-500/10 px-2.5 py-1 text-xs font-semibold leading-5 text-blue-600 dark:text-blue-400">
                                         {t('mostPopular')}
                                     </span>
@@ -94,12 +105,13 @@ export function PricingTable() {
                                 )}
                             </p>
                             <a
-                                href="#"
+                                href={plan.disabled ? undefined : "/signup"}
                                 aria-describedby={plan.name}
-                                className={`mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${plan.popular
-                                    ? "bg-blue-600 text-white shadow-sm hover:bg-blue-500 focus-visible:outline-blue-600"
-                                    : "bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20 focus-visible:outline-gray-200 dark:focus-visible:outline-white"
+                                className={`mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${plan.disabled
+                                        ? "bg-gray-300 dark:bg-zinc-800 text-gray-500 dark:text-gray-500 cursor-not-allowed"
+                                        : "bg-blue-600 text-white shadow-sm hover:bg-blue-500 focus-visible:outline-blue-600"
                                     }`}
+                                onClick={(e) => plan.disabled && e.preventDefault()}
                             >
                                 {plan.cta}
                             </a>
