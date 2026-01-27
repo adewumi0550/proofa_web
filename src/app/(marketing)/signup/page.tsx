@@ -206,7 +206,7 @@ export default function SignupPage() {
                                             htmlFor="terms"
                                             className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-600 dark:text-gray-400"
                                         >
-                                            I agree to the <Link href="/terms" className="text-blue-600 hover:underline">Terms</Link> and <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+                                            I agree to the <Link href="/terms" className="text-blue-600 hover:underline">Terms</Link> and <Link href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link>
                                         </label>
                                     </div>
 
