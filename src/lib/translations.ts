@@ -15,9 +15,9 @@ export const translations = {
         proofa: "PROOFA",
 
         // Landing Page
-        heroTitle: "Certify Your AI Creative Workflows",
+        heroTitle: "The All-in-One Workspace for Human-Led AI",
         buildingFuture: "Building the Future of Creative AI",
-        heroSubtitle: "Monetize and protect your art. Orchestrate the world\'s most powerful models. From ChatGPT to Veo 3, transform your original work into a licensed commercial asset.",
+        heroSubtitle: "Access professional models and secure your creative process with a verifiable Authorship Passport.",
         joinWaitlist: "Join 2,850+ creators waiting for early access.",
         joinWaitlistBtn: "Join Waitlist",
         enterEmailPlaceholder: "Enter your email for early access",
@@ -274,13 +274,13 @@ export const translations = {
 
         // Testimonials
         socialProofTitle: "Social Proof",
-        trustedByTitle: "Trusted by Early Adopters",
-        testimonial_elena: "Proofa provides the exact legal layer we needed to integrate AI into our professional workflow without risking IP ownership. The Authorship Passport is a game changer.",
-        role_elena: "Creative Director, Studio X",
-        testimonial_marcus: "Finally, a way to prove my human input in the creative process. The audit logic is transparent and gives my clients the confidence they need.",
-        role_marcus: "Freelance Concept Artist",
-        testimonial_sarah: "The ability to secure my workflow data privately before licensing is exactly what the industry was missing. A secure and professional environment.",
-        role_sarah: "Head of Innovation, TechArt",
+        trustedByTitle: "Feedback from Focus Group",
+        testimonial_elena: "As a poet, proving my original verses vs AI suggestions was difficult. Proofa's authorship log clearly distinguished my human input from the generated rhymes.",
+        role_elena: "Beta Tester (Poetry)",
+        testimonial_marcus: "I use AI for generating backing tracks, but the composition is mine. Proofa helped me secure the copyright for my notes while using modern tools.",
+        role_marcus: "Beta Tester (Music)",
+        testimonial_sarah: "I'm not an artist, but I love testing new models. The dashboard is the best aggregator I've used—clean, intuitive, and efficient UI/UX.",
+        role_sarah: "Beta Tester (Model Aggregator)",
 
         // Warnings
         betaWarning: "⚠️ Protocol Beta: This is a prototype for a closed focus group. Not for public commercial use. Transactions are simulated.",
@@ -364,9 +364,9 @@ export const translations = {
         proofa: "PROOFA",
 
         // Landing Page
-        heroTitle: "Zertifizieren Sie Ihre KI-Workflows",
+        heroTitle: "Der All-in-One-Workspace für menschengeführte KI",
         buildingFuture: "Die Zukunft der kreativen KI gestalten",
-        heroSubtitle: "Monetarisieren und schützen Sie Ihre Kunst. Orchestrieren Sie die mächtigsten Modelle der Welt. Von ChatGPT bis Veo 3, verwandeln Sie Ihr Originalwerk in ein lizenziertes kommerzielles Asset.",
+        heroSubtitle: "Greifen Sie auf professionelle Modelle zu und sichern Sie Ihren kreativen Prozess mit einem verifizierbaren Autorenschaftspass.",
         joinWaitlist: "Schließen Sie sich 2.850+ Kreativen an.",
         joinWaitlistBtn: "Warteliste beitreten",
         enterEmailPlaceholder: "E-Mail für frühen Zugang eingeben",
@@ -623,13 +623,13 @@ export const translations = {
 
         // Testimonials
         socialProofTitle: "Sozialer Beweis",
-        trustedByTitle: "Vertraut von Early Adopters",
-        testimonial_elena: "Proofa bietet genau die rechtliche Ebene, die wir brauchten, um KI in unseren professionellen Workflow zu integrieren, ohne das geistige Eigentum zu gefährden. Der Autorenschaftspass ändert alles.",
-        role_elena: "Kreativdirektorin, Studio X",
-        testimonial_marcus: "Endlich ein Weg, meinen menschlichen Beitrag im kreativen Prozess zu beweisen. Die Audit-Logik ist transparent und gibt meinen Kunden das Vertrauen, das sie brauchen.",
-        role_marcus: "Freiberuflicher Konzeptkünstler",
-        testimonial_sarah: "Die Möglichkeit, meine Workflow-Daten privat zu sichern, bevor ich sie lizenziere, ist genau das, was der Branche gefehlt hat. Eine sichere und professionelle Umgebung.",
-        role_sarah: "Leiterin Innovation, TechArt",
+        trustedByTitle: "Feedback aus der Fokusgruppe",
+        testimonial_elena: "Als Dichterin war es schwer, meine Originalverse von KI-Vorschlägen zu unterscheiden. Das Proofa-Protokoll zeigte klar meinen menschlichen Anteil.",
+        role_elena: "Betatesterin (Lyrik)",
+        testimonial_marcus: "Ich nutze KI für Backing-Tracks, aber die Komposition gehört mir. Proofa half mir, mein Urheberrecht an den Noten zu sichern.",
+        role_marcus: "Betatester (Musik)",
+        testimonial_sarah: "Ich bin kein Künstler, aber ich liebe es, neue Modelle zu testen. Das Dashboard ist der beste Aggregator, den ich je benutzt habe – saubere und intuitive UI/UX.",
+        role_sarah: "Betatester (Modell-Aggregator)",
 
         // Warnings
         betaWarning: "⚠️ Protokoll Beta: Dies ist ein Prototyp für eine geschlossene Fokusgruppe. Nicht für den öffentlichen kommerziellen Gebrauch bestimmt. Transaktionen werden simuliert.",
