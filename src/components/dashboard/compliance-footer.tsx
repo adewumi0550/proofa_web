@@ -12,8 +12,20 @@ interface ComplianceFooterProps {
     isCertified?: boolean;
 }
 
-export function ComplianceFooter({ score, stage, onCertify, isCertified }: ComplianceFooterProps) {
+export function ComplianceFooter({ score, stage, onCertify, isCertified, consentDeclined }: ComplianceFooterProps) {
     const isEligible = score >= 80;
+
+    if (consentDeclined) {
+        return (
+            <footer className="w-full bg-white dark:bg-[#0c0c0c] border-t border-gray-100 dark:border-white/5 py-3 px-6 md:px-12 space-y-2 shrink-0 transition-all opacity-50 pointer-events-none select-none">
+                <div className="max-w-7xl mx-auto flex items-center justify-center py-4">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                        Authorship Passport Disabled via Privacy Settings
+                    </span>
+                </div>
+            </footer>
+        );
+    }
 
     return (
         <footer className="w-full bg-white dark:bg-[#0c0c0c] border-t border-gray-100 dark:border-white/5 py-3 px-6 md:px-12 space-y-2 shrink-0 transition-all">

@@ -39,11 +39,12 @@ export default function PrivacyPolicy() {
                             {t('privacyControllerText')}
                         </p>
                         <address className="not-italic text-muted-foreground mt-2 border-l-2 border-primary/50 pl-4">
-                            <strong>Proofa GmbH i.G.</strong><br />
-                            [Founder Name - Please Update]<br />
-                            [Address - Please Update]<br />
+                            <strong>Anna Muzykina</strong><br />
+                            Hermann-Ehlers str. 20<br />
+                            59229 Ahlen, NRW<br />
                             Germany<br />
-                            Email: <a href="mailto:privacy@proofa.tech" className="text-primary hover:underline">privacy@proofa.tech</a>
+                            Phone: +49 155 6134 0369<br />
+                            Email: <a href="mailto:admin@proofa.tech" className="text-primary hover:underline">admin@proofa.tech</a>
                         </address>
                     </section>
 
@@ -95,7 +96,7 @@ export default function PrivacyPolicy() {
                         <p className="text-muted-foreground leading-relaxed">
                             {t('privacyContactText')}
                             <br />
-                            <a href="mailto:privacy@proofa.tech" className="text-primary hover:underline font-medium">privacy@proofa.tech</a>
+                            <a href="mailto:admin@proofa.tech" className="text-primary hover:underline font-medium">admin@proofa.tech</a>
                         </p>
                     </section>
 

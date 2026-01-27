@@ -26,9 +26,9 @@ export default function Impressum() {
                     <section>
                         <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumLegalTitle')}</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            <strong>{t('impressumLegalText')}</strong><br />
-                            [Address - Please Update]<br />
-                            481xx Münster<br />
+                            <strong>Anna Muzykina</strong><br />
+                            Hermann-Ehlers str. 20<br />
+                            59229 Ahlen, NRW<br />
                             Germany
                         </p>
                     </section>
@@ -36,14 +36,16 @@ export default function Impressum() {
                     <section>
                         <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumRepresentedTitle')}</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            {t('impressumRepresentedText')}
+                            Anna Muzykina
                         </p>
                     </section>
 
                     <section>
                         <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumContactTitle')}</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            E-Mail: <a href="mailto:privacy@proofa.tech" className="text-primary hover:underline">privacy@proofa.tech</a>
+                            Phone: +49 155 6134 0369<br />
+                            E-Mail: <a href="mailto:admin@proofa.tech" className="text-primary hover:underline">admin@proofa.tech</a><br />
+                            LinkedIn: <a href="https://www.linkedin.com/in/anna-muzykina/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Anna Muzykina</a>
                         </p>
                     </section>
 
@@ -64,9 +66,10 @@ export default function Impressum() {
                     <section>
                         <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumResponsibleTitle')}</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            [Founder Name - Please Update]<br />
-                            [Address - Please Update]<br />
-                            481xx Münster
+                            Anna Muzykina<br />
+                            Hermann-Ehlers str. 20<br />
+                            59229 Ahlen, NRW<br />
+                            Germany
                         </p>
                     </section>
 

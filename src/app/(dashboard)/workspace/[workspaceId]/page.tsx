@@ -418,6 +418,7 @@ export default function WorkspacePage() {
 
     const handleCertify = async () => {
         if (!user?.access_token) return;
+
         try {
             const res = await proofaApi.workspaces.certify(workspaceId, user.access_token);
             if (score >= 80) {

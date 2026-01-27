@@ -11,7 +11,8 @@ import {
     Plus,
     ChevronDown,
     Trash2,
-    Image as ImageIcon
+    Image as ImageIcon,
+    AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
