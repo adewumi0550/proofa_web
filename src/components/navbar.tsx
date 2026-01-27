@@ -23,7 +23,7 @@ export function Navbar() {
     ];
 
     return (
-        <nav className="fixed w-full z-50 top-0 left-0 border-b border-gray-200 dark:border-white/10 bg-white/60 dark:bg-black/60 backdrop-blur-lg supports-[backdrop-filter]:bg-white/30 dark:supports-[backdrop-filter]:bg-black/30 transition-colors duration-300">
+        <nav className="fixed w-full z-50 top-10 left-0 border-b border-gray-200 dark:border-white/10 bg-white/60 dark:bg-black/60 backdrop-blur-lg supports-[backdrop-filter]:bg-white/30 dark:supports-[backdrop-filter]:bg-black/30 transition-colors duration-300">
             <div className="w-full px-6">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">

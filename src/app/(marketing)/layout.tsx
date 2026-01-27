@@ -9,7 +9,8 @@ export default function MarketingLayout({
     return (
         <>
             <Navbar />
-            <main className="pt-16">
+            <br />
+            <main className="pt-28">
                 {children}
             </main>
             <Footer />

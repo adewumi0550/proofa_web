@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/auth-context";
 import { LanguageProvider } from "@/components/language-context";
 import { Toaster } from "sonner";
 import { ProofaPreloader } from "@/components/preloader";
+import { BetaBanner } from "@/components/beta-banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,8 @@ export default function RootLayout({
         >
           <AuthProvider>
             <LanguageProvider>
+              {/* Closed Beta Warning Banner */}
+              <BetaBanner />
               <Toaster />
               <ProofaPreloader />
               {children}
@@ -42,6 +45,6 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
       </body>
-    </html>
+    </html >
   );
 }

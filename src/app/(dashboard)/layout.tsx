@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }>) {
     return (
         <NewProjectProvider>
-            <div className="flex bg-[#fbfbfb] dark:bg-[#090909] h-screen w-full overflow-hidden transition-colors duration-500">
+            <div className="flex bg-[#fbfbfb] dark:bg-[#090909] h-screen w-full overflow-hidden transition-colors duration-500 pt-10">
                 <DashboardSidebar />
                 <div className="flex-1 h-full min-w-0 flex flex-col relative overflow-hidden">
                     {children}

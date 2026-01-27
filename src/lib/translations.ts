@@ -280,6 +280,9 @@ export const translations = {
         role_marcus: "Freelance Concept Artist",
         testimonial_sarah: "The ability to secure my workflow data privately before licensing is exactly what the industry was missing. A secure and professional environment.",
         role_sarah: "Head of Innovation, TechArt",
+
+        // Warnings
+        betaWarning: "⚠️ Protocol Beta: This is a prototype for a closed focus group. Not for public commercial use. Transactions are simulated.",
     },
 
     de: {
@@ -561,5 +564,8 @@ export const translations = {
         role_marcus: "Freiberuflicher Konzeptkünstler",
         testimonial_sarah: "Die Möglichkeit, meine Workflow-Daten privat zu sichern, bevor ich sie lizenziere, ist genau das, was der Branche gefehlt hat. Eine sichere und professionelle Umgebung.",
         role_sarah: "Leiterin Innovation, TechArt",
+
+        // Warnings
+        betaWarning: "⚠️ Protokoll Beta: Dies ist ein Prototyp für eine geschlossene Fokusgruppe. Nicht für den öffentlichen kommerziellen Gebrauch bestimmt. Transaktionen werden simuliert.",
     },
 };

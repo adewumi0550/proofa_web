@@ -49,7 +49,8 @@ export function Footer() {
                         <div>
                             <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">{t('legal')}</h3>
                             <ul className="space-y-3 text-sm">
-                                <li><a href="/privacy" className="hover:text-blue-400 transition-colors">Privacy Policy</a></li>
+                                <li><a href="/privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</a></li>
+                                <li><a href="/impressum" className="hover:text-blue-400 transition-colors">Impressum</a></li>
                                 <li><a href="/terms" className="hover:text-blue-400 transition-colors">{t('termsService')}</a></li>
                                 <li><a href="/cookie-policy" className="hover:text-blue-400 transition-colors">{t('cookiePolicy')}</a></li>
                                 <li><a href="/security" className="hover:text-blue-400 transition-colors">{t('security')}</a></li>
@@ -59,7 +60,7 @@ export function Footer() {
                 </div>
                 <div className="mt-12 pt-8 border-t border-white/10 flex flex-col items-center md:flex-row md:justify-between gap-4">
                     <p className="text-xs text-gray-500 order-2 md:order-1">
-                        {t('rightsReserved')}
+                        © 2026 Proofa GmbH i.G. All rights reserved.
                     </p>
                     <div className="flex gap-6 order-1 md:order-2">
                         <a href="#" className="text-gray-400 hover:text-white transition-colors">
