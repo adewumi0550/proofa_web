@@ -40,12 +40,16 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 mb-8">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-12 w-full sm:w-auto">
-                {t('getStarted')}
-              </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 h-12 w-full sm:w-auto border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
-                {t('viewAllFeatures')}
-              </Button>
+              <Link href="/signup">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-12 w-full sm:w-auto">
+                  {t('getStarted')}
+                </Button>
+              </Link>
+              <Link href="/features">
+                <Button size="lg" variant="outline" className="rounded-full px-8 h-12 w-full sm:w-auto border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10">
+                  {t('viewAllFeatures')}
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
