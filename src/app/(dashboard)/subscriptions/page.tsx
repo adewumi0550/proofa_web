@@ -80,7 +80,7 @@ export default function SubscriptionsPage() {
                                         <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">{t('activeSubscription') || "Active Subscription"}</span>
                                     </div>
 
-                                    <h2 className="text-4xl font-black mb-1 capitalize">{user?.plan || "Free"} {t('classic') || "Classic"}</h2>
+                                    <h2 className="text-4xl font-black mb-1 capitalize">{user?.plan || "Free"} Classic</h2>
                                     <p className="text-gray-400 text-sm mb-8">{t('poweringWorkflows') || "Powering your daily creative workflows."}</p>
 
                                     <div className="space-y-4 pt-6 border-t border-white/10">

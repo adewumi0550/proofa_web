@@ -10,6 +10,7 @@ interface ComplianceFooterProps {
     stage: "Inception" | "Collaboration" | "Certified" | "Licensing";
     onCertify?: () => void;
     isCertified?: boolean;
+    consentDeclined?: boolean;
 }
 
 export function ComplianceFooter({ score, stage, onCertify, isCertified, consentDeclined }: ComplianceFooterProps) {

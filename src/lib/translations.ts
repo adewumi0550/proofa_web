@@ -839,6 +839,7 @@ export const translations = {
         consentCookieClause: "Einwilligungsbasierte Funktionen: Bitte beachten Sie, dass der Urheberschafts-Pass eine einwilligungsbasierte Funktion ist. Wenn Sie unsere Datenschutz- und Cookie-Richtlinien nicht akzeptieren, wird unser System keine Ihrer kreativen Eingaben oder Ausgaben protokollieren, hashen oder speichern. Folglich kann für diese Sitzung kein verifizierbarer Urheberschaftsnachweis erstellt werden.",
 
         cookiePolicyTitle: "Cookie- & Local-Storage-Richtlinie",
+        cookieLastUpdated: "Zuletzt aktualisiert: 28. Januar 2026",
         cookieGeneralTitle: "1. Allgemeine Informationen",
         cookieGeneralText: "Proofa verwendet Cookies und Local Storage, um die technische Funktionalität unseres Prototyps zu gewährleisten und Ihre Benutzererfahrung zu verbessern. Als Projekt mit Sitz in Deutschland verfolgen wir einen „Privacy by Design“-Ansatz.",
         cookieNecessaryTitle: "2. Notwendige technische Cookies",
