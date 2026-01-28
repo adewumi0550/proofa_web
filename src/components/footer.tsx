@@ -61,7 +61,7 @@ export function Footer() {
                 </div>
                 <div className="mt-12 pt-8 border-t border-white/10 flex flex-col items-center md:flex-row md:justify-between gap-4">
                     <p className="text-xs text-gray-500 order-2 md:order-1">
-                        © 2026 Proofa GmbH i.G. All rights reserved.
+                        {t('rightsReserved')}
                     </p>
                     <div className="flex gap-6 order-1 md:order-2">
                         <a

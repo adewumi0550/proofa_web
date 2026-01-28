@@ -292,6 +292,28 @@ export default function ProfilePage() {
                     </motion.div>
                 </div>
 
+                {/* Data Control */}
+                <div className="mt-12 pt-12 border-t border-gray-200 dark:border-white/10">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Data Control</h3>
+                    <div className="p-8 rounded-[32px] border border-gray-200 dark:border-white/10 bg-white dark:bg-[#111]">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h4 className="font-bold text-gray-900 dark:text-white mb-2">{t('exportData') || "Export Personal Data"}</h4>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm max-w-xl">
+                                    {t('exportDataDesc') || "Request a copy of all your personal data including prompt history functionality (GDPR Art. 15)."}
+                                </p>
+                            </div>
+                            <Button
+                                onClick={() => window.location.href = `mailto:admin@proofa.tech?subject=GDPR Data Export Request&body=Requesting data export for user: ${user?.email}`}
+                                variant="outline"
+                                className="rounded-xl border-gray-200 dark:border-white/10"
+                            >
+                                Request Export
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Danger Zone */}
                 <div className="mt-12 pt-12 border-t border-gray-200 dark:border-white/10">
                     <div className="p-8 rounded-[32px] border border-red-200 dark:border-red-900/20 bg-red-50 dark:bg-red-900/5">

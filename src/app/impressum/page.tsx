@@ -57,11 +57,19 @@ export default function Impressum() {
                     </section>
 
                     <section>
+                        <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumODR')}</h2>
+                        <p className="text-muted-foreground leading-relaxed">
+                            <span dangerouslySetInnerHTML={{ __html: t('impressumODR').replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>') }} />
+                        </p>
+                    </section>
+
+                    {/* VAT ID Removed to prevent Abmahnung */}
+                    {/* <section>
                         <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumVatTitle')}</h2>
                         <p className="text-muted-foreground leading-relaxed">
                             {t('impressumVatText')}
                         </p>
-                    </section>
+                    </section> */}
 
                     <section>
                         <h2 className="text-xl font-semibold mb-4 text-primary">{t('impressumResponsibleTitle')}</h2>
