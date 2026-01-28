@@ -135,11 +135,12 @@ export const proofaApi = {
                     'Authorization': `Bearer ${token}`
                 }
             }),
-        delete: (token: string) =>
-            api.delete<BackendResponse<{ success: boolean; message: string }>>("/auth/delete", {
+        delete: (token: string, reason?: string) =>
+            api.delete<BackendResponse<{ success: boolean; message: string }>>("/auth/account", {
                 headers: {
                     'Authorization': `Bearer ${token}`
-                }
+                },
+                data: { reason }
             }),
     },
     workspaces: {

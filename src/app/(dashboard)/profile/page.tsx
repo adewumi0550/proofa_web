@@ -14,15 +14,22 @@ import { toast } from "sonner";
 import { proofaApi } from "@/lib/api";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DeleteAccountModal } from "@/components/delete-account-modal";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const { t } = useLanguage();
+    const router = useRouter();
 
     const [isEditing, setIsEditing] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+
+    // Deletion State
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -30,6 +37,25 @@ export default function ProfilePage() {
             setLastName(user.last_name || "");
         }
     }, [user]);
+
+    const handleDeleteAccount = async (reason: string) => {
+        setIsDeleting(true);
+        try {
+            const token = localStorage.getItem("proofa_access_token");
+            if (token) {
+                await proofaApi.auth.delete(token, reason);
+            }
+            logout();
+            router.push("/signup");
+        } catch (error) {
+            console.error("Failed to delete account:", error);
+            logout();
+            router.push("/signup");
+        } finally {
+            setIsDeleting(false);
+            setShowDeleteModal(false);
+        }
+    };
 
     const handleSaveProfile = async () => {
         if (!user?.access_token) return;
@@ -265,6 +291,30 @@ export default function ProfilePage() {
                         </div>
                     </motion.div>
                 </div>
+
+                {/* Danger Zone */}
+                <div className="mt-12 pt-12 border-t border-gray-200 dark:border-white/10">
+                    <div className="p-8 rounded-[32px] border border-red-200 dark:border-red-900/20 bg-red-50 dark:bg-red-900/5">
+                        <h3 className="text-xl font-bold text-red-600 dark:text-red-500 mb-2">Danger Zone</h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 max-w-2xl">
+                            Permanently delete your account and all of your content. This action is irreversible—please be certain.
+                        </p>
+                        <Button
+                            onClick={() => setShowDeleteModal(true)}
+                            variant="destructive"
+                            className="bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-lg shadow-red-900/20"
+                        >
+                            Delete Account
+                        </Button>
+                    </div>
+                </div>
+
+                <DeleteAccountModal
+                    isOpen={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={handleDeleteAccount}
+                    isLoading={isDeleting}
+                />
 
             </div>
         </div>

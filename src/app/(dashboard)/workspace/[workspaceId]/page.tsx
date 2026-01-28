@@ -268,6 +268,10 @@ export default function WorkspacePage() {
 
 
     const handleFileProcess = async (file: File) => {
+        if (!consentGiven) {
+            toast.error("Upload blocked", { description: "You must accept the privacy policy to upload assets." });
+            return;
+        }
         if (!file || !user?.access_token) return;
 
         setUploading(true);
@@ -342,6 +346,10 @@ export default function WorkspacePage() {
 
 
     const handleSendMessage = async () => {
+        if (!consentGiven) {
+            toast.error("Action blocked", { description: "You must accept the privacy policy to use the Authorship Passport." });
+            return;
+        }
         if ((!input.trim() && !uploadedFileId) || !user?.access_token) return;
 
         const currentUploadId = uploadedFileId;
