@@ -12,25 +12,25 @@ import { cn } from "@/lib/utils";
 
 const roles = [
     {
-        id: "student",
+        id: "Student",
         title: "Student",
         icon: GraduationCap,
         description: "I'm learning and experimenting with AI tools.",
     },
     {
-        id: "poet",
+        id: "Artist",
         title: "Poet / Artist",
         icon: Feather,
         description: "I use AI to enhance my creative expression.",
     },
     {
-        id: "educator",
+        id: "Educator",
         title: "Educator",
         icon: BookOpen,
         description: "I teach others how to use AI responsibly.",
     },
     {
-        id: "other",
+        id: "Other",
         title: "Other",
         icon: User,
         description: "I'm exploring for other professional reasons.",
