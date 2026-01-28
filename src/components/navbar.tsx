@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X, LogOut } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
@@ -14,6 +15,9 @@ export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useAuth();
     const { t } = useLanguage();
+
+    const pathname = usePathname();
+    const isAuthPage = pathname?.startsWith("/login") || pathname?.startsWith("/signup");
 
     const navLinks = [
         { name: t('modelGarden'), href: "/model-garden" },
@@ -55,7 +59,7 @@ export function Navbar() {
                         </div>
                     </div>
                     <div className="hidden md:flex items-center gap-4">
-                        <LanguageSwitcher />
+                        {!isAuthPage && <LanguageSwitcher />}
                         <ThemeToggle />
                         {user ? (
                             <>
@@ -119,7 +123,7 @@ export function Navbar() {
                         <div className="flex items-center justify-between px-3 py-4 border-t border-gray-200 dark:border-white/10 mt-4">
                             <div className="flex items-center gap-2">
                                 <ThemeToggle />
-                                <LanguageSwitcher />
+                                {!isAuthPage && <LanguageSwitcher />}
                             </div>
                             <div className="flex gap-2">
                                 <Link href="/login" onClick={() => setIsOpen(false)}>

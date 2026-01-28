@@ -10,23 +10,30 @@ import {
     DropdownMenuSeparator,
     DropdownMenuGroup
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { User, Users, Folder, CreditCard, LogOut } from "lucide-react";
+import { User, Users, Folder, CreditCard, LogOut, Trash2 } from "lucide-react";
 import { useAuth } from "@/components/auth-context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { DeleteAccountModal } from "@/components/delete-account-modal";
+import { proofaApi } from "@/lib/api";
 
 export function UserDropdown() {
     const { user, logout } = useAuth();
+    const router = useRouter();
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
+
+    const handleLogout = () => {
+        logout();
+        router.push("/login");
+    };
 
     const handleDeleteAccount = async () => {
         setIsDeleting(true);
         try {
             const token = localStorage.getItem("proofa_access_token");
             if (token) {
-                await import("@/lib/api").then(mod => mod.proofaApi.auth.delete(token));
+                await proofaApi.auth.delete(token);
             }
             // Clear local storage and logout even if API fails (frontend simulation of deletion)
             logout();
@@ -106,20 +113,12 @@ export function UserDropdown() {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="absolute">
-                {/* Lazy load modal to avoid hydration issues if needed, but direct import is fine for now */}
-                <DeleteAccountModal
-                    isOpen={showDeleteModal}
-                    onClose={() => setShowDeleteModal(false)}
-                    onConfirm={handleDeleteAccount}
-                    isLoading={isDeleting}
-                />
-            </div>
+            <DeleteAccountModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDeleteAccount}
+                isLoading={isDeleting}
+            />
         </>
     );
 }
-
-// Helper component import
-import { DeleteAccountModal } from "@/components/delete-account-modal";
-import { Trash2 } from "lucide-react";
-
