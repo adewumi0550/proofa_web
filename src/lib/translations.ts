@@ -399,9 +399,24 @@ export const translations = {
         cookieChoicesTitle: "5. Your Choices",
         cookieChoicesText: "You can manage or delete cookies and local storage through your browser settings. However, disabling technical storage may limit your ability to use the Authorship Passport features.",
 
-        securityTitle: "Security at Proofa",
-        securityProtectionTitle: "Data Protection",
-        securityProtectionText: "Security is our top priority. We use industry-standard encryption to protect your data both in transit and at rest. Your Authorship Passports are secured using cryptographic hashing.",
+        securityTitle: "Security & Integrity at Proofa",
+
+        // Security Section 1
+        sec_dataProt_title: "1. Data Protection & Encryption",
+        sec_dataProt_subtitle: "Security is our top priority. We implement a \"Security by Design\" architecture:",
+        sec_dataProt_transit: "Encryption in Transit: All data sent between your browser and our servers is protected using TLS 1.3 encryption.",
+        sec_dataProt_rest: "Encryption at Rest: All sensitive information in our databases is encrypted using AES-256 standards.",
+
+        // Security Section 2
+        sec_auth_title: "2. Authorship Integrity (Cryptographic SHA-256 Hashing)",
+        sec_auth_subtitle: "Your Authorship Passports are secured using non-reversible cryptographic hashing:",
+        sec_auth_privacy: "Privacy of Intent: We hash the fingerprint of your creative process. Your original prompts are never exposed in the public registry; only their verifiable \"digital signature\" is stored.",
+        sec_auth_immutability: "Immutability: Once a hash is recorded in our Private Ledger, it cannot be altered, ensuring the integrity of your creation's timeline.",
+
+        // Security Section 3
+        sec_infra_title: "3. Infrastructure & Sovereignty",
+        sec_infra_eu: "EU-Based Hosting: To comply with strict GDPR standards, all Proofa servers and databases are physically located within the European Union.",
+        sec_infra_access: "Access Control: Access to backend systems is strictly restricted to the core technical founders (Anna Muzykina, Denys, Saheed) via multi-factor authentication.",
 
         // Impressum
         impressumTitle: "Impressum",
@@ -653,6 +668,22 @@ export const translations = {
         termsService: "Nutzungsbedingungen",
         cookiePolicy: "Cookie-Richtlinie",
         security: "Sicherheit",
+
+        // Security Content (EN fallback for verified text)
+        securityTitle: "Security & Integrity at Proofa",
+        sec_dataProt_title: "1. Data Protection & Encryption",
+        sec_dataProt_subtitle: "Security is our top priority. We implement a \"Security by Design\" architecture:",
+        sec_dataProt_transit: "Encryption in Transit: All data sent between your browser and our servers is protected using TLS 1.3 encryption.",
+        sec_dataProt_rest: "Encryption at Rest: All sensitive information in our databases is encrypted using AES-256 standards.",
+
+        sec_auth_title: "2. Authorship Integrity (Cryptographic SHA-256 Hashing)",
+        sec_auth_subtitle: "Your Authorship Passports are secured using non-reversible cryptographic hashing:",
+        sec_auth_privacy: "Privacy of Intent: We hash the fingerprint of your creative process. Your original prompts are never exposed in the public registry; only their verifiable \"digital signature\" is stored.",
+        sec_auth_immutability: "Immutability: Once a hash is recorded in our Private Ledger, it cannot be altered, ensuring the integrity of your creation's timeline.",
+
+        sec_infra_title: "3. Infrastructure & Sovereignty",
+        sec_infra_eu: "EU-Based Hosting: To comply with strict GDPR standards, all Proofa servers and databases are physically located within the European Union.",
+        sec_infra_access: "Access Control: Access to backend systems is strictly restricted to the core technical founders (Anna Muzykina, Denys, Saheed) via multi-factor authentication.",
         footerDesc: "Die Zertifizierungsschicht für KI-generierte Assets. Monetarisieren Sie Ihre Kreativität.",
         rightsReserved: "© 2025 Proofa Inc. Alle Rechte vorbehalten.",
 
@@ -818,10 +849,6 @@ export const translations = {
         cookieTrackingText: "Proofa verwendet in dieser Prototypenphase keine Tracking- oder Werbe-Cookies von Drittanbietern (wie Google Analytics oder Facebook Pixel). Alle Protokolle werden ausschließlich für das technische Debugging durch das Kernteam (Anna Muzykina, Denys, Saheed) verwendet.",
         cookieChoicesTitle: "5. Ihre Auswahl",
         cookieChoicesText: "Sie können Cookies und Local Storage über Ihre Browsereinstellungen verwalten oder löschen. Das Deaktivieren des technischen Speichers kann jedoch Ihre Fähigkeit zur Nutzung der Urheberschafts-Pass-Funktionen einschränken.",
-
-        securityTitle: "Sicherheit bei Proofa",
-        securityProtectionTitle: "Datenschutz",
-        securityProtectionText: "Sicherheit hat für uns oberste Priorität. Wir verwenden branchenübliche Verschlüsselung, um Ihre Daten sowohl bei der Übertragung als auch im Ruhezustand zu schützen. Ihre Autorenschaftspässe sind durch kryptografisches Hashing gesichert.",
 
         // Impressum
         impressumTitle: "Impressum",

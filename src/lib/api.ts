@@ -135,6 +135,12 @@ export const proofaApi = {
                     'Authorization': `Bearer ${token}`
                 }
             }),
+        delete: (token: string) =>
+            api.delete<BackendResponse<{ success: boolean; message: string }>>("/auth/delete", {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }),
     },
     workspaces: {
         create: (data: { name: string; seed_content: string; oath_signed: boolean }, token: string) =>

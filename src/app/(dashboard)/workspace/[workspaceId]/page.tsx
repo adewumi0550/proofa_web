@@ -26,6 +26,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { UserDropdown } from "@/components/dashboard/user-dropdown";
 import { useSocket } from "@/hooks/use-socket";
 import confetti from "canvas-confetti";
+import { useConsent } from "@/hooks/use-consent";
 
 type Stage = "Collaboration" | "Certified" | "Licensing";
 
@@ -90,6 +91,9 @@ export default function WorkspacePage() {
         "Finalizing verdict..."
     ];
     const [thinkingStep, setThinkingStep] = useState(0);
+
+    // Consent Logic
+    const { consentGiven, hasActionTaken } = useConsent();
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -418,6 +422,13 @@ export default function WorkspacePage() {
 
     const handleCertify = async () => {
         if (!user?.access_token) return;
+
+        if (!consentGiven) {
+            toast.error("Authorship Passport disabled", {
+                description: "You must accept the privacy policy to certify assets."
+            });
+            return;
+        }
 
         try {
             const res = await proofaApi.workspaces.certify(workspaceId, user.access_token);
@@ -813,20 +824,28 @@ export default function WorkspacePage() {
                                                     handleSendMessage();
                                                 }
                                             }}
-                                            placeholder="Type your message..."
-                                            className="w-full bg-transparent border-none focus:ring-0 focus:outline-none resize-none max-h-32 py-2.5 text-sm"
+                                            placeholder={consentGiven ? "Type your message..." : "Authorship Passport disabled (Consent required)"}
+                                            className="w-full bg-transparent border-none focus:ring-0 focus:outline-none resize-none max-h-32 py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             rows={1}
+                                            disabled={!consentGiven}
                                         />
                                     </div>
 
                                     {/* Send Button */}
                                     <Button
                                         onClick={handleSendMessage}
-                                        disabled={(!input.trim() && !uploadedFileId) || isMessageSending}
-                                        className="rounded-xl h-10 w-10 bg-blue-600 hover:bg-blue-700 text-white shrink-0 p-0"
+                                        disabled={(!input.trim() && !uploadedFileId) || isMessageSending || !consentGiven}
+                                        className="rounded-xl h-10 w-10 bg-blue-600 hover:bg-blue-700 text-white shrink-0 p-0 disabled:opacity-50"
                                     >
                                         <Send className="w-4 h-4" />
                                     </Button>
+
+                                    {!consentGiven && (
+                                        <div className="absolute -bottom-8 left-0 text-[10px] text-orange-500 font-bold flex items-center gap-1.5 opacity-80">
+                                            <AlertCircle className="w-3 h-3" />
+                                            Authorship Passport disabled via Privacy Settings
+                                        </div>
+                                    )}
                                 </div>
                                 <ComplianceFooter
                                     score={score}
