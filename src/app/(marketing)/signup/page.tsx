@@ -37,7 +37,7 @@ export default function SignupPage() {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [termsAccepted, setTermsAccepted] = useState(true);
+    const [termsAccepted, setTermsAccepted] = useState(false);
 
     const router = useRouter();
     const { register } = useAuth();

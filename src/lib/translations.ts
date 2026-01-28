@@ -233,7 +233,7 @@ export const translations = {
         cookiePolicy: "Cookie Policy",
         security: "Security",
         footerDesc: "The certification layer for AI-generated assets. Monetize your creativity with legal protection.",
-        rightsReserved: "© 2025 Proofa Inc. All rights reserved.",
+        rightsReserved: "© 2026 Anna Muzykina (Proofa Project). All rights reserved.",
 
         // New Pages
         communities: "Communities",
@@ -268,6 +268,11 @@ export const translations = {
         remainingCredits: "Remaining Credits",
         status: "Status",
         active: "Active",
+
+        // Data Privacy
+        exportData: "Export Personal Data",
+        exportDataDesc: "Request a copy of all your personal data including prompt history functionality (GDPR Art. 15).",
+
         poweringWorkflows: "Powering your daily creative workflows.",
 
         // FAQ
@@ -428,7 +433,8 @@ export const translations = {
         impressumRegisterTitle: "Register Entry",
         impressumRegisterText: "Registration in the Commercial Register: Currently in formation. Not yet registered.",
         impressumVatTitle: "VAT ID",
-        impressumVatText: "Sales tax identification number according to § 27 a Sales Tax Law: In application.",
+        impressumVatText: "", // Removed to prevent Abmahnung until valid ID is assigned
+        impressumODR: "The European Commission provides a platform for online dispute resolution (ODR): https://ec.europa.eu/consumers/odr/. You can find our email address in the impressum above.",
         impressumResponsibleTitle: "Responsible for content acc. to § 55 Para. 2 RStV",
         impressumDisclaimer: "Disclaimer",
         impressumLiabilityContentTitle: "Liability for Contents",
@@ -685,7 +691,7 @@ export const translations = {
         sec_infra_eu: "EU-Based Hosting: To comply with strict GDPR standards, all Proofa servers and databases are physically located within the European Union.",
         sec_infra_access: "Access Control: Access to backend systems is strictly restricted to the core technical founders (Anna Muzykina, Denys, Saheed) via multi-factor authentication.",
         footerDesc: "Die Zertifizierungsschicht für KI-generierte Assets. Monetarisieren Sie Ihre Kreativität.",
-        rightsReserved: "© 2025 Proofa Inc. Alle Rechte vorbehalten.",
+        rightsReserved: "© 2026 Anna Muzykina (Proofa Project). Alle Rechte vorbehalten.",
 
         // New Pages
         communities: "Gemeinschaften",
@@ -860,13 +866,17 @@ export const translations = {
         impressumContactTitle: "Kontakt",
         impressumRegisterTitle: "Registereintrag",
         impressumRegisterText: "Eintragung im Handelsregister: Derzeit in Gründung. Noch nicht eingetragen.",
-        impressumVatTitle: "Umsatzsteuer-ID",
-        impressumVatText: "Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: In Beantragung.",
+        impressumVatTitle: "USt-IdNr.",
+        impressumVatText: "", // Entfernt zur Vermeidung von Abmahnungen
+        impressumODR: "Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/. Unsere E-Mail-Adresse finden Sie oben im Impressum.",
         impressumResponsibleTitle: "Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV",
         impressumDisclaimer: "Haftungsausschluss (Disclaimer)",
         impressumLiabilityContentTitle: "Haftung für Inhalte",
         impressumLiabilityContentText: "Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.",
         impressumLiabilityLinksTitle: "Haftung für Links",
         impressumLiabilityLinksText: "Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.",
+
+        exportData: "Daten exportieren",
+        exportDataDesc: "Exportieren Sie alle Ihre Daten, die auf Proofa gespeichert sind, in einem maschinenlesbaren Format."
     },
 };
