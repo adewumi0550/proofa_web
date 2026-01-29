@@ -7,7 +7,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/proxy/:path*',
-                destination: 'https://proofa-backend-966541614788.europe-west1.run.app/:path*',
+                destination: 'https://proofa-backend-40641038540.europe-west1.run.app/:path*',
             },
         ];
     },
