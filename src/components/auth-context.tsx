@@ -152,7 +152,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const res = await proofaApi.auth.completeProfile(persona, token);
             console.log("Profile completed:", res.data);
 
-            if (!res.data.success || !res.data.data) {
+            if (!res.data.success) {
                 throw new Error(res.data.message || "Failed to complete profile");
             }
 
