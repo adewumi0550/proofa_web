@@ -40,15 +40,22 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dragCounter = useRef(0);
 
-    // ... (availableModels and scroll logic unchanged)
-    const [availableModels] = useState([
-        "Pro v1.5 Engine",
-        "Creative Diffusion",
-        "Sonic Synth",
-        "Motion Core",
-        "Voice Weaver",
-        "Analysis Hub"
-    ]);
+    // Models per mode configuration
+    const modelsByMode: Record<string, string[]> = {
+        art: ["Pro v1.5 Engine", "Creative Diffusion", "Analysis Hub"],
+        video: ["Pro v1.5 Engine", "Motion Core", "Nano banana", "Veo", "Analysis Hub"],
+        music: ["Pro v1.5 Engine", "Sonic Synth", "Analysis Hub"],
+        voice: ["Pro v1.5 Engine", "Voice Weaver", "Analysis Hub"],
+    };
+
+    const availableModels = modelsByMode[activeMode] || modelsByMode.art;
+
+    // Reset selected model if not available in new mode
+    useEffect(() => {
+        if (!availableModels.includes(selectedModel)) {
+            setSelectedModel(availableModels[0]);
+        }
+    }, [activeMode, availableModels, selectedModel]);
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 

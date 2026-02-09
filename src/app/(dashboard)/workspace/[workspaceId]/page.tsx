@@ -45,7 +45,7 @@ interface Message {
 
 const MEDIA_MODELS = {
     Art: ["Pro v1.5 Engine", "Midjourney v6", "DALL-E 3", "Stable Diffusion XL"],
-    Video: ["Sora v1", "Runway Gen-2", "Pika 1.0", "Stable Video Diffusion"],
+    Video: ["Nano banana", "Veo", "Sora v1", "Runway Gen-2", "Pika 1.0", "Stable Video Diffusion"],
     Music: ["Suno v3", "Udio Pro", "MusicLM", "AudioCraft"],
     Voice: ["ElevenLabs Multi", "OpenAI TTS-1", "Google WaveNet", "Bark v1"]
 };
