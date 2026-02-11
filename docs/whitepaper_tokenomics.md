@@ -38,17 +38,17 @@ $PRFA serves three primary functions, ensuring constant circulation and demand w
 
 ### 3.1 Service Payment (B2C)
 Individual creators and freelancers use $PRFA to pay for:
-*   **Certification Fees:** Generating a "Human Score" for a specific project.
-*   **Storage:** Storing large "Step 0" verification production files on the decentralized Proofa ledger.
+*   **Certification Fees:** Generating a "Human Score" via our **Anti-fraud Orchestration** layer.
+*   **Secure Verification Vault:** Storing large "Step 0" production files and encrypted audit trails in our AES-256 protected environment.
 *   **Portfolio Features:** Unlocking premium portfolio displays for prospective clients.
 
 ### 3.2 Professional Staking (Reputation)
 For high-volume creators and agencies, holding $PRFA is a badge of trust.
-*   **Staking for Bandwidth:** Staking a certain amount of $PRFA grants "Priority Access" to the Gemini Judge during high-traffic periods, ensuring faster verification times.
+*   **Staking for Bandwidth:** Staking a certain amount of $PRFA grants "Priority Access" to the **Orchestrator** during high-traffic periods, ensuring faster verification times.
 *   **Dispute Resolution:** Stakers can participate in community governance to resolve disputes over false positives/negatives, earning rewards for honest adjudication.
 
 ### 3.3 B2B API Access
-Enterprise clients (e.g., Upwork, ArtStation, News Agencies) require $PRFA to access the **Proofa Verification API**.
+Enterprise clients (e.g., Upwork, ArtStation, News Agencies) require $PRFA to access the **Proofa Verification Vault API**.
 *   **Bulk Verification:** Platforms verifying thousands of user submissions daily pay fees in $PRFA.
 *   **Badge Integration:** Licensing the "verified human" badge for their own UI requires a monthly balance of $PRFA.
 

@@ -3,7 +3,7 @@
 import { Waitlist } from "@/components/waitlist";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Shield, Zap, Lock, Video, Image, Music, MessageSquareText } from "lucide-react";
+import { ArrowRight, Shield, Zap, Lock, Video, Image, Music, MessageSquareText, Globe } from "lucide-react";
 import { PricingTable } from "@/components/pricing-table";
 import { FadeIn } from "@/components/fade-in";
 import { useLanguage } from "@/components/language-context";
@@ -148,6 +148,173 @@ export default function Home() {
           </div>
 
 
+        </div>
+      </div>
+
+      {/* Technical Deep-Dive Section (For Google Cloud Audit & Enterprise trust) */}
+      <div className="py-24 bg-gray-50 dark:bg-white/2 border-y border-gray-200 dark:border-white/5 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <FadeIn>
+            <div className="mx-auto max-w-2xl text-center mb-16">
+              <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('hiw_tech_title')}</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                {t('hiw_tech_subtitle')}
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <FadeIn delay={0.1}>
+              <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Lock className="w-24 h-24 rotate-12" />
+                </div>
+                <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-500">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('hiw_vault_title')}</h3>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {t('hiw_vault_desc')}
+                </p>
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/5">
+                  <span className="text-[10px] font-black font-mono text-blue-500 uppercase tracking-widest">Protocol: AES-256 / SHA-256</span>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.2}>
+              <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Zap className="w-24 h-24 rotate-12" />
+                </div>
+                <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-500">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('hiw_antifraud_title')}</h3>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {t('hiw_antifraud_desc')}
+                </p>
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/5">
+                  <span className="text-[10px] font-black font-mono text-purple-500 uppercase tracking-widest">Engine: Gemini 1.5 Pro</span>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.3}>
+              <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Shield className="w-24 h-24 rotate-12" />
+                </div>
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-500">
+                  <Shield className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('hiw_pqc_title')}</h3>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {t('hiw_pqc_desc')}
+                </p>
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/5">
+                  <span className="text-[10px] font-black font-mono text-emerald-500 uppercase tracking-widest">Algorithm: Dilithium3</span>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.4}>
+              <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <ArrowRight className="w-24 h-24 rotate-12" />
+                </div>
+                <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-500">
+                  <Globe className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('hiw_orchestration_title')}</h3>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {t('hiw_orchestration_desc')}
+                </p>
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/5">
+                  <span className="text-[10px] font-black font-mono text-pink-500 uppercase tracking-widest">Compliance: KYC-Ready / OAuth2</span>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+
+          {/* Technical Workflow Diagram */}
+          <FadeIn delay={0.5}>
+            <div className="mt-20 p-8 rounded-2xl bg-white dark:bg-black/20 border border-gray-100 dark:border-white/5 shadow-inner">
+              <h3 className="text-center text-sm font-black text-gray-400 uppercase tracking-[0.3em] mb-12">{t('wf_title')}</h3>
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative">
+                {/* Connector Line */}
+                <div className="hidden md:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent z-0"></div>
+
+                {[
+                  { key: 'wf_step1', icon: Lock },
+                  { key: 'wf_step2', icon: Zap },
+                  { key: 'wf_step3', icon: Shield },
+                  { key: 'wf_step4', icon: ArrowRight },
+                ].map((step, idx) => (
+                  <div key={idx} className="relative z-10 flex flex-col items-center text-center max-w-[150px]">
+                    <div className="w-20 h-20 rounded-full bg-white dark:bg-gray-900 border-2 border-blue-500/20 shadow-xl flex items-center justify-center mb-6 group hover:border-blue-500 transition-colors duration-500">
+                      <step.icon className="w-8 h-8 text-blue-500 group-hover:scale-110 transition-transform" />
+                    </div>
+                    <span className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">{t(step.key as any)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+
+      {/* Visual Context Section */}
+      <div className="py-24 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <FadeIn>
+            <div className="mx-auto max-w-2xl text-center mb-16">
+              <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('vc_title')}</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                {t('vc_subtitle')}
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <FadeIn delay={0.1}>
+              <div className="space-y-6">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-gray-100 dark:bg-white/5 relative group">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-end p-8">
+                    <p className="text-white text-sm font-bold">{t('vc_audit_caption')}</p>
+                  </div>
+                  <img
+                    src="/forensic_audit_trail_mockup_1770844934976.png"
+                    alt="Forensic Audit Trail"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="flex items-center gap-4 px-4 text-gray-500">
+                  <span className="text-[10px] font-black font-mono uppercase tracking-widest">Fig 01. Forensic Audit Trail View</span>
+                  <div className="h-px flex-1 bg-gray-100 dark:bg-white/5"></div>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.2}>
+              <div className="space-y-6">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-gray-100 dark:bg-white/5 relative group">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-end p-8">
+                    <p className="text-white text-sm font-bold">{t('vc_passport_caption')}</p>
+                  </div>
+                  <img
+                    src="/authorship_passport_mockup_1770844951895.png"
+                    alt="Authorship Passport"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="flex items-center gap-4 px-4 text-gray-500">
+                  <span className="text-[10px] font-black font-mono uppercase tracking-widest">Fig 02. Authorship Passport Issuance</span>
+                  <div className="h-px flex-1 bg-gray-100 dark:bg-white/5"></div>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
         </div>
       </div>
 

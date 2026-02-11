@@ -40,6 +40,29 @@ export const translations = {
         checkPricing: "Check Pricing",
         contactEducation: "Contact Education",
 
+        // How it Works - Technical Upgrade
+        hiw_tech_title: "Under the Hood: The Proofa Architecture",
+        hiw_tech_subtitle: "The Technical Foundation of Forensic Authorship",
+        hiw_vault_title: "Secure Verification Vault",
+        hiw_vault_desc: "We implement a multi-layered security environment where creative intent is anchored via a unique Birth-Hash. All session metadata is stored in a Vault secured by AES-256 encryption, ensuring the integrity of the forensic evidence.",
+        hiw_antifraud_title: "Anti-Fraud Orchestration via 'The Judge'",
+        hiw_antifraud_desc: "Proofa acts as a forensic proxy. Our proprietary engine, The Judge, orchestrates with Gemini 1.5 Pro to analyze the 'Algorithm of Doings.' By measuring the human iterative refinements against the model's base output, we provide a verifiable Human Authorship Coefficient.",
+        hiw_pqc_title: "Post-Quantum Cryptography (PQC)",
+        hiw_pqc_desc: "To ensure future-proof legal validity, every Authorship Passport is digitally signed using the Dilithium3 scheme. This quantum-resistant protection ensures your creative proof remains unforgeable for decades.",
+        hiw_orchestration_title: "Bank-Grade Integration Layers",
+        hiw_orchestration_desc: "We provide an enterprise API layer designed for seamless integration with institutional financial systems. Our architecture is KYC-ready and follows the strict data-sovereignty requirements of the European financial sector, built on a robust GCP-hosted infrastructure.",
+
+        // Visual Context & Workflow
+        vc_title: "Visual Context: Platform Readiness",
+        vc_subtitle: "Proofa In-Development Preview",
+        vc_audit_caption: "Forensic Audit Trail View: Real-time logging of creative metadata and cryptographic anchors.",
+        vc_passport_caption: "Authorship Passport Issuance: The final, PQC-sealed certificate with Human Authorship Coefficient.",
+        wf_title: "Technical Workflow",
+        wf_step1: "Birth-Hash Generation",
+        wf_step2: "Interaction Logging",
+        wf_step3: "Forensic Analysis (Gemini)",
+        wf_step4: "PQC Digital Signing",
+
         // Careers
         careersTitle: "Join the Team",
         noOpenings: "No open positions at the moment. Please check back later.",
@@ -57,14 +80,15 @@ export const translations = {
         featurePassportTitle: "Authorship Passport",
         featurePassportDesc: "A technical document generated via a private ledger that logs your creative footprint, making your authorship verifiable and permanent.",
 
-        teamHeader: "The Team",
-        teamAnnaRole: "Founder & CEO",
-        teamAnnaBio: "The visionary leading the movement to redefine digital authorship and protect creators' rights.",
-        teamDenysRole: "Co-Founder & COO",
-        teamDenysBio: "The strategic lead managing operations and building the framework for Proofa’s growth.",
-        teamSaheedRole: "Co-Founder & CTO",
-        teamSaheedBio: "The technical architect ensuring the security of our ledger and the integrity of the model aggregation logic.",
-        teamNote: "Born from pure enthusiasm and a shared belief that technology must serve human creativity.",
+        teamTitle: "Our Leadership",
+        teamSubtitle: "Meet the Team",
+        teamDesc: "The minds behind Proofa dedicated to protecting human creativity.",
+        team_anna_role: "Founder & CEO",
+        team_anna_desc: "The visionary leading the movement to redefine digital authorship and protect creators' rights.",
+        team_denys_role: "Co-Founder & COO",
+        team_denys_desc: "The strategic lead managing operations and building the framework for Proofa’s growth.",
+        team_saheed_role: "Co-Founder & CTO",
+        team_saheed_desc: "The technical architect ensuring the security of our ledger and the integrity of the model aggregation logic.",
 
         statusHeader: "Legal & Development Status",
         statusPhase: "Proofa is currently in its Focus Group Phase.",
@@ -290,16 +314,6 @@ export const translations = {
         faq_q5: "What does 'Future Licensing' mean?",
         faq_a5: "Securing a Passport today creates a foundational record of your authorship. This technical proof is designed to be the basis for future asset management and commercial use within our evolving ecosystem.",
 
-        // Team
-        teamTitle: "Our Leadership",
-        teamSubtitle: "Meet the Team",
-        teamDesc: "The minds behind Proofa dedicated to protecting human creativity.",
-        team_anna_role: "Founder & CEO",
-        team_anna_desc: 'The visionary and architectural heart of Proofa. Anna is the creator of the original concept of "Human Creative Energy" and the architect of the platform’s logic. Combining her background as a developer with a deep understanding of the LegalTech landscape, she drives the platform\'s introduction to the world. Anna ensures that every line of code and every feature aligns with the core mission: protecting the "Human Spark" in the age of AI.',
-        team_denys_role: "Co-founder & COO",
-        team_denys_desc: "The strategic engine of the project. Denys is responsible for the operational stability and growth of Proofa. He manages the complex world of documentation, controls legal and business meetings, and identifies key market opportunities. His focus is on building the bridge between Proofa’s innovative technology and its practical application in the business and legal sectors.",
-        team_saheed_role: "Co-founder & CTO",
-        team_saheed_desc: "The technical powerhouse. Saheed leads the development and execution of the platform’s complex architecture. Working in close collaboration with Anna, he translates her vision and creative logic into a robust, scalable codebase. As the hands-on lead for Proofa’s technical infrastructure, he ensures the platform remains at the cutting edge of Web3 and AI-verification technology.",
 
         // Feature Cards (Home)
         feat_passport_title: "Authorship Passport",
@@ -482,6 +496,29 @@ export const translations = {
         checkPricing: "Preise Prüfen",
         contactEducation: "Kontakt Bildung",
 
+        // How it Works - Technical Upgrade
+        hiw_tech_title: "Blick unter die Haube: Die Proofa-Architektur",
+        hiw_tech_subtitle: "Das technische Fundament der forensischen Autorenschaft",
+        hiw_vault_title: "Sicherer Verifikations-Vault",
+        hiw_vault_desc: "Wir implementieren eine mehrschichtige Sicherheitsumgebung, in der die kreative Absicht über einen einzigartigen Birth-Hash verankert wird. Alle Sitzungsmetadaten werden in einem durch AES-256 verschlüsselten Vault gespeichert.",
+        hiw_antifraud_title: "Anti-Betrugs-Orchestrierung via 'The Judge'",
+        hiw_antifraud_desc: "Proofa agiert als forensischer Proxy. Unsere proprietäre Engine, The Judge, orchestriert mit Gemini 1.5 Pro, um den 'Алгоритм действий' zu analysieren und einen verifizierbaren menschlichen Urheberschafts-Koeffizienten zu liefern.",
+        hiw_pqc_title: "Post-Quantum-Kryptographie (PQC)",
+        hiw_pqc_desc: "Um eine zukunftssichere rechtliche Gültigkeit zu gewährleisten, wird jeder Autorenschaftspass mit dem Dilithium3-Verfahren digital signiert. Dieser quantenresistente Schutz garantiert die Unfälschbarkeit über Jahrzehnte.",
+        hiw_orchestration_title: "Bankfähige Integrationsschichten",
+        hiw_orchestration_desc: "Wir bieten eine Enterprise-API-Schicht, die für die nahtlose Integration in institutionelle Finanzsysteme konzipiert ist. Unsere Architektur ist KYC-bereit und entspricht den strengen Anforderungen an die Datensouveränität des europäischen Finanzsektors, aufgebaut auf einer robusten GCP-Infrastruktur.",
+
+        // Visual Context & Workflow
+        vc_title: "Visual Context: Plattform-Reife",
+        vc_subtitle: "Proofa Entwicklungs-Vorschau",
+        vc_audit_caption: "Forensischer Audit-Trail: Echtzeit-Protokollierung von Metadaten und kryptografischen Ankern.",
+        vc_passport_caption: "Ausstellung des Autorenschaftspasses: Das finale, PQC-versiegelte Zertifikat.",
+        wf_title: "Technischer Workflow",
+        wf_step1: "Birth-Hash Generierung",
+        wf_step2: "Interaktions-Logging",
+        wf_step3: "Forensische Analyse (Gemini)",
+        wf_step4: "PQC Digitale Signatur",
+
         // Careers
         careersTitle: "Werden Sie Teil des Teams",
         noOpenings: "Derzeit keine offenen Stellen. Bitte schauen Sie später wieder vorbei.",
@@ -499,14 +536,15 @@ export const translations = {
         featurePassportTitle: "Autorenschafts-Pass",
         featurePassportDesc: "Ein technisches Dokument, das über ein privates Register generiert wird und Ihren kreativen Fußabdruck protokolliert, wodurch Ihre Autorenschaft überprüfbar und dauerhaft wird.",
 
-        teamHeader: "Das Team",
-        teamAnnaRole: "Gründerin & CEO",
-        teamAnnaBio: "Die Visionärin, die die Bewegung anführt, um digitale Autorenschaft neu zu definieren und Urheberrechte zu schützen.",
-        teamDenysRole: "Mitgründer & COO",
-        teamDenysBio: "Der strategische Leiter, der den Betrieb führt und den Rahmen für das Wachstum von Proofa bildet.",
-        teamSaheedRole: "Mitgründer & CTO",
-        teamSaheedBio: "Der technische Architekt, der die Sicherheit unseres Registers und die Integrität der Modell-Aggregationslogik gewährleistet.",
-        teamNote: "Geboren aus reinem Enthusiasmus und dem gemeinsamen Glauben, dass Technologie der menschlichen Kreativität dienen muss.",
+        teamTitle: "Unser Führungsteam",
+        teamSubtitle: "Treffen Sie das Team",
+        teamDesc: "Die Köpfe hinter Proofa, die sich dem Schutz der menschlichen Kreativität verschrieben haben.",
+        team_anna_role: "Gründerin & CEO",
+        team_anna_desc: "Die Visionärin, die die Bewegung anführt, um digitale Autorenschaft neu zu definieren und Urheberrechte zu schützen.",
+        team_denys_role: "Mitgründer & COO",
+        team_denys_desc: "Der strategische Leiter, der den Betrieb führt und den Rahmen für das Wachstum von Proofa bildet.",
+        team_saheed_role: "Mitgründer & CTO",
+        team_saheed_desc: "Der technische Architekt, der die Sicherheit unseres Registers und die Integrität der Modell-Aggregationslogik gewährleistet.",
 
         statusHeader: "Rechtlicher & Entwicklungsstatus",
         statusPhase: "Proofa befindet sich derzeit in der Fokusgruppen-Phase.",
@@ -742,17 +780,6 @@ export const translations = {
         faq_a4: "Ja. Ihre Workflow-Daten werden in einem sicheren, privaten Register gespeichert. Dies ermöglicht es Ihnen, eine dauerhafte Aufzeichnung Ihrer Urheberschaft zu führen, ohne Ihre Arbeit oder Ihre Prompts der Öffentlichkeit preiszugeben.",
         faq_q5: "Was bedeutet 'Zukünftige Lizenzierung'?",
         faq_a5: "Die Sicherung eines Passes schafft heute eine grundlegende Aufzeichnung Ihrer Urheberschaft. Dieser technische Beweis soll die Grundlage für die zukünftige Vermögensverwaltung und kommerzielle Nutzung in unserem sich entwickelnden Ökosystem bilden.",
-
-        // Team
-        teamTitle: "Unsere Führung",
-        teamSubtitle: "Treffen Sie das Team",
-        teamDesc: "Die Köpfe hinter Proofa, die sich dem Schutz der menschlichen Kreativität widmen.",
-        team_anna_role: "Gründerin & CEO",
-        team_anna_desc: 'Das visionäre und architektonische Herz von Proofa. Anna ist die Schöpferin des ursprünglichen Konzepts der "Menschlichen Kreativen Energie" und die Architektin der Logik der Plattform. Mit ihrem Hintergrund als Entwicklerin und einem tiefen Verständnis der LegalTech-Landschaft treibt sie die Einführung der Plattform in die Welt voran. Anna stellt sicher, dass jede Zeile Code und jede Funktion mit der Kernmission übereinstimmt: den "Human Spark" im Zeitalter der KI zu schützen.',
-        team_denys_role: "Mitbegründer & COO",
-        team_denys_desc: "Der strategische Motor des Projekts. Denys ist verantwortlich für die operative Stabilität und das Wachstum von Proofa. Er verwaltet die komplexe Welt der Dokumentation, kontrolliert Rechts- und Geschäftstermine und identifiziert wichtige Marktchancen. Sein Fokus liegt darauf, die Brücke zwischen der innovativen Technologie von Proofa und ihrer praktischen Anwendung im Geschäfts- und Rechtssektor zu schlagen.",
-        team_saheed_role: "Mitbegründer & CTO",
-        team_saheed_desc: "Das technische Kraftpaket. Saheed leitet die Entwicklung und Ausführung der komplexen Architektur der Plattform. In enger Zusammenarbeit mit Anna übersetzt er ihre Vision und kreative Logik in eine robuste, skalierbare Codebasis. Als praktischer Leiter der technischen Infrastruktur von Proofa stellt er sicher, dass die Plattform an der Spitze der Web3- und KI-Verifikationstechnologie bleibt.",
 
         // Feature Cards (Home)
         feat_passport_title: "Autorenschaftspass",
