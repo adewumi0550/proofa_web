@@ -90,6 +90,15 @@ export const translations = {
         team_saheed_role: "Co-Founder & CTO",
         team_saheed_desc: "The technical architect ensuring the security of our ledger and the integrity of the model aggregation logic.",
 
+        teamHeader: "Our Leadership",
+        teamNote: "The minds behind Proofa dedicated to protecting human creativity.",
+        teamAnnaRole: "Founder & CEO",
+        teamAnnaBio: "The visionary leading the movement to redefine digital authorship and protect creators' rights.",
+        teamDenysRole: "Co-Founder & COO",
+        teamDenysBio: "The strategic lead managing operations and building the framework for Proofa’s growth.",
+        teamSaheedRole: "Co-Founder & CTO",
+        teamSaheedBio: "The technical architect ensuring the security of our ledger and the integrity of the model aggregation logic.",
+
         statusHeader: "Legal & Development Status",
         statusPhase: "Proofa is currently in its Focus Group Phase.",
         statusRoadmap: "We are in the process of official legal entity formation (GmbH). This prototype is our first step toward a global standard for creative proof.",
@@ -545,6 +554,15 @@ export const translations = {
         team_denys_desc: "Der strategische Leiter, der den Betrieb führt und den Rahmen für das Wachstum von Proofa bildet.",
         team_saheed_role: "Mitgründer & CTO",
         team_saheed_desc: "Der technische Architekt, der die Sicherheit unseres Registers und die Integrität der Modell-Aggregationslogik gewährleistet.",
+
+        teamHeader: "Unser Führungsteam",
+        teamNote: "Die Köpfe hinter Proofa, die sich dem Schutz der menschlichen Kreativität verschrieben haben.",
+        teamAnnaRole: "Gründerin & CEO",
+        teamAnnaBio: "Die Visionärin, die die Bewegung anführt, um digitale Autorenschaft neu zu definieren und Urheberrechte zu schützen.",
+        teamDenysRole: "Mitgründer & COO",
+        teamDenysBio: "Der strategische Leiter, der den Betrieb führt und den Rahmen für das Wachstum von Proofa bildet.",
+        teamSaheedRole: "Mitgründer & CTO",
+        teamSaheedBio: "Der technische Architekt, der die Sicherheit unseres Registers und die Integrität der Modell-Aggregationslogik gewährleistet.",
 
         statusHeader: "Rechtlicher & Entwicklungsstatus",
         statusPhase: "Proofa befindet sich derzeit in der Fokusgruppen-Phase.",

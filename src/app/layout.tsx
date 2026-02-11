@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-blue-500/30 selection:text-blue-200 transition-colors duration-300`}>
+      <body suppressHydrationWarning className={`${inter.className} antialiased min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-blue-500/30 selection:text-blue-200 transition-colors duration-300`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

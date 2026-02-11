@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/components/auth-context";
 import { motion } from "framer-motion";
-import { Search, Users, MessageSquare, Plus, ChevronRight, TrendingUp } from "lucide-react";
+import { Search, ChevronRight, TrendingUp, Users } from "lucide-react";
 import { useLanguage } from "@/components/language-context";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -11,25 +11,106 @@ import { UserDropdown } from "@/components/dashboard/user-dropdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { CommunityCard } from "@/components/community/community-card";
+import { CreatePost } from "@/components/community/create-post";
+import { Feed } from "@/components/community/feed";
+import { JoinCommunityModal } from "@/components/community/join-community-modal";
+
+const COMMUNITY_CATEGORIES = [
+    { id: "gen-art", name: "Generative Art", members: "12.4k", color: "from-blue-500 to-cyan-500", description: "Discuss Stable Diffusion, Midjourney, and DALL-E workflows." },
+    { id: "legal-tech", name: "Legal Tech & IP", members: "3.2k", color: "from-purple-500 to-indigo-500", description: "AI in law, copyright issues, and regulatory compliance." },
+    { id: "prompt-eng", name: "Prompt Engineering", members: "8.1k", color: "from-orange-500 to-red-500", description: "Master the art of prompting for LLMs and image generators." },
+    { id: "video-synth", name: "Video Synthesis", members: "5.7k", color: "from-green-500 to-emerald-500", description: "Tools like Runway, Pika, and Sora." },
+    { id: "ai-ethics", name: "AI Ethics", members: "2.1k", color: "from-pink-500 to-rose-500", description: "Responsible AI, bias mitigation, and safety." },
+    { id: "model-tuning", name: "Model Tuning", members: "4.5k", color: "from-yellow-500 to-amber-500", description: "Fine-tuning LoRAs, Dreambooth, and local LLMs." },
+];
 
 export default function CommunitiesPage() {
     const { user } = useAuth();
     const { t } = useLanguage();
     const [isLoading, setIsLoading] = React.useState(true);
+    const [posts, setPosts] = useState([
+        {
+            id: 1,
+            author: {
+                name: "Sarah Chen",
+                avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+                handle: "@sarah_ai"
+            },
+            content: "Just discovered a new way to optimize Stable Diffusion XL prompts for photorealistic portraits. The key is in the negative prompt weighting! 🎨✨ #GenerativeAI #SDXL",
+            timestamp: "2h ago",
+            likes: 42,
+            comments: 12,
+            shares: 5,
+            isPrivate: false,
+            communityName: "Generative Art"
+        },
+        {
+            id: 2,
+            author: {
+                name: "Alex Rivera",
+                avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+                handle: "@arivera"
+            },
+            content: "Looking for collaborators on a new open-source legal LLM project. We're fine-tuning Llama 3 on case law. DM if interested! ⚖️",
+            timestamp: "4h ago",
+            likes: 28,
+            comments: 8,
+            shares: 14,
+            isPrivate: true,
+            communityName: "Legal Tech & IP"
+        }
+    ]);
 
     React.useEffect(() => {
         const timer = setTimeout(() => setIsLoading(false), 1500);
         return () => clearTimeout(timer);
     }, []);
 
-    const communityCategories = [
-        { name: "Generative Art", members: "12.4k", color: "from-blue-500 to-cyan-500" },
-        { name: "Legal Tech & IP", members: "3.2k", color: "from-purple-500 to-indigo-500" },
-        { name: "Prompt Engineering", members: "8.1k", color: "from-orange-500 to-red-500" },
-        { name: "Video Synthesis", members: "5.7k", color: "from-green-500 to-emerald-500" },
-        { name: "AI Ethics", members: "2.1k", color: "from-pink-500 to-rose-500" },
-        { name: "Model Tuning", members: "4.5k", color: "from-yellow-500 to-amber-500" },
-    ];
+    const handlePost = (postData: any) => {
+        const newPost = {
+            id: Date.now(),
+            author: {
+                name: user?.first_name || "You",
+                avatar: user?.avatar_url || "https://github.com/shadcn.png",
+                handle: "@you"
+            },
+            content: postData.content,
+            timestamp: "Just now",
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            isPrivate: postData.isPrivate,
+            communityName: "General" // Default for now
+        };
+        setPosts([newPost, ...posts]);
+    };
+
+    const [joinedCommunities, setJoinedCommunities] = useState<string[]>([]);
+    const [joinModalOpen, setJoinModalOpen] = useState(false);
+    const [selectedCommunity, setSelectedCommunity] = useState<{ id: string, name: string } | null>(null);
+    const [isJoining, setIsJoining] = useState(false);
+
+    const handleJoinClick = (id: string, name: string) => {
+        if (joinedCommunities.includes(id)) {
+            // Already joined - maybe confirm leave? For now, just toggle off
+            setJoinedCommunities(prev => prev.filter(cId => cId !== id));
+        } else {
+            setSelectedCommunity({ id, name });
+            setJoinModalOpen(true);
+        }
+    };
+
+    const confirmJoin = async () => {
+        if (!selectedCommunity) return;
+        setIsJoining(true);
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setJoinedCommunities(prev => [...prev, selectedCommunity.id]);
+        setIsJoining(false);
+        setJoinModalOpen(false);
+        setSelectedCommunity(null);
+    };
 
     return (
         <div className="flex-1 h-full overflow-y-auto bg-[#fbfbfb] dark:bg-[#090909] p-8 custom-scrollbar">
@@ -73,6 +154,25 @@ export default function CommunitiesPage() {
                     </div>
                 </div>
 
+                {/* Your Communities Section */}
+                {joinedCommunities.length > 0 && (
+                    <div className="space-y-6">
+                        <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+                            <Users className="w-6 h-6 text-green-500" /> Your Communities
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {COMMUNITY_CATEGORIES.filter(c => joinedCommunities.includes(c.id)).map((category) => (
+                                <CommunityCard
+                                    key={category.id}
+                                    {...category}
+                                    isMember={true}
+                                    onJoinClick={handleJoinClick}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Categories Grid */}
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
@@ -95,42 +195,44 @@ export default function CommunitiesPage() {
                                 </div>
                             ))
                         ) : (
-                            communityCategories.map((category, idx) => (
+                            COMMUNITY_CATEGORIES.map((category, idx) => (
                                 <motion.div
-                                    key={category.name}
+                                    key={category.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: idx * 0.1 }}
-                                    className="group cursor-pointer p-6 rounded-3xl bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all"
                                 >
-                                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${category.color} mb-6 flex items-center justify-center text-white`}>
-                                        <Users className="w-6 h-6" />
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{category.name}</h3>
-                                    <div className="flex items-center justify-between mt-4">
-                                        <span className="text-sm font-medium text-gray-500">{category.members} members</span>
-                                        <Button size="sm" className="rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-4">
-                                            {t('joinCommunity') || "Join"}
-                                        </Button>
-                                    </div>
+                                    <CommunityCard
+                                        {...category}
+                                        isMember={joinedCommunities.includes(category.id)}
+                                        onJoinClick={handleJoinClick}
+                                    />
                                 </motion.div>
                             ))
                         )}
                     </div>
                 </div>
 
-                {/* Discussion List Placeholder */}
-                <div className="p-8 rounded-[32px] bg-gray-50/50 dark:bg-white/[0.02] border border-dashed border-gray-200 dark:border-white/10 text-center">
-                    <div className="inline-flex p-4 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 mb-4">
-                        <MessageSquare className="w-8 h-8" />
+                {/* Global Feed Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-6">
+                    <div className="lg:col-span-2 space-y-8">
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Recent Discussions</h2>
+                            <CreatePost onPost={handlePost} />
+                            <div className="mt-8">
+                                <Feed posts={posts} />
+                            </div>
+                        </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Start a Discussion</h3>
-                    <p className="text-gray-500 mb-6 max-w-sm mx-auto font-medium">Have a question or want to show off your latest certified workflow? Start a conversation with the community.</p>
-                    <Button className="rounded-full bg-black dark:bg-white text-white dark:text-black font-bold h-12 px-8 gap-2">
-                        <Plus className="w-5 h-5" /> New Post
-                    </Button>
                 </div>
 
+                <JoinCommunityModal
+                    isOpen={joinModalOpen}
+                    onClose={() => setJoinModalOpen(false)}
+                    onConfirm={confirmJoin}
+                    communityName={selectedCommunity?.name || ""}
+                    isLoading={isJoining}
+                />
             </div>
         </div>
     );
