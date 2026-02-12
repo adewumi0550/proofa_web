@@ -36,7 +36,7 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
     const { t } = useLanguage();
     const [input, setInput] = useState("");
     const [stagedFile, setStagedFile] = useState<File | null>(null); // New state for staged file
-    const [selectedModel, setSelectedModel] = useState("Pro v1.5 Engine");
+    const [selectedModel, setSelectedModel] = useState("Pro v2.5 Engine");
     const [activeMode, setActiveMode] = useState<"art" | "video" | "music" | "voice">("art");
     const [isModelsOpen, setIsModelsOpen] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -45,10 +45,10 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
 
     // Models per mode configuration
     const modelsByMode: Record<string, string[]> = {
-        art: ["Pro v1.5 Engine", "Creative Diffusion", "Analysis Hub"],
-        video: ["Pro v1.5 Engine", "Motion Core", "Nano banana", "Veo", "Analysis Hub"],
-        music: ["Pro v1.5 Engine", "Sonic Synth", "Analysis Hub"],
-        voice: ["Pro v1.5 Engine", "Voice Weaver", "Analysis Hub"],
+        art: ["Pro v2.5 Engine", "Creative Diffusion", "Analysis Hub"],
+        video: ["Pro v2.5 Engine", "Motion Core", "Nano banana", "Veo", "Analysis Hub"],
+        music: ["Pro v2.5 Engine", "Sonic Synth", "Analysis Hub"],
+        voice: ["Pro v2.5 Engine", "Voice Weaver", "Analysis Hub"],
     };
 
     const availableModels = modelsByMode[activeMode] || modelsByMode.art;

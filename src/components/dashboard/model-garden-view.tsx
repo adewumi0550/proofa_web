@@ -44,7 +44,7 @@ export function ModelGardenView() {
                     { title: "Imagen 4", tag: "Image", icon: "🖼️", color: "from-blue-500/20 to-cyan-500/20", plays: "Photorealism", badge: "Google High-Fidelity" },
                     { title: "Gemini 3", tag: "Science", icon: "🔬", color: "from-purple-600/20 to-fuchsia-600/20", plays: "Deep Research", badge: "Study Anything" },
                     { title: "Gemini 2.5 Pro", tag: "Multimodal", icon: "✨", color: "from-blue-500/20 to-purple-500/20", plays: "High Performance" },
-                    { title: "Gemini 1.5 Pro", tag: "Long Context", icon: "📚", color: "from-cyan-500/20 to-blue-500/20", plays: "2M Token Window" },
+                    { title: "Gemini 2.5 Pro", tag: "Long Context", icon: "📚", color: "from-cyan-500/20 to-blue-500/20", plays: "2M Token Window" },
                     { title: "Gemma 3", tag: "Open Source", icon: "🔓", color: "from-emerald-500/20 to-green-500/20", plays: "Dev Choice", badge: "Community" },
                     { title: "Nano Banana Pro", tag: "Image", icon: "🍌", color: "from-yellow-400/20 to-orange-400/20", plays: "On-Device", badge: "Flash Image" },
                     { title: "Google Lyria", tag: "Music", icon: "🎼", color: "from-blue-500/20 to-cyan-500/20", plays: "DeepMind" },

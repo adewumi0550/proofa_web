@@ -235,7 +235,7 @@ export default function Home() {
                   {t('hiw_antifraud_desc')}
                 </p>
                 <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/5">
-                  <span className="text-[10px] font-black font-mono text-purple-500 uppercase tracking-widest">Engine: Gemini 1.5 Pro</span>
+                  <span className="text-[10px] font-black font-mono text-purple-500 uppercase tracking-widest">Engine: Gemini 2.5 Pro</span>
                 </div>
               </div>
             </FadeIn>
