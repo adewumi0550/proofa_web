@@ -146,12 +146,10 @@ export default function Home() {
               </div>
             </FadeIn>
           </div>
-
-
         </div>
       </div>
 
-      {/* Technical Deep-Dive Section (For Google Cloud Audit & Enterprise trust) */}
+      {/* Under the Hood Section (Moved up) */}
       <div className="py-24 bg-gray-50 dark:bg-white/2 border-y border-gray-200 dark:border-white/5 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <FadeIn>
@@ -163,7 +161,7 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <FadeIn delay={0.1}>
               <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -219,9 +217,14 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.4}>
-              <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden">
+              <div className="group p-8 rounded-2xl bg-white dark:bg-black/40 border border-gray-100 dark:border-white/5 shadow-sm relative overflow-hidden blur-[1px] opacity-70 grayscale-[0.5] select-none transition-all duration-500">
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                  <div className="bg-black/80 dark:bg-white/90 text-white dark:text-black px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wider transform -rotate-12 shadow-xl border border-white/20">
+                    {t('comingSoon')}
+                  </div>
+                </div>
                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <ArrowRight className="w-24 h-24 rotate-12" />
+                  <Globe className="w-24 h-24 rotate-12" />
                 </div>
                 <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-500">
                   <Globe className="w-6 h-6" />
@@ -263,6 +266,51 @@ export default function Home() {
           </FadeIn>
         </div>
       </div>
+
+      {/* How It Works (Step-by-Step) (Moved up) */}
+      <FadeIn delay={0.4} className="mt-24">
+        <div className="mx-auto max-w-2xl text-center mb-16">
+          <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('hiw_stepTitle')}</h2>
+          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            {t('hiw_title')}
+          </p>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+            {[
+              {
+                step: "01",
+                title: t('hiw_step1_title'),
+                desc: t('hiw_step1_desc')
+              },
+              {
+                step: "02",
+                title: t('hiw_step2_title'),
+                desc: t('hiw_step2_desc')
+              },
+              {
+                step: "03",
+                title: t('hiw_step3_title'),
+                desc: t('hiw_step3_desc')
+              },
+              {
+                step: "04",
+                title: t('hiw_step4_title'),
+                desc: t('hiw_step4_desc')
+              }
+            ].map((item, index) => (
+              <div key={item.step} className="relative p-6 bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="text-4xl font-black text-gray-100 dark:text-white/5 mb-4 absolute top-4 right-4">{item.step}</div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 relative z-10">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 relative z-10">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </FadeIn>
+
+
 
       {/* Visual Context Section */}
       <div className="py-24 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
@@ -317,49 +365,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* Team Section */}
-      <FadeIn delay={0.4} className="mt-24">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('hiw_stepTitle')}</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-            {t('hiw_title')}
-          </p>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-            {[
-              {
-                step: "01",
-                title: t('hiw_step1_title'),
-                desc: t('hiw_step1_desc')
-              },
-              {
-                step: "02",
-                title: t('hiw_step2_title'),
-                desc: t('hiw_step2_desc')
-              },
-              {
-                step: "03",
-                title: t('hiw_step3_title'),
-                desc: t('hiw_step3_desc')
-              },
-              {
-                step: "04",
-                title: t('hiw_step4_title'),
-                desc: t('hiw_step4_desc')
-              }
-            ].map((item, index) => (
-              <div key={item.step} className="relative p-6 bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="text-4xl font-black text-gray-100 dark:text-white/5 mb-4 absolute top-4 right-4">{item.step}</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 relative z-10">{item.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 relative z-10">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </FadeIn>
 
       <Testimonials />
 
