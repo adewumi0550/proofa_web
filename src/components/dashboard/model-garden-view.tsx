@@ -20,10 +20,10 @@ export function ModelGardenView() {
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-widest mb-6 border border-amber-500/20"
                 >
                     <Sparkles className="w-3.5 h-3.5" />
-                    AI Discovery Hub
+                    {t('aiDiscoveryHub')}
                 </motion.div>
                 <h1 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-6 tracking-tighter">{t('modelGarden')}</h1>
-                <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-medium lowercase">Explore a curated collection of AI-powered creative assets. Join the community in the Modern Garden or showcase your latest masterpieces.</p>
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-medium lowercase">{t('modelGardenDesc')}</p>
             </div>
 
             <div className="max-w-2xl mx-auto space-y-6 relative group">
@@ -93,8 +93,8 @@ export function ModelGardenView() {
 
                         <div className={`h-56 rounded-[2.5rem] bg-gradient-to-br ${item.color} mb-8 flex items-center justify-center relative overflow-hidden ring-1 ring-inset ring-white/10`}>
                             <div className="absolute inset-0 bg-black/60 backdrop-blur-xl opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-5 text-white">
-                                <Button variant="secondary" size="sm" className="rounded-full font-bold text-[10px] shadow-2xl px-8 h-12">Collect Asset</Button>
-                                <Link href="#" className="text-[10px] font-bold text-white/60 hover:text-white transition-colors">Preview Details</Link>
+                                <Button variant="secondary" size="sm" className="rounded-full font-bold text-[10px] shadow-2xl px-8 h-12">{t('collectAsset')}</Button>
+                                <Link href="#" className="text-[10px] font-bold text-white/60 hover:text-white transition-colors">{t('previewDetails')}</Link>
                             </div>
                             <div className="text-7xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 ease-out">{item.icon}</div>
                         </div>
@@ -110,11 +110,11 @@ export function ModelGardenView() {
                                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white dark:border-[#111] shadow-lg" />
                                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white dark:border-[#111] shadow-lg" />
                                 </div>
-                                <div className="text-[10px] font-bold text-gray-400">Created by <span className="text-gray-900 dark:text-white">ProCreators</span></div>
+                                <div className="text-[10px] font-bold text-gray-400">{t('createdBy')} <span className="text-gray-900 dark:text-white">{t('proCreators')}</span></div>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-tighter">Certified</span>
+                                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-tighter">{t('certifiedStatus')}</span>
                             </div>
                         </div>
                     </motion.div>

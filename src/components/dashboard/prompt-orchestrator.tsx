@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
+import { useLanguage } from "@/components/language-context";
 
 interface Message {
     id: string;
@@ -31,6 +32,7 @@ interface PromptOrchestratorProps {
 }
 
 export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestratorProps) {
+    const { t } = useLanguage();
     const [input, setInput] = useState("");
     const [stagedFile, setStagedFile] = useState<File | null>(null); // New state for staged file
     const [selectedModel, setSelectedModel] = useState("Pro v1.5 Engine");
@@ -140,8 +142,8 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
                             <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
                                 <Upload className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                             </div>
-                            <h3 className="text-xl font-black text-gray-900 dark:text-white mb-2">Drop File Here</h3>
-                            <p className="text-sm font-bold text-gray-500">Add assets to your prompt</p>
+                            <h3 className="text-xl font-black text-gray-900 dark:text-white mb-2">{t('dropFileHere')}</h3>
+                            <p className="text-sm font-bold text-gray-500">{t('addAssets')}</p>
                         </motion.div>
                     </motion.div>
                 )}
@@ -187,10 +189,10 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
                 </div>
 
                 <div className="flex gap-2">
-                    <ModeTab active={activeMode === 'art'} icon={<ImageIcon className="w-4 h-4" />} label="Art" onClick={() => setActiveMode('art')} />
-                    <ModeTab active={activeMode === 'video'} icon={<Video className="w-4 h-4" />} label="Video" onClick={() => setActiveMode('video')} />
-                    <ModeTab active={activeMode === 'music'} icon={<Music className="w-4 h-4" />} label="Music" onClick={() => setActiveMode('music')} />
-                    <ModeTab active={activeMode === 'voice'} icon={<Mic className="w-4 h-4" />} label="Voice" onClick={() => setActiveMode('voice')} />
+                    <ModeTab active={activeMode === 'art'} icon={<ImageIcon className="w-4 h-4" />} label={t('modeArt')} onClick={() => setActiveMode('art')} />
+                    <ModeTab active={activeMode === 'video'} icon={<Video className="w-4 h-4" />} label={t('modeVideo')} onClick={() => setActiveMode('video')} />
+                    <ModeTab active={activeMode === 'music'} icon={<Music className="w-4 h-4" />} label={t('modeMusic')} onClick={() => setActiveMode('music')} />
+                    <ModeTab active={activeMode === 'voice'} icon={<Mic className="w-4 h-4" />} label={t('modeVoice')} onClick={() => setActiveMode('voice')} />
                 </div>
             </div>
 
@@ -214,7 +216,7 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
                             <Plus className="w-8 h-8 text-gray-400 group-hover:text-blue-500 transition-colors" />
                         </button>
                         <p className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-500">
-                            Workspace Active
+                            {t('workspaceActive')}
                         </p>
                     </div>
                 ) : (
@@ -289,7 +291,7 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
                                         handleSend();
                                     }
                                 }}
-                                placeholder={stagedFile ? "Describe this file or assert authorship..." : `Enter creative command for ${activeMode} mode...`}
+                                placeholder={stagedFile ? t('describeFile') : t('enterCreativeCommand').replace('{mode}', t(`mode${activeMode.charAt(0).toUpperCase() + activeMode.slice(1)}`))}
                                 className="flex-1 bg-transparent border-none focus:ring-0 focus:outline-none text-sm md:text-base font-medium text-gray-900 dark:text-white resize-none min-h-[56px] py-4 px-2 custom-scrollbar placeholder:text-gray-400"
                                 style={{ maxHeight: '200px' }}
                             />

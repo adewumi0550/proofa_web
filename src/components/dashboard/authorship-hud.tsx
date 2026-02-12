@@ -4,6 +4,7 @@ import React from "react";
 import { Info, ShieldCheck, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language-context";
 
 interface AuthorshipHUDProps {
     score: number;
@@ -16,6 +17,7 @@ interface AuthorshipHUDProps {
 }
 
 export function AuthorshipHUD({ score, stage, onCertify, isCertified, verdict, reason, consentDeclined }: AuthorshipHUDProps) {
+    const { t } = useLanguage();
     const isEligible = score >= 80;
 
     if (consentDeclined) {
@@ -24,7 +26,7 @@ export function AuthorshipHUD({ score, stage, onCertify, isCertified, verdict, r
                 <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                     <ShieldCheck className="w-4 h-4" />
                     <span className="text-xs font-bold uppercase tracking-wider">
-                        Authorship Passport Disabled
+                        {t('passportDisabledPrivacy')}
                     </span>
                 </div>
             </div>
@@ -38,13 +40,13 @@ export function AuthorshipHUD({ score, stage, onCertify, isCertified, verdict, r
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                         <span className="text-[10px] font-black tracking-widest text-gray-400 uppercase">
-                            Authorship Strength
+                            {t('authorshipStrength')}
                         </span>
                         <div className="group relative z-50">
                             <Info className="w-3 h-3 text-gray-300 dark:text-gray-600 cursor-help" />
                             <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-[100]">
                                 <p className="text-[10px] font-bold text-gray-600 dark:text-gray-300 leading-relaxed uppercase tracking-wider">
-                                    EU AI Act Art. 52 Compliance: This score measures human creative direction vs AI automation depth.
+                                    {t('euComplianceTitle')}: {t('euComplianceDesc')}
                                 </p>
                             </div>
                         </div>
@@ -115,12 +117,12 @@ export function AuthorshipHUD({ score, stage, onCertify, isCertified, verdict, r
                                 className="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full"
                             >
                                 <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
-                                <span className="text-[9px] font-black text-green-500 tracking-tighter uppercase">Eligible for IP</span>
+                                <span className="text-[9px] font-black text-green-500 tracking-tighter uppercase">{t('eligibleForIp')}</span>
                             </motion.div>
                         ) : (
                             <div className="flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/5 border border-transparent rounded-full opacity-50">
                                 <AlertCircle className="w-3.5 h-3.5 text-gray-400" />
-                                <span className="text-[9px] font-bold text-gray-400 uppercase">Analysis Pending</span>
+                                <span className="text-[9px] font-bold text-gray-400 uppercase">{t('analysisPending')}</span>
                             </div>
                         )}
                     </AnimatePresence>
@@ -137,7 +139,7 @@ export function AuthorshipHUD({ score, stage, onCertify, isCertified, verdict, r
                                     : 'bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50'}
                             `}
                         >
-                            {stage === 'Certified' || isCertified ? 'View Certificate' : 'Certify Asset'}
+                            {stage === 'Certified' || isCertified ? t('viewCertificate') : t('certifyAsset')}
                         </Button>
                     )}
                 </div>

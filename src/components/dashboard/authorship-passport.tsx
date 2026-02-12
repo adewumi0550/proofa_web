@@ -16,6 +16,7 @@ import {
     Clock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language-context";
 
 interface AuthorshipPassportProps {
     projectName: string;
@@ -32,11 +33,20 @@ export function AuthorshipPassport({
     timestamp,
     onBack
 }: AuthorshipPassportProps) {
+    const { t } = useLanguage();
+
+    // Check if score is high confidence
+    const isHighConfidence = humanScore >= 80;
+
+    // QR Code URL (dynamically generated for the asset hash)
+    // In a real app, this would point to the verification URL
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${assetHash}`;
+
     const licensingTiers = [
-        { name: "Apparel", royalty: "4-10%", icon: Zap, description: "T-shirts, hoodies, and wearable accessories." },
-        { name: "Home Decor", royalty: "5-12%", icon: Globe, description: "Wall art, pillows, and kitchenware." },
-        { name: "Digital", royalty: "10-25%", icon: Layers, description: "Game assets, NFTs, and digital collectibles." },
-        { name: "Flat Fee", royalty: "$500+", icon: Scale, description: "One-time usage for editorials or campaigns." },
+        { name: t('apparel'), royalty: "4-10%", icon: Zap, description: t('apparelDesc') },
+        { name: t('homeDecor'), royalty: "5-12%", icon: Globe, description: t('homeDecorDesc') },
+        { name: t('digital'), royalty: "10-25%", icon: Layers, description: t('digitalDesc') },
+        { name: t('flatFee'), royalty: "$500+", icon: Scale, description: t('flatFeeDesc') },
     ];
 
     return (
@@ -48,8 +58,8 @@ export function AuthorshipPassport({
                         <Menu className="w-5 h-5 text-gray-400" />
                     </button>
                     <div>
-                        <h1 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Authorship Passport</h1>
-                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Securing Human Creativity on the Blockchain</p>
+                        <h1 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">{t('authorshipPassport')}</h1>
+                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{t('securingCreativity')}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -59,11 +69,11 @@ export function AuthorshipPassport({
                         className="rounded-full bg-white dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 font-black text-[9px] uppercase tracking-widest px-6 h-10 border border-gray-100 dark:border-white/10 shadow-sm flex items-center gap-2"
                     >
                         <ArrowLeft className="w-3.5 h-3.5" />
-                        Back to Workspace
+                        {t('backToWorkspace')}
                     </Button>
                     <Button variant="outline" className="rounded-full border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 font-bold text-[9px] uppercase tracking-widest h-10 px-6 shadow-sm">
                         <Archive className="w-3.5 h-3.5 mr-2" />
-                        My Collections
+                        {t('myCollections')}
                     </Button>
                 </div>
             </div>
@@ -79,7 +89,7 @@ export function AuthorshipPassport({
                         {/* Security Watermark Background */}
                         <div className="absolute inset-0 opacity-[0.02] pointer-events-none p-12 overflow-hidden select-none flex flex-wrap gap-x-12 gap-y-16">
                             {Array.from({ length: 60 }).map((_, i) => (
-                                <span key={i} className="text-[9px] font-black uppercase -rotate-45 whitespace-nowrap">Proofa Registry Audit</span>
+                                <span key={i} className="text-[9px] font-black uppercase -rotate-45 whitespace-nowrap">{t('proofaRegistryAudit')}</span>
                             ))}
                         </div>
 
@@ -90,32 +100,30 @@ export function AuthorshipPassport({
                                 <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-blue-500/20 shadow-xl shadow-blue-500/5">
                                     <Layers className="w-8 h-8 text-blue-500" />
                                 </div>
-                                <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-[0.2em] uppercase mb-1">Authorship Passport</h2>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Official Forensic Audit Report :: Proofa Registry</p>
+                                <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-[0.2em] uppercase mb-1">{t('authorshipPassport')}</h2>
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">{t('officialForensicReport')}</p>
                             </div>
 
                             {/* Main Body */}
                             <div className="flex-1">
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400 leading-relaxed max-w-lg mx-auto text-center mb-16">
-                                    This document serves as an official declaration of creative verification for the digital asset identified below.
-                                    Pursuant to the <span className="text-gray-900 dark:text-white font-bold decoration-blue-500/30 underline underline-offset-4">EU AI Act (Art. 52)</span> and established intellectual property frameworks,
-                                    Proofa has conducted a forensic analysis of the creative workflow provided by the user.
+                                    {t('declarationText')}
                                 </p>
 
                                 {/* Data Grid */}
                                 <div className="space-y-0 border-t border-gray-100 dark:border-white/5">
                                     <div className="flex items-center justify-between py-6 border-b border-gray-100 dark:border-white/5">
-                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Cryptographic Asset Hash</span>
+                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">{t('cryptographicAssetHash')}</span>
                                         <div className="px-3 py-1 bg-blue-500/10 rounded-md">
                                             <span className="text-[11px] font-black font-mono text-blue-600 dark:text-blue-400 truncate max-w-xs">{assetHash}</span>
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-between py-6 border-b border-gray-100 dark:border-white/5">
-                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Human Control Coefficient</span>
+                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('humanControlCoefficient')}</span>
                                         <span className="text-3xl font-black text-gray-900 dark:text-white">{humanScore.toFixed(2)}%</span>
                                     </div>
                                     <div className="flex items-center justify-between py-6 border-b border-gray-100 dark:border-white/5">
-                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Verification Timestamp</span>
+                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('verificationTimestamp')}</span>
                                         <span className="text-[13px] font-bold text-gray-600 dark:text-gray-300 flex items-center gap-2">
                                             <Clock className="w-3.5 h-3.5 text-gray-400" />
                                             {timestamp}
@@ -125,7 +133,7 @@ export function AuthorshipPassport({
                                         <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</span>
                                         <div className="flex items-center gap-2.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                            <span className="text-[10px] font-black text-emerald-500 uppercase tracking-wider">Passport Verified</span>
+                                            <span className="text-[10px] font-black text-emerald-500 uppercase tracking-wider">{t('passportVerified')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -139,12 +147,12 @@ export function AuthorshipPassport({
                                             <ShieldCheck className="w-8 h-8 text-blue-500/20" />
                                         </div>
                                     </div>
-                                    <p className="text-[9px] font-black text-gray-300 dark:text-gray-600 uppercase tracking-[0.2em]">Forensic Audit Signature Stamp</p>
+                                    <p className="text-[9px] font-black text-gray-300 dark:text-gray-600 uppercase tracking-[0.2em]">{t('forensicSignatureStamp')}</p>
                                 </div>
                                 <div className="text-right flex flex-col items-end gap-1">
                                     <div className="w-48 h-px bg-gray-900 dark:bg-white mb-4 opacity-10" />
-                                    <h4 className="text-base font-black text-gray-900 dark:text-white tracking-widest uppercase">Proofa Audit Node a-01</h4>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Authorized Electronic Signature</p>
+                                    <h4 className="text-base font-black text-gray-900 dark:text-white tracking-widest uppercase">{t('auditNode')}</h4>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('authorizedSignature')}</p>
                                 </div>
                             </div>
                         </div>
@@ -155,13 +163,13 @@ export function AuthorshipPassport({
                         <div className="space-y-6">
                             <div className="flex items-center gap-3">
                                 <ShieldCheck className="w-4 h-4 text-blue-500" />
-                                <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-400">Forensic Audit Summary</h3>
+                                <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-400">{t('forensicAuditSummary')}</h3>
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { label: "Manual Intervention (Delta 0)", desc: "High creative control detected in the arrangement of elements." },
-                                    { label: "PQC Identity Verified", desc: "Signature verified using Dilithium3 algorithm on local node." },
-                                    { label: "Global Compliance", desc: "Adheres to EU AI Act transparency requirements and US Copyright Office guidelines." }
+                                    { label: `${t('manualIntervention')} (Delta 0)`, desc: "High creative control detected in the arrangement of elements." }, // Using manualIntervention key mostly
+                                    { label: t('pqcIdentity'), desc: "Signature verified using Dilithium3 algorithm on local node." },
+                                    { label: t('compliance'), desc: "Adheres to EU AI Act transparency requirements and US Copyright Office guidelines." }
                                 ].map((item, i) => (
                                     <div key={i} className="flex gap-4">
                                         <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -178,11 +186,11 @@ export function AuthorshipPassport({
 
                         <div className="flex flex-col justify-end gap-4 pb-2">
                             <Button className="h-16 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-black uppercase tracking-[0.2em] text-xs hover:opacity-90 shadow-2xl active:scale-[0.98] transition-all">
-                                Issue Passport
+                                {t('issuePassport')}
                             </Button>
                             <Button variant="outline" className="h-16 rounded-2xl border-gray-200 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 flex items-center justify-center gap-3">
                                 <Download className="w-5 h-5 text-gray-400" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Download Cert</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">{t('downloadCert')}</span>
                             </Button>
                         </div>
                     </div>
@@ -190,7 +198,7 @@ export function AuthorshipPassport({
 
                 {/* Right Side: Commercial Rights Sidebar */}
                 <div className="lg:col-span-4 space-y-8 lg:sticky lg:top-24 h-fit">
-                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Commercial Rights Overview</h3>
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">{t('commercialRightsOverview')}</h3>
                     <div className="space-y-4">
                         {licensingTiers.map((tier) => (
                             <motion.div
@@ -199,23 +207,23 @@ export function AuthorshipPassport({
                                 whileTap={{ scale: 0.98 }}
                                 className={`
                                     relative p-8 rounded-3xl cursor-pointer transition-all border
-                                    ${tier.name === 'Apparel'
+                                    ${tier.name === t('apparel')
                                         ? 'bg-blue-600 border-blue-400 shadow-2xl shadow-blue-500/30 text-white'
                                         : 'bg-white dark:bg-[#111] border-gray-100 dark:border-white/5 hover:border-blue-500/20 shadow-sm'}
                                 `}
                             >
                                 <div className="flex items-center justify-between mb-6">
-                                    <div className={`p-4 rounded-2xl ${tier.name === 'Apparel' ? 'bg-white/20' : 'bg-gray-50 dark:bg-white/5'}`}>
-                                        <tier.icon className={`w-6 h-6 ${tier.name === 'Apparel' ? 'text-white' : 'text-gray-400'}`} />
+                                    <div className={`p-4 rounded-2xl ${tier.name === t('apparel') ? 'bg-white/20' : 'bg-gray-50 dark:bg-white/5'}`}>
+                                        <tier.icon className={`w-6 h-6 ${tier.name === t('apparel') ? 'text-white' : 'text-gray-400'}`} />
                                     </div>
-                                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${tier.name === 'Apparel' ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-600'}`}>
-                                        Royalty: {tier.royalty}
+                                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${tier.name === t('apparel') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-600'}`}>
+                                        {t('royalty')}: {tier.royalty}
                                     </div>
                                 </div>
                                 <h4 className="text-lg font-black uppercase tracking-tight mb-2">
                                     {tier.name}
                                 </h4>
-                                <p className={`text-[11px] font-bold leading-relaxed lowercase ${tier.name === 'Apparel' ? 'text-white/60' : 'text-gray-400'}`}>
+                                <p className={`text-[11px] font-bold leading-relaxed lowercase ${tier.name === t('apparel') ? 'text-white/60' : 'text-gray-400'}`}>
                                     {tier.description}
                                 </p>
                             </motion.div>
@@ -226,9 +234,9 @@ export function AuthorshipPassport({
                         <div className="flex gap-4">
                             <Scale className="w-5 h-5 text-amber-600 shrink-0" />
                             <div className="space-y-2">
-                                <h5 className="text-[10px] font-black uppercase text-amber-900 tracking-widest leading-none">Legal Notice</h5>
+                                <h5 className="text-[10px] font-black uppercase text-amber-900 tracking-widest leading-none">{t('legalNotice')}</h5>
                                 <p className="text-[10px] font-bold text-amber-900/40 leading-relaxed uppercase tracking-tight">
-                                    Copyright registration requires disclosure of AI tools. Proofa's Audit Trail serves as evidence of human creative control.
+                                    {t('legalNoticeDesc')}
                                 </p>
                             </div>
                         </div>

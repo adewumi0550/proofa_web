@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/language-context";
 
 interface LicensingEngineProps {
     projectID: string | null;
@@ -34,14 +35,15 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
     creativeHash,
     onBack
 }) => {
+    const { t } = useLanguage();
     const [selectedCategory, setSelectedCategory] = useState<string>("Apparel");
     const [isCertified, setIsCertified] = useState(false);
 
     const licensingTiers = [
-        { name: "Apparel", royalty: "4-10%", icon: Zap, description: "T-shirts, hoodies, and wearable accessories." },
-        { name: "Home Decor", royalty: "5-12%", icon: Globe, description: "Wall art, pillows, and kitchenware." },
-        { name: "Digital", royalty: "10-25%", icon: Layers, description: "Game assets, NFTs, and digital collectibles." },
-        { name: "Flat Fee", royalty: "$500+", icon: Scale, description: "One-time usage for editorials or campaigns." },
+        { name: t('apparel'), royalty: "4-10%", icon: Zap, description: t('apparelDesc') },
+        { name: t('homeDecor'), royalty: "5-12%", icon: Globe, description: t('homeDecorDesc') },
+        { name: t('digital'), royalty: "10-25%", icon: Layers, description: t('digitalDesc') },
+        { name: t('flatFee'), royalty: "$500+", icon: Scale, description: t('flatFeeDesc') },
     ];
 
     const handleCertify = () => {
@@ -63,9 +65,9 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
             {/* Header Section */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-2">Licensing Engine</h2>
+                    <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-2">{t('licensingEngine')}</h2>
                     <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
-                        Transforming Human Score into IP Assets
+                        {t('transformingScore')}
                     </p>
                 </div>
                 <div className="flex items-center gap-4">
@@ -75,11 +77,11 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                         className="glass-button rounded-full font-black text-[10px] uppercase tracking-widest text-blue-600 dark:text-blue-400 flex items-center gap-2 px-6 h-10 border-0 shadow-lg"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        Back to Workspace
+                        {t('backToWorkspace')}
                     </Button>
                     <Button variant="outline" className="rounded-full border-black/10 dark:border-white/10 font-bold text-[10px] uppercase tracking-widest">
                         <Archive className="w-3.5 h-3.5 mr-2" />
-                        My Collections
+                        {t('myCollections')}
                     </Button>
                 </div>
             </div>
@@ -94,7 +96,7 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                                     <ShieldCheck className="w-6 h-6 text-blue-500" />
                                 </div>
                                 <div>
-                                    <h3 className="font-black text-lg tracking-tight">Authorship Certification</h3>
+                                    <h3 className="font-black text-lg tracking-tight">{t('authorshipCertification')}</h3>
                                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Hash: {creativeHash || "0xPENDING"}</span>
                                 </div>
                             </div>
@@ -107,19 +109,19 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
 
                         <div className="space-y-4">
                             <div className="p-6 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                                <h4 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-4">Audit Trail Summary</h4>
+                                <h4 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-4">{t('auditTrailSummary')}</h4>
                                 <ul className="space-y-3">
                                     <li className="flex items-center gap-3 text-sm font-bold text-gray-600 dark:text-gray-300">
                                         <CheckCircle2 className="w-4 h-4 text-blue-500" />
-                                        Manual Intervention Detected (Delta {humanScore / 100})
+                                        {t('manualIntervention')} (Delta {humanScore / 100})
                                     </li>
                                     <li className="flex items-center gap-3 text-sm font-bold text-gray-600 dark:text-gray-300">
                                         <CheckCircle2 className="w-4 h-4 text-blue-500" />
-                                        PQC Identity Verified (Dilithium Signature)
+                                        {t('pqcIdentity')}
                                     </li>
                                     <li className="flex items-center gap-3 text-sm font-bold text-gray-600 dark:text-gray-300">
                                         <CheckCircle2 className="w-4 h-4 text-blue-500" />
-                                        Compliance: EU AI Act & US Copyright Policy
+                                        {t('compliance')}
                                     </li>
                                 </ul>
                             </div>
@@ -130,7 +132,7 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                                     className="flex-1 glass-button rounded-2xl h-14 font-black uppercase tracking-widest text-[11px]"
                                     disabled={isCertified}
                                 >
-                                    {isCertified ? "Certified ✓" : "Initialize Certification"}
+                                    {isCertified ? t('certified') : t('initializeCertification')}
                                 </Button>
                                 <Button variant="outline" className="w-14 h-14 rounded-2xl border-black/10 dark:border-white/10">
                                     <Download className="w-5 h-5 text-gray-400" />
@@ -145,15 +147,15 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                             <Plus className="w-6 h-6 text-gray-400 group-hover:text-blue-500" />
                         </div>
                         <div>
-                            <h4 className="font-black text-gray-900 dark:text-white">Create New Collection</h4>
-                            <p className="text-xs font-bold text-gray-400">Industry Standard: 10-12 pieces per Style Guide</p>
+                            <h4 className="font-black text-gray-900 dark:text-white">{t('createNewCollection')}</h4>
+                            <p className="text-xs font-bold text-gray-400">{t('industryStandard')}</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Right: Royalty Presets */}
                 <div className="space-y-6">
-                    <h3 className="font-black text-gray-400 uppercase tracking-widest text-[10px]">Licensing Presets</h3>
+                    <h3 className="font-black text-gray-400 uppercase tracking-widest text-[10px]">{t('licensingPresets')}</h3>
                     <div className="space-y-4">
                         {licensingTiers.map((tier) => (
                             <motion.div
@@ -173,7 +175,7 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                                         <tier.icon className={`w-5 h-5 ${selectedCategory === tier.name ? 'text-white' : 'text-gray-500'}`} />
                                     </div>
                                     <span className={`text-xs font-black ${selectedCategory === tier.name ? 'text-white/80' : 'text-blue-500'}`}>
-                                        ROYALTY: {tier.royalty}
+                                        {t('royalty')}: {tier.royalty}
                                     </span>
                                 </div>
                                 <h4 className={`font-black tracking-tight ${selectedCategory === tier.name ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
@@ -190,9 +192,9 @@ export const LicensingEngine: React.FC<LicensingEngineProps> = ({
                         <div className="flex gap-3">
                             <Scale className="w-5 h-5 text-yellow-600 shrink-0" />
                             <div>
-                                <h5 className="text-[11px] font-black uppercase text-yellow-700 leading-none mb-1">Legal Notice</h5>
+                                <h5 className="text-[11px] font-black uppercase text-yellow-700 leading-none mb-1">{t('legalNotice')}</h5>
                                 <p className="text-[10px] font-bold text-yellow-800/70 leading-relaxed">
-                                    Copyright registration requires disclosure of AI tools. Proofa&apos;s Audit Trail serves as evidence of human creative control.
+                                    {t('legalNoticeDesc')}
                                 </p>
                             </div>
                         </div>

@@ -4,6 +4,7 @@ import React from "react";
 import { ShieldCheck, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language-context";
 
 interface ComplianceFooterProps {
     score: number;
@@ -14,6 +15,7 @@ interface ComplianceFooterProps {
 }
 
 export function ComplianceFooter({ score, stage, onCertify, isCertified, consentDeclined }: ComplianceFooterProps) {
+    const { t } = useLanguage();
     const isEligible = score >= 80;
 
     if (consentDeclined) {
@@ -21,7 +23,7 @@ export function ComplianceFooter({ score, stage, onCertify, isCertified, consent
             <footer className="w-full bg-white dark:bg-[#0c0c0c] border-t border-gray-100 dark:border-white/5 py-3 px-6 md:px-12 space-y-2 shrink-0 transition-all opacity-50 pointer-events-none select-none">
                 <div className="max-w-7xl mx-auto flex items-center justify-center py-4">
                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                        Authorship Passport Disabled via Privacy Settings
+                        {t('passportDisabledPrivacy')}
                     </span>
                 </div>
             </footer>
@@ -40,13 +42,13 @@ export function ComplianceFooter({ score, stage, onCertify, isCertified, consent
                         rel="noopener noreferrer"
                         className="text-[10px] font-black uppercase tracking-widest text-gray-900 dark:text-gray-200 hover:text-blue-500 transition-colors"
                     >
-                        EU AI Act Compliant
+                        {t('euAiActCompliant')}
                     </a>
                     <div className="group relative">
                         <Info className="w-3 h-3 text-gray-300 dark:text-gray-600 cursor-help" />
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50">
                             <p className="text-[10px] font-bold text-gray-600 dark:text-gray-300 leading-relaxed uppercase tracking-wider text-center">
-                                Certified under EU AI Act Art. 52 Transparency Obligations.
+                                {t('transparencyObligations')}
                             </p>
                         </div>
                     </div>
@@ -58,7 +60,7 @@ export function ComplianceFooter({ score, stage, onCertify, isCertified, consent
                         size="sm"
                         className="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-blue-600 transition-all h-8"
                     >
-                        Review Passport
+                        {t('reviewPassport')}
                     </Button>
                     <Button
                         onClick={onCertify}
@@ -73,7 +75,7 @@ export function ComplianceFooter({ score, stage, onCertify, isCertified, consent
                                     : 'bg-gray-100 dark:bg-white/5 text-gray-400 cursor-not-allowed'}
                         `}
                     >
-                        {isCertified || stage === "Certified" || stage === "Licensing" ? 'Issue Passport' : 'Certify Asset'}
+                        {isCertified || stage === "Certified" || stage === "Licensing" ? t('issuePassport') : t('certifyAsset')}
                     </Button>
                 </div>
             </div>
@@ -82,7 +84,7 @@ export function ComplianceFooter({ score, stage, onCertify, isCertified, consent
             <div className="max-w-7xl mx-auto space-y-1.5">
                 <div className="flex items-center justify-between">
                     <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">
-                        Authorship Strength
+                        {t('authorshipStrength')}
                     </span>
                     <span className={`text-xs font-black transition-colors ${score >= 80 ? 'text-blue-500' : 'text-gray-500'}`}>
                         {score}%
@@ -106,13 +108,13 @@ export function ComplianceFooter({ score, stage, onCertify, isCertified, consent
             {/* Bottom Row: Steps */}
             <div className="max-w-7xl mx-auto flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-gray-400">
                 <div className={`flex items-center gap-1 ${stage === "Inception" ? "text-blue-500" : ""}`}>
-                    <span>Step 1: Inception</span>
+                    <span>{t('step1')}</span>
                 </div>
                 <div className={`flex items-center gap-1 ${stage === "Collaboration" ? "text-blue-500" : ""}`}>
-                    <span>Step 2: Collaboration</span>
+                    <span>{t('step2')}</span>
                 </div>
                 <div className={`flex items-center gap-1 ${stage === "Certified" || stage === "Licensing" ? "text-blue-500" : ""}`}>
-                    <span>Step 3: Certification</span>
+                    <span>{t('step3')}</span>
                 </div>
             </div>
         </footer>

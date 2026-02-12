@@ -14,7 +14,10 @@ import { User, Users, Folder, CreditCard, LogOut, Trash2 } from "lucide-react";
 import { useAuth } from "@/components/auth-context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLanguage } from "@/components/language-context";
+
 export function UserDropdown() {
+    const { t } = useLanguage();
     const { user, logout } = useAuth();
     const router = useRouter();
 
@@ -44,25 +47,25 @@ export function UserDropdown() {
                     <Link href="/profile">
                         <DropdownMenuItem className="cursor-pointer py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                             <User className="mr-3 h-4 w-4 text-blue-500" />
-                            <span className="font-medium">Profile</span>
+                            <span className="font-medium">{t('profile')}</span>
                         </DropdownMenuItem>
                     </Link>
                     <Link href="/communities">
                         <DropdownMenuItem className="cursor-pointer py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                             <Users className="mr-3 h-4 w-4 text-purple-500" />
-                            <span className="font-medium">Join communities</span>
+                            <span className="font-medium">{t('joinCommunities')}</span>
                         </DropdownMenuItem>
                     </Link>
                     <Link href="/dashboard">
                         <DropdownMenuItem className="cursor-pointer py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                             <Folder className="mr-3 h-4 w-4 text-orange-500" />
-                            <span className="font-medium">Manage Projects</span>
+                            <span className="font-medium">{t('dashboard')}</span>
                         </DropdownMenuItem>
                     </Link>
                     <Link href="/subscriptions">
                         <DropdownMenuItem className="cursor-pointer py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                             <CreditCard className="mr-3 h-4 w-4 text-green-500" />
-                            <span className="font-medium">Subscriptions</span>
+                            <span className="font-medium">{t('subscriptions')}</span>
                         </DropdownMenuItem>
                     </Link>
                 </DropdownMenuGroup>
@@ -70,7 +73,7 @@ export function UserDropdown() {
 
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer py-2.5 px-3 rounded-lg text-muted-foreground focus:text-foreground focus:bg-gray-100 dark:focus:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors mt-1">
                     <LogOut className="mr-3 h-4 w-4" />
-                    <span className="font-medium">Log out</span>
+                    <span className="font-medium">{t('logOut')}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

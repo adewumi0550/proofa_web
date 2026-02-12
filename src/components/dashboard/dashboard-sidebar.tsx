@@ -124,7 +124,7 @@ export function DashboardSidebar() {
                 </Link>
 
                 <div className="pt-2 pb-1">
-                    {!isCollapsed && <div className="px-3 pb-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Discovery</div>}
+                    {!isCollapsed && <div className="px-3 pb-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{t('discovery')}</div>}
 
                     <Link
                         href="/dashboard?tab=garden"
@@ -138,7 +138,7 @@ export function DashboardSidebar() {
                         <div className="w-4 h-4 flex items-center justify-center shrink-0">
                             <Sparkles className="w-3.5 h-3.5 opacity-70 text-blue-500" />
                         </div>
-                        {!isCollapsed && <span className="truncate flex-1 text-left">Modern Garden</span>}
+                        {!isCollapsed && <span className="truncate flex-1 text-left">{t('modernGarden')}</span>}
                     </Link>
 
                     <Link
@@ -153,7 +153,7 @@ export function DashboardSidebar() {
                         <div className="w-4 h-4 flex items-center justify-center shrink-0">
                             <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm" />
                         </div>
-                        {!isCollapsed && <span className="truncate flex-1 text-left">Show Off</span>}
+                        {!isCollapsed && <span className="truncate flex-1 text-left">{t('showOff')}</span>}
                     </Link>
                 </div>
 
