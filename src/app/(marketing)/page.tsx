@@ -8,6 +8,7 @@ import { PricingTable } from "@/components/pricing-table";
 import { FadeIn } from "@/components/fade-in";
 import { useLanguage } from "@/components/language-context";
 import { TeamSection } from "@/components/team-section";
+import { VisualContext } from "@/components/visual-context";
 import { Testimonials } from "@/components/testimonials";
 import { Faq } from "@/components/faq";
 
@@ -464,58 +465,7 @@ export default function Home() {
       </FadeIn>
 
       {/* Visual Context Section */}
-      <div className="py-24 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <FadeIn>
-            <div className="mx-auto max-w-2xl text-center mb-16">
-              <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">{t('vc_title')}</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                {t('vc_subtitle')}
-              </p>
-            </div>
-          </FadeIn>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <FadeIn delay={0.1}>
-              <div className="space-y-6">
-                <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-gray-100 dark:bg-white/5 relative group">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-end p-8">
-                    <p className="text-white text-sm font-bold">{t('vc_audit_caption')}</p>
-                  </div>
-                  <img
-                    src="/forensic_audit_trail_mockup_1770844934976.png"
-                    alt="Forensic Audit Trail"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="flex items-center gap-4 px-4 text-gray-500">
-                  <span className="text-[10px] font-black font-mono uppercase tracking-widest">Fig 01. Forensic Audit Trail View</span>
-                  <div className="h-px flex-1 bg-gray-100 dark:bg-white/5"></div>
-                </div>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.2}>
-              <div className="space-y-6">
-                <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-gray-100 dark:bg-white/5 relative group">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-end p-8">
-                    <p className="text-white text-sm font-bold">{t('vc_passport_caption')}</p>
-                  </div>
-                  <img
-                    src="/authorship_passport_mockup_1770844951895.png"
-                    alt="Authorship Passport"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="flex items-center gap-4 px-4 text-gray-500">
-                  <span className="text-[10px] font-black font-mono uppercase tracking-widest">Fig 02. Authorship Passport Issuance</span>
-                  <div className="h-px flex-1 bg-gray-100 dark:bg-white/5"></div>
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </div >
+      <VisualContext />
 
       <Testimonials />
 
