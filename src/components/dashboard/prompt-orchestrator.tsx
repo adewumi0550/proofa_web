@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import { useLanguage } from "@/components/language-context";
+import { translations } from "@/lib/translations";
 
 interface Message {
     id: string;
@@ -291,7 +292,7 @@ export function PromptOrchestrator({ onPromptSent, messages }: PromptOrchestrato
                                         handleSend();
                                     }
                                 }}
-                                placeholder={stagedFile ? t('describeFile') : t('enterCreativeCommand').replace('{mode}', t(`mode${activeMode.charAt(0).toUpperCase() + activeMode.slice(1)}`))}
+                                placeholder={stagedFile ? t('describeFile') : t('enterCreativeCommand').replace('{mode}', t(`mode${activeMode.charAt(0).toUpperCase() + activeMode.slice(1)}` as keyof typeof translations.en))}
                                 className="flex-1 bg-transparent border-none focus:ring-0 focus:outline-none text-sm md:text-base font-medium text-gray-900 dark:text-white resize-none min-h-[56px] py-4 px-2 custom-scrollbar placeholder:text-gray-400"
                                 style={{ maxHeight: '200px' }}
                             />

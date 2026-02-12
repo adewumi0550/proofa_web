@@ -113,10 +113,10 @@ export default function AboutPage() {
             {/* 4. The Team */}
             <section className="bg-gray-50 dark:bg-white/5 py-20 border-t border-black/5 dark:border-white/5">
                 <div className="max-w-7xl mx-auto px-6 text-center">
-                    <h2 className="text-3xl font-bold mb-4">{t('teamHeader')}</h2>
+                    <h2 className="text-3xl font-bold mb-4">{t('teamTitle')}</h2>
 
                     <p className="max-w-2xl mx-auto text-gray-500 dark:text-gray-400 mb-12 italic">
-                        "{t('teamNote')}"
+                        "{t('teamDesc')}"
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-8">
@@ -126,9 +126,9 @@ export default function AboutPage() {
                                 AM
                             </div>
                             <h3 className="text-xl font-bold">Anna Muzykina</h3>
-                            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-4">{t('teamAnnaRole')}</p>
+                            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-4">{t('team_anna_role')}</p>
                             <p className="text-sm text-gray-600 dark:text-gray-300">
-                                {t('teamAnnaBio')}
+                                {t('team_anna_desc')}
                             </p>
                         </div>
 
@@ -138,9 +138,9 @@ export default function AboutPage() {
                                 DD
                             </div>
                             <h3 className="text-xl font-bold">Denys Doroshev</h3>
-                            <p className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-4">{t('teamDenysRole')}</p>
+                            <p className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-4">{t('team_denys_role')}</p>
                             <p className="text-sm text-gray-600 dark:text-gray-300">
-                                {t('teamDenysBio')}
+                                {t('team_denys_desc')}
                             </p>
                         </div>
 
@@ -150,9 +150,9 @@ export default function AboutPage() {
                                 SA
                             </div>
                             <h3 className="text-xl font-bold">Saheed Adewumi</h3>
-                            <p className="text-sm font-semibold text-green-600 dark:text-green-400 mb-4">{t('teamSaheedRole')}</p>
+                            <p className="text-sm font-semibold text-green-600 dark:text-green-400 mb-4">{t('team_saheed_role')}</p>
                             <p className="text-sm text-gray-600 dark:text-gray-300">
-                                {t('teamSaheedBio')}
+                                {t('team_saheed_desc')}
                             </p>
                         </div>
                     </div>

@@ -547,6 +547,7 @@ export const translations = {
         profile: "Profile",
 
         // Dashboard - Authorship Passport
+        authorshipPassport: "Authorship Passport",
         securingCreativity: "Securing Human Creativity on the Blockchain",
         proofaRegistryAudit: "Proofa Registry Audit",
         officialForensicReport: "Official Forensic Report :: Proofa Registry",
@@ -887,6 +888,8 @@ export const translations = {
         faq_a3: "Die Umgebung ermöglicht es Ihnen, verschiedene professionelle Modelle zu orchestrieren. Unsere Logik ist modellunabhängig; sie überwacht die Interaktion des Erstellers mit den Werkzeugen, nicht die Werkzeuge selbst.",
         faq_q4: "Ist mein kreativer Prozess privat?",
         faq_a4: "Ja. Ihre Workflow-Daten werden in einem sicheren, privaten Register gespeichert. Dies ermöglicht es Ihnen, eine dauerhafte Aufzeichnung Ihrer Urheberschaft zu führen, ohne Ihre Arbeit oder Ihre Prompts der Öffentlichkeit preiszugeben.",
+        faq_q5: "Was bedeutet 'Future Licensing'?",
+        faq_a5: "Die Sicherung eines Passes am heutigen Tag schafft eine grundlegende Aufzeichnung Ihrer Urheberschaft. Dieser technische Nachweis soll die Basis für künftiges Asset Management und die kommerzielle Nutzung in unserem sich entwickelnden Ökosystem sein.",
         hiw_step1_title: "Erfassung des kreativen Seeds",
         hiw_step1_desc: "Etablieren Sie Ihre rechtliche Absicht mit einem einzigartigen Birth-Hash. Jedes Projekt beginnt mit einem obligatorischen Autorenschaftseid.",
         hiw_step2_title: "Forensisches Interaktions-Logging",
@@ -982,6 +985,7 @@ export const translations = {
         profile: "Profil",
 
         // Dashboard - Authorship Passport
+        authorshipPassport: "Autorenschaftspass",
         securingCreativity: "Sicherung menschlicher Kreativität auf der Blockchain",
         proofaRegistryAudit: "Proofa Register Audit",
         officialForensicReport: "Offizieller Forensischer Bericht :: Proofa Register",
