@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, ChevronLeft, ChevronRight, Settings, MessageSquare, LayoutDashboard, UserCircle, LogOut, Sparkles } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, Settings, MessageSquare, LayoutDashboard, UserCircle, LogOut, Sparkles, Users, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/auth-context";
@@ -154,6 +154,36 @@ export function DashboardSidebar() {
                             <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm" />
                         </div>
                         {!isCollapsed && <span className="truncate flex-1 text-left">{t('showOff')}</span>}
+                    </Link>
+
+                    <Link
+                        href="/communities"
+                        className={`
+                            w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors group relative
+                            text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200
+                            ${pathname === '/communities' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : ''}
+                            ${isCollapsed ? 'justify-center px-0' : ''}
+                        `}
+                    >
+                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            <Users className="w-3.5 h-3.5 opacity-70 text-purple-500" />
+                        </div>
+                        {!isCollapsed && <span className="truncate flex-1 text-left">{t('joinCommunities')}</span>}
+                    </Link>
+
+                    <Link
+                        href="/subscriptions"
+                        className={`
+                            w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors group relative
+                            text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200
+                            ${pathname === '/subscriptions' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : ''}
+                            ${isCollapsed ? 'justify-center px-0' : ''}
+                        `}
+                    >
+                        <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            <CreditCard className="w-3.5 h-3.5 opacity-70 text-green-500" />
+                        </div>
+                        {!isCollapsed && <span className="truncate flex-1 text-left">{t('subscriptions')}</span>}
                     </Link>
                 </div>
 
