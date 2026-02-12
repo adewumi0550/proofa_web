@@ -3,7 +3,7 @@
 import { Waitlist } from "@/components/waitlist";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Shield, Zap, Lock, Video, Image, Music, MessageSquareText, Globe } from "lucide-react";
+import { ArrowRight, Shield, Zap, Lock, Video, Image, Music, MessageSquareText, Globe, Activity, Scale, ShieldCheck, Archive } from "lucide-react";
 import { PricingTable } from "@/components/pricing-table";
 import { FadeIn } from "@/components/fade-in";
 import { useLanguage } from "@/components/language-context";
@@ -106,43 +106,84 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FadeIn delay={0.1}>
-              <div className="p-8 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:shadow-lg transition-all duration-300 h-full">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6 text-blue-600 dark:text-blue-400">
-                  <Shield className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {/* Bento Tile 1: The Passport (Large Hero) */}
+            <FadeIn delay={0.1} className="md:col-span-2 md:row-span-2">
+              <div className="group relative p-8 lg:p-12 rounded-[2.5rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:shadow-2xl transition-all duration-500 h-full overflow-hidden flex flex-col justify-between">
+                <div>
+                  <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-8 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-500">
+                    <Shield className="w-7 h-7" />
+                  </div>
+                  <div className="text-sm font-black text-blue-600 dark:text-blue-400 mb-2 uppercase tracking-widest">{t('feat_passport_title')}</div>
+                  <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 max-w-sm">{t('feat_passport_desc')}</h3>
                 </div>
-                <div className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2">The Passport</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('feat_passport_title')}</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {t('feat_passport_desc')}
-                </p>
+
+                {/* Isometric Mockup Visualization */}
+                <div className="relative mt-12 w-full h-64 lg:h-80 bg-white/40 dark:bg-black/20 rounded-2xl border border-gray-100 dark:border-white/5 p-4 transform lg:rotate-[-5deg] lg:translate-x-4 group-hover:rotate-0 group-hover:translate-x-0 transition-all duration-700 shadow-inner overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-50"></div>
+                  <div className="flex flex-col gap-4">
+                    <div className="h-4 w-1/3 bg-blue-500/10 rounded-full animate-pulse"></div>
+                    <div className="flex gap-2">
+                      <div className="h-2 w-full bg-gray-200 dark:bg-white/5 rounded-full"></div>
+                      <div className="h-2 w-1/2 bg-gray-200 dark:bg-white/5 rounded-full"></div>
+                    </div>
+                    <div className="h-32 w-full bg-blue-500/5 border border-blue-500/10 rounded-xl flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Lock className="w-12 h-12 text-blue-500/20 animate-float" />
+                      </div>
+                      <div className="absolute bottom-4 left-4 right-4 h-1 bg-blue-500/20 rounded-full overflow-hidden">
+                        <div className="h-full w-2/3 bg-blue-500 animate-gradient-x"></div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-mono text-gray-400">
+                      <span>SIGN_REF: 0x82...F2</span>
+                      <span className="text-blue-500 font-bold">VERIFIED</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Decorative Aura */}
+                <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full"></div>
               </div>
             </FadeIn>
 
+            {/* Bento Tile 2: The Audit (Utility) */}
             <FadeIn delay={0.2}>
-              <div className="p-8 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:shadow-lg transition-all duration-300 h-full">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400">
+              <div className="group p-8 rounded-[2rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:shadow-xl transition-all duration-500 h-full overflow-hidden relative">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400 group-hover:rotate-12 transition-transform duration-500">
                   <Zap className="w-6 h-6" />
                 </div>
-                <div className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-2">The Audit</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('feat_audit_title')}</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <div className="text-xs font-black text-purple-600 dark:text-purple-400 mb-2 uppercase tracking-widest">{t('feat_audit_title')}</div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   {t('feat_audit_desc')}
                 </p>
+                <div className="mt-8 flex gap-2">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-1 bg-purple-500/20 flex-1 rounded-full overflow-hidden">
+                      <div className="h-full bg-purple-500 animate-pulse" style={{ animationDelay: `${i * 200}ms`, width: `${40 + i * 15}%` }}></div>
+                    </div>
+                  ))}
+                </div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-500/5 blur-[50px] rounded-full"></div>
               </div>
             </FadeIn>
 
+            {/* Bento Tile 3: The Ledger (Utility) */}
             <FadeIn delay={0.3}>
-              <div className="p-8 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:shadow-lg transition-all duration-300 h-full">
-                <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center mb-6 text-pink-600 dark:text-pink-400">
+              <div className="group p-8 rounded-[2rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:shadow-xl transition-all duration-500 h-full overflow-hidden relative">
+                <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-xl flex items-center justify-center mb-6 text-pink-600 dark:text-pink-400 group-hover:scale-110 transition-transform duration-500">
                   <Lock className="w-6 h-6" />
                 </div>
-                <div className="text-sm font-semibold text-pink-600 dark:text-pink-400 mb-2">The Ledger</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('feat_ledger_title')}</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <div className="text-xs font-black text-pink-600 dark:text-pink-400 mb-2 uppercase tracking-widest">{t('feat_ledger_title')}</div>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   {t('feat_ledger_desc')}
                 </p>
+
+                <div className="mt-8 p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 font-mono text-[9px] text-gray-500 flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></div>
+                  <span className="truncate">BLOCK_HASH: 7a83...f92</span>
+                </div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-pink-500/5 blur-[50px] rounded-full"></div>
               </div>
             </FadeIn>
           </div>
@@ -276,41 +317,151 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-            {[
-              {
-                step: "01",
-                title: t('hiw_step1_title'),
-                desc: t('hiw_step1_desc')
-              },
-              {
-                step: "02",
-                title: t('hiw_step2_title'),
-                desc: t('hiw_step2_desc')
-              },
-              {
-                step: "03",
-                title: t('hiw_step3_title'),
-                desc: t('hiw_step3_desc')
-              },
-              {
-                step: "04",
-                title: t('hiw_step4_title'),
-                desc: t('hiw_step4_desc')
-              }
-            ].map((item, index) => (
-              <div key={item.step} className="relative p-6 bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="text-4xl font-black text-gray-100 dark:text-white/5 mb-4 absolute top-4 right-4">{item.step}</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 relative z-10">{item.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 relative z-10">{item.desc}</p>
-              </div>
-            ))}
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="relative">
+            {/* The "Winding Serpentine Path" - Dynamic SVG Connector */}
+            <div className="absolute inset-x-0 inset-y-12 pointer-events-none hidden md:block">
+              <svg className="w-full h-full" viewBox="0 0 100 1000" preserveAspectRatio="none">
+                <path
+                  d="M 10 0 
+                     C 10 83, 90 83, 90 166 
+                     C 90 250, 10 250, 10 333 
+                     C 10 416, 90 416, 90 500 
+                     C 90 583, 10 583, 10 666 
+                     C 10 750, 90 750, 90 833 
+                     C 90 916, 10 916, 10 1000"
+                  fill="none"
+                  stroke="url(#hiw_serpentine_grad)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="opacity-50 dark:opacity-60"
+                />
+                <defs>
+                  <linearGradient id="hiw_serpentine_grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="16%" stopColor="#8B5CF6" />
+                    <stop offset="33%" stopColor="#10B981" />
+                    <stop offset="50%" stopColor="#EC4899" />
+                    <stop offset="66%" stopColor="#3B82F6" />
+                    <stop offset="83%" stopColor="#8B5CF6" />
+                    <stop offset="100%" stopColor="#10B981" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            {/* Mobile Fallback Line */}
+            {/* Mobile Fallback Line - Now with Premium Gradient */}
+            <div className="absolute left-[39px] top-0 bottom-0 w-[3px] md:hidden bg-[linear-gradient(to_bottom,#3B82F6_0%,#8B5CF6_16%,#10B981_33%,#EC4899_50%,#3B82F6_66%,#8B5CF6_83%,#10B981_100%)] shadow-[0_0_15px_rgba(59,130,246,0.4)] opacity-80"></div>
+
+            <div className="space-y-32 md:space-y-64">
+              {[
+                {
+                  step: "01",
+                  title: t('hiw_step1_title'),
+                  desc: t('hiw_step1_desc'),
+                  color: "blue",
+                  icon: Globe,
+                  glow: "bg-blue-500/10",
+                  curveOffset: "md:left-[10%]"
+                },
+                {
+                  step: "02",
+                  title: t('hiw_step2_title'),
+                  desc: t('hiw_step2_desc'),
+                  color: "purple",
+                  icon: Activity,
+                  glow: "bg-purple-500/10",
+                  curveOffset: "md:left-[90%]"
+                },
+                {
+                  step: "03",
+                  title: "ADK Multi-Layer Discovery",
+                  desc: t('hiw_step3_desc'),
+                  color: "emerald",
+                  icon: Scale,
+                  glow: "bg-emerald-500/10",
+                  curveOffset: "md:left-[10%]"
+                },
+                {
+                  step: "04",
+                  title: t('hiw_step4_title'),
+                  desc: t('hiw_step4_desc'),
+                  color: "pink",
+                  icon: ShieldCheck,
+                  glow: "bg-pink-500/10",
+                  curveOffset: "md:left-[90%]"
+                },
+                {
+                  step: "05",
+                  title: t('hiw_step5_title'),
+                  desc: t('hiw_step5_desc'),
+                  color: "blue",
+                  icon: Archive,
+                  glow: "bg-blue-500/10",
+                  curveOffset: "md:left-[10%]"
+                },
+                {
+                  step: "06",
+                  title: t('hiw_step6_title'),
+                  desc: t('hiw_step6_desc'),
+                  color: "purple",
+                  icon: Zap,
+                  glow: "bg-purple-500/10",
+                  curveOffset: "md:left-[90%]"
+                },
+                {
+                  step: "07",
+                  title: t('hiw_step7_title'),
+                  desc: t('hiw_step7_desc'),
+                  color: "emerald",
+                  icon: Lock,
+                  glow: "bg-emerald-500/10",
+                  curveOffset: "md:left-[10%]"
+                }
+              ].map((item, index) => (
+                <FadeIn key={item.step} delay={index * 0.05}>
+                  <div className={`relative flex flex-col md:flex-row items-center gap-12 md:gap-24 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+                    {/* Step Indicator Anchored to the Serpentine Path */}
+                    <div className={`absolute left-[39px] ${item.curveOffset} top-12 w-4 h-4 -ml-2 -mt-2 rounded-full border-4 border-white dark:border-black bg-gray-200 dark:bg-white/10 z-20 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-700`}>
+                      <div className={`absolute inset-0 rounded-full animate-pulse bg-${item.color}-500/40 blur-[4px]`}></div>
+                    </div>
+
+                    {/* Step Visual Wrapper */}
+                    <div className="relative flex-shrink-0">
+                      {/* Ambient Aura Glow */}
+                      <div className={`absolute inset-0 ${item.glow} blur-[60px] rounded-full scale-150`}></div>
+
+                      {/* Icon Box */}
+                      <div className={`relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-white dark:bg-gray-900 border border-${item.color}-500/20 shadow-2xl flex items-center justify-center group hover:scale-110 transition-transform duration-500`}>
+                        <item.icon className={`w-10 h-10 md:w-12 md:h-12 text-${item.color}-500`} />
+                      </div>
+
+                      {/* Step Number Chip */}
+                      <div className="absolute -top-4 -right-4 z-20 px-3 py-1 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-black text-[10px] font-black tracking-widest shadow-lg">
+                        {item.step}
+                      </div>
+                    </div>
+
+                    {/* Text Content */}
+                    <div className={`flex-1 text-center md:text-left ${index % 2 === 1 ? 'md:text-right' : ''}`}>
+                      <div className={`inline-block mb-4 px-3 py-1 rounded-full bg-${item.color}-500/5 border border-${item.color}-500/10 text-[10px] font-black text-${item.color}-600 dark:text-${item.color}-400 uppercase tracking-[0.2em]`}>
+                        Stage {item.step}
+                      </div>
+                      <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
           </div>
         </div>
       </FadeIn>
-
-
 
       {/* Visual Context Section */}
       <div className="py-24 bg-white dark:bg-black overflow-hidden transition-colors duration-300">
@@ -364,7 +515,7 @@ export default function Home() {
             </FadeIn>
           </div>
         </div>
-      </div>
+      </div >
 
       <Testimonials />
 
